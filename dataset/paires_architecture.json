@@ -1,0 +1,95 @@
+[
+  {
+    "id": 1,
+    "code_php": "<?php\n// Fichier unique : index.php — tout en un\n$conn = mysql_connect('localhost', 'root', 'pass');\nmysql_select_db('shop', $conn);\n\nif ($_GET['action'] == 'getProducts') {\n    $result = mysql_query(\"SELECT * FROM products\");\n    while($row = mysql_fetch_array($result)) {\n        echo json_encode($row);\n    }\n}\n\nif ($_GET['action'] == 'getUser') {\n    $id = $_GET['id'];\n    $result = mysql_query(\n        \"SELECT * FROM users WHERE id=$id\"\n    );\n    echo json_encode(mysql_fetch_array($result));\n}",
+    "code_python": "# main.py — Architecture FastAPI modulaire\nfrom fastapi import FastAPI\nfrom routers import products, users\n\napp = FastAPI(title=\"Shop API\")\napp.include_router(products.router, prefix=\"/products\")\napp.include_router(users.router, prefix=\"/users\")\n\n# routers/products.py\nfrom fastapi import APIRouter, Depends\nfrom sqlalchemy.orm import Session\n\nrouter = APIRouter()\n\n@router.get(\"/\")\ndef get_products(db: Session = Depends(get_db)):\n    return db.query(Product).all()\n\n# routers/users.py\n@router.get(\"/{user_id}\")\ndef get_user(user_id: int,\n             db: Session = Depends(get_db)):\n    user = db.query(User).filter(\n        User.id == user_id\n    ).first()\n    if not user:\n        raise HTTPException(status_code=404)\n    return user",
+    "description": "Migration monolithe PHP vers FastAPI modulaire",
+    "categorie": "architecture_moderne",
+    "pattern_source": "monolithic",
+    "pattern_cible": "modular_fastapi",
+    "type_transformation": "architecture_migration",
+    "faille": "sql_injection",
+    "cwe": "CWE-89",
+    "severity": "critical",
+    "invariant": [
+      "endpoints fonctionnellement identiques",
+      "séparation des responsabilités"
+    ],
+    "source": "manuel_architecture"
+  },
+  {
+    "id": 2,
+    "code_php": "<?php\nclass UserService {\n    private $db;\n\n    public function __construct() {\n        $this->db = new Database();\n    }\n\n    public function getUser($id) {\n        return $this->db->query(\n            \"SELECT * FROM users WHERE id=$id\"\n        );\n    }\n\n    public function saveUser($user) {\n        $this->db->query(\n            \"INSERT INTO users VALUES (...)\"\n        );\n        $this->sendWelcomeEmail($user['email']);\n        $this->logActivity($user['id']);\n    }\n\n    private function sendWelcomeEmail($email) { }\n    private function logActivity($userId) { }\n}",
+    "code_python": "# Pattern Repository + Service Layer\nfrom abc import ABC, abstractmethod\n\nclass UserRepository:\n    def __init__(self, db: Session):\n        self.db = db\n\n    def find_by_id(self, user_id: int) -> User:\n        return self.db.query(User).filter(\n            User.id == user_id\n        ).first()\n\n    def save(self, user: User) -> User:\n        self.db.add(user)\n        self.db.commit()\n        return user\n\nclass EmailService:\n    async def send_welcome(self, email: str):\n        pass\n\nclass ActivityLogger:\n    def log(self, user_id: int, action: str):\n        pass\n\nclass UserService:\n    def __init__(self, repo: UserRepository,\n                 email: EmailService,\n                 logger: ActivityLogger):\n        self.repo = repo\n        self.email = email\n        self.logger = logger\n\n    def get_user(self, user_id: int) -> User:\n        return self.repo.find_by_id(user_id)\n\n    async def create_user(self, user: User) -> User:\n        saved = self.repo.save(user)\n        await self.email.send_welcome(user.email)\n        self.logger.log(user.id, \"created\")\n        return saved",
+    "description": "Migration vers pattern Repository + Service Layer",
+    "categorie": "architecture_moderne",
+    "pattern_source": "god_class",
+    "pattern_cible": "repository_service",
+    "type_transformation": "architecture_migration",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "séparation données/logique/services",
+      "injection de dépendances",
+      "comportement fonctionnel identique"
+    ],
+    "source": "manuel_architecture"
+  },
+  {
+    "id": 3,
+    "code_php": "<?php\n// Traitement synchrone bloquant\nfunction processLargeFile($filename) {\n    $lines = file($filename);\n    $results = array();\n    foreach($lines as $line) {\n        $result = processLine($line);\n        $results[] = $result;\n        sleep(1); // simulate heavy processing\n    }\n    return $results;\n}",
+    "code_python": "import asyncio\nfrom typing import List\n\nasync def process_line_async(line: str) -> dict:\n    await asyncio.sleep(1)\n    return {\"line\": line.strip(), \"processed\": True}\n\nasync def process_large_file(\n    filename: str\n) -> List[dict]:\n    with open(filename, 'r') as f:\n        lines = f.readlines()\n\n    tasks = [\n        process_line_async(line)\n        for line in lines\n    ]\n    results = await asyncio.gather(*tasks)\n    return list(results)",
+    "description": "Migration traitement synchrone vers async/await",
+    "categorie": "architecture_moderne",
+    "pattern_source": "synchronous_blocking",
+    "pattern_cible": "async_concurrent",
+    "type_transformation": "architecture_migration",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "tous les résultats retournés",
+      "ordre des résultats préservé"
+    ],
+    "source": "manuel_architecture"
+  },
+  {
+    "id": 4,
+    "code_php": "<?php\n// Configuration hardcodée partout dans le code\ndefine('DB_HOST', 'localhost');\ndefine('DB_NAME', 'myapp');\ndefine('API_KEY', 'abc123');\ndefine('MAX_UPLOAD_SIZE', 5242880);\ndefine('SESSION_LIFETIME', 3600);\n\nfunction getConfig($key) {\n    $configs = array(\n        'db_host' => DB_HOST,\n        'api_key' => API_KEY\n    );\n    return $configs[$key];\n}",
+    "code_python": "from pydantic_settings import BaseSettings\nfrom functools import lru_cache\n\nclass Settings(BaseSettings):\n    db_host: str\n    db_name: str\n    api_key: str\n    max_upload_size: int = 5242880\n    session_lifetime: int = 3600\n\n    class Config:\n        env_file = \".env\"\n\n@lru_cache()\ndef get_settings() -> Settings:\n    return Settings()\n\nsettings = get_settings()",
+    "description": "Migration configuration hardcodée vers pydantic-settings",
+    "categorie": "architecture_moderne",
+    "pattern_source": "hardcoded_config",
+    "pattern_cible": "env_based_config",
+    "type_transformation": "architecture_migration",
+    "faille": "hardcoded_secret",
+    "cwe": "CWE-798",
+    "severity": "high",
+    "invariant": [
+      "toutes les configs accessibles",
+      "secrets dans variables d'environnement",
+      "valeurs par défaut préservées"
+    ],
+    "source": "manuel_architecture"
+  },
+  {
+    "id": 5,
+    "code_php": "<?php\n// Session PHP classique\nsession_start();\n\nfunction login($username, $password) {\n    $user = authenticateUser($username, $password);\n    if ($user) {\n        $_SESSION['user_id'] = $user['id'];\n        $_SESSION['role'] = $user['role'];\n        $_SESSION['logged_in'] = true;\n        return true;\n    }\n    return false;\n}\n\nfunction isLoggedIn() {\n    return isset($_SESSION['logged_in'])\n           && $_SESSION['logged_in'];\n}\n\nfunction getUserRole() {\n    return $_SESSION['role'] ?? null;\n}",
+    "code_python": "from fastapi import Depends, HTTPException\nfrom fastapi.security import OAuth2PasswordBearer\nfrom jose import JWTError, jwt\nfrom datetime import datetime, timedelta\n\nSECRET_KEY = settings.secret_key\nALGORITHM = \"HS256\"\n\noauth2_scheme = OAuth2PasswordBearer(\n    tokenUrl=\"token\"\n)\n\ndef create_access_token(user_id: int,\n                        role: str) -> str:\n    payload = {\n        \"sub\": str(user_id),\n        \"role\": role,\n        \"exp\": datetime.utcnow() + timedelta(hours=1)\n    }\n    return jwt.encode(payload, SECRET_KEY,\n                      algorithm=ALGORITHM)\n\ndef get_current_user(\n    token: str = Depends(oauth2_scheme)\n) -> dict:\n    try:\n        payload = jwt.decode(token, SECRET_KEY,\n                            algorithms=[ALGORITHM])\n        return payload\n    except JWTError:\n        raise HTTPException(\n            status_code=401,\n            detail=\"Token invalide\"\n        )",
+    "description": "Migration sessions PHP vers JWT FastAPI",
+    "categorie": "architecture_moderne",
+    "pattern_source": "php_sessions",
+    "pattern_cible": "jwt_oauth2",
+    "type_transformation": "architecture_migration",
+    "faille": "insecure_session",
+    "cwe": "CWE-384",
+    "severity": "high",
+    "invariant": [
+      "authentification préservée",
+      "rôle utilisateur accessible",
+      "expiration de session maintenue"
+    ],
+    "source": "manuel_architecture"
+  }
+]

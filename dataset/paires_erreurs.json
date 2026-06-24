@@ -1,0 +1,176 @@
+[
+  {
+    "id": 1,
+    "code_php": "<?php\nfunction getUser($id) {\n    try {\n        $result = mysql_query(\"SELECT * FROM users WHERE id=$id\");\n        return mysql_fetch_array($result);\n    } catch (Exception $e) {\n        echo \"Error: \" . $e->getMessage();\n        echo \"Query: SELECT * FROM users WHERE id=$id\";\n    }\n}",
+    "code_python": "def get_user(id: int, db: Session):\n    try:\n        return db.query(User).filter(User.id == id).first()\n    except Exception as e:\n        logger.error(f\"Database error for user {id}: {str(e)}\")\n        raise HTTPException(\n            status_code=500,\n            detail=\"Internal server error\"\n        )",
+    "description": "Récupérer utilisateur avec gestion d'erreur",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "information_leakage",
+    "type_transformation": "security_fix",
+    "faille": "error_disclosure",
+    "cwe": "CWE-209",
+    "severity": "medium",
+    "invariant": [
+      "message d'erreur interne jamais exposé à l'utilisateur",
+      "erreur loggée côté serveur uniquement"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 2,
+    "code_php": "<?php\nfunction connectDB() {\n    $conn = mysql_connect('localhost', 'root', 'password');\n    if (!$conn) {\n        die(\"Connection failed: \" . mysql_error());\n    }\n    return $conn;\n}",
+    "code_python": "import logging\nfrom sqlalchemy import create_engine\nfrom sqlalchemy.exc import SQLAlchemyError\n\nlogger = logging.getLogger(__name__)\n\ndef connect_db():\n    try:\n        engine = create_engine(\n            \"mysql://root:password@localhost/db\"\n        )\n        engine.connect()\n        return engine\n    except SQLAlchemyError as e:\n        logger.critical(\"Database connection failed\")\n        raise RuntimeError(\"Service unavailable\")",
+    "description": "Connexion BDD avec gestion erreur propre",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "information_leakage",
+    "type_transformation": "security_fix",
+    "faille": "error_disclosure",
+    "cwe": "CWE-209",
+    "severity": "medium",
+    "invariant": [
+      "détails de connexion jamais exposés",
+      "erreur critique loggée"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 3,
+    "code_php": "<?php\nfunction divideNumbers($a, $b) {\n    return $a / $b;\n}",
+    "code_python": "def divide_numbers(a: float, b: float) -> float:\n    if b == 0:\n        raise ValueError(\"Division par zéro impossible\")\n    return a / b",
+    "description": "Division avec gestion de l'erreur division par zéro",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "missing_error_handling",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "b != 0 avant division",
+      "exception explicite si b == 0"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 4,
+    "code_php": "<?php\nfunction readConfig($file) {\n    $content = file_get_contents($file);\n    if ($content === false) {\n        die(\"Error reading file: \" . $file);\n    }\n    return json_decode($content, true);\n}",
+    "code_python": "import json\nimport logging\n\nlogger = logging.getLogger(__name__)\n\ndef read_config(file: str) -> dict:\n    try:\n        with open(file, 'r') as f:\n            return json.load(f)\n    except FileNotFoundError:\n        logger.error(f\"Config file not found: {file}\")\n        raise RuntimeError(\"Configuration unavailable\")\n    except json.JSONDecodeError as e:\n        logger.error(f\"Invalid JSON in config: {str(e)}\")\n        raise ValueError(\"Invalid configuration format\")",
+    "description": "Lire un fichier de configuration",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "poor_error_handling",
+    "type_transformation": "quality_fix",
+    "faille": "error_disclosure",
+    "cwe": "CWE-209",
+    "severity": "medium",
+    "invariant": [
+      "chemin du fichier jamais exposé à l'utilisateur",
+      "erreurs typées et loggées"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 5,
+    "code_php": "<?php\nfunction processPayment($amount, $cardNumber) {\n    if ($amount <= 0) {\n        throw new Exception(\"Invalid amount: $amount\");\n    }\n    return chargeCard($cardNumber, $amount);\n}",
+    "code_python": "import logging\n\nlogger = logging.getLogger(__name__)\n\ndef process_payment(amount: float, card_number: str) -> bool:\n    if amount <= 0:\n        raise ValueError(\"Le montant doit être positif\")\n    try:\n        return charge_card(card_number, amount)\n    except PaymentError as e:\n        logger.error(\n            f\"Payment failed for amount {amount}\",\n            extra={\"error_code\": e.code}\n        )\n        raise HTTPException(\n            status_code=402,\n            detail=\"Paiement refusé\"\n        )",
+    "description": "Traitement paiement avec gestion erreur sécurisée",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "information_leakage",
+    "type_transformation": "security_fix",
+    "faille": "error_disclosure",
+    "cwe": "CWE-209",
+    "severity": "high",
+    "invariant": [
+      "numéro de carte jamais dans les logs",
+      "montant validé avant traitement",
+      "message d'erreur générique pour l'utilisateur"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 6,
+    "code_php": "<?php\nfunction parseUserInput($data) {\n    $decoded = json_decode($data);\n    echo $decoded->username;\n}",
+    "code_python": "import json\nimport logging\nfrom pydantic import BaseModel, ValidationError\n\nlogger = logging.getLogger(__name__)\n\nclass UserInput(BaseModel):\n    username: str\n\ndef parse_user_input(data: str) -> UserInput:\n    try:\n        parsed = json.loads(data)\n        return UserInput(**parsed)\n    except json.JSONDecodeError:\n        raise ValueError(\"Format JSON invalide\")\n    except ValidationError as e:\n        raise ValueError(\"Données utilisateur invalides\")",
+    "description": "Parser une entrée JSON utilisateur",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "missing_error_handling",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "medium",
+    "invariant": [
+      "JSON validé avant utilisation",
+      "structure validée par Pydantic"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 7,
+    "code_php": "<?php\nfunction sendRequest($url) {\n    $response = file_get_contents($url);\n    return json_decode($response, true);\n}",
+    "code_python": "import httpx\nimport logging\n\nlogger = logging.getLogger(__name__)\n\nasync def send_request(url: str) -> dict:\n    try:\n        async with httpx.AsyncClient(timeout=10.0) as client:\n            response = await client.get(url)\n            response.raise_for_status()\n            return response.json()\n    except httpx.TimeoutException:\n        logger.warning(f\"Request timeout for URL\")\n        raise TimeoutError(\"Service non disponible\")\n    except httpx.HTTPStatusError as e:\n        logger.error(f\"HTTP error: {e.response.status_code}\")\n        raise RuntimeError(\"Erreur service externe\")",
+    "description": "Requête HTTP avec gestion d'erreurs complète",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "missing_error_handling",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "timeout configuré",
+      "status HTTP vérifié",
+      "URL jamais loggée"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 8,
+    "code_php": "<?php\nfunction deleteUser($userId) {\n    $sql = \"DELETE FROM users WHERE id=\" . $userId;\n    mysql_query($sql);\n    echo \"User $userId deleted successfully\";\n}",
+    "code_python": "import logging\n\nlogger = logging.getLogger(__name__)\n\ndef delete_user(user_id: int, db: Session) -> dict:\n    user = db.query(User).filter(\n        User.id == user_id\n    ).first()\n    if not user:\n        raise HTTPException(\n            status_code=404,\n            detail=\"Utilisateur non trouvé\"\n        )\n    db.delete(user)\n    db.commit()\n    logger.info(f\"User deleted successfully\")\n    return {\"message\": \"Utilisateur supprimé\"}",
+    "description": "Supprimer utilisateur avec gestion erreur",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "missing_validation",
+    "type_transformation": "security_fix",
+    "faille": "sql_injection",
+    "cwe": "CWE-89",
+    "severity": "critical",
+    "invariant": [
+      "utilisateur vérifié avant suppression",
+      "ID utilisateur jamais dans message public",
+      "action loggée sans données sensibles"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 9,
+    "code_php": "<?php\nfunction validateAndSave($data) {\n    if (empty($data['name'])) {\n        return false;\n    }\n    saveToDatabase($data);\n    return true;\n}",
+    "code_python": "import logging\nfrom pydantic import BaseModel, validator\n\nlogger = logging.getLogger(__name__)\n\nclass DataModel(BaseModel):\n    name: str\n\n    @validator('name')\n    def name_not_empty(cls, v):\n        if not v.strip():\n            raise ValueError('Le nom ne peut pas être vide')\n        return v.strip()\n\ndef validate_and_save(data: dict, db: Session) -> bool:\n    try:\n        validated = DataModel(**data)\n        save_to_database(validated, db)\n        return True\n    except ValueError as e:\n        logger.warning(f\"Validation failed: {str(e)}\")\n        raise HTTPException(\n            status_code=422,\n            detail=str(e)\n        )",
+    "description": "Valider et sauvegarder des données",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "poor_error_handling",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "validation explicite avant sauvegarde",
+      "erreur de validation retournée avec détail"
+    ],
+    "source": "manuel_erreurs"
+  },
+  {
+    "id": 10,
+    "code_php": "<?php\nfunction importCSV($filename) {\n    $file = fopen($filename, 'r');\n    while ($row = fgetcsv($file)) {\n        insertRow($row);\n    }\n    fclose($file);\n}",
+    "code_python": "import csv\nimport logging\n\nlogger = logging.getLogger(__name__)\n\ndef import_csv(filename: str, db: Session) -> dict:\n    imported = 0\n    errors = 0\n    try:\n        with open(filename, 'r', encoding='utf-8') as f:\n            reader = csv.DictReader(f)\n            for row in reader:\n                try:\n                    insert_row(row, db)\n                    imported += 1\n                except Exception as e:\n                    logger.warning(f\"Row skipped: {str(e)}\")\n                    errors += 1\n        db.commit()\n        return {\"imported\": imported, \"errors\": errors}\n    except FileNotFoundError:\n        raise HTTPException(\n            status_code=404,\n            detail=\"Fichier non trouvé\"\n        )",
+    "description": "Import CSV avec gestion d'erreurs par ligne",
+    "categorie": "gestion_erreurs",
+    "type_erreur": "missing_error_handling",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "erreurs par ligne isolées",
+      "rapport import/erreurs retourné",
+      "transaction committée uniquement si succès global"
+    ],
+    "source": "manuel_erreurs"
+  }
+]

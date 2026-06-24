@@ -1,0 +1,175 @@
+[
+  {
+    "id": 1,
+    "code_php": "<?php\nfunction processData($d) {\n    $r = array();\n    for($i=0;$i<count($d);$i++) {\n        if($d[$i]['s']==1) {\n            $r[] = $d[$i]['v']*1.2;\n        } else {\n            $r[] = $d[$i]['v'];\n        }\n    }\n    return $r;\n}",
+    "code_python": "from typing import List\n\ndef process_data(items: List[dict]) -> List[float]:\n    result = []\n    for item in items:\n        if item['status'] == 1:\n            result.append(item['value'] * 1.2)\n        else:\n            result.append(item['value'])\n    return result",
+    "description": "Traitement données avec nommage lisible",
+    "categorie": "qualite_code",
+    "type_amelioration": "naming_clarity",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "logique métier identique",
+      "noms de variables explicites"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 2,
+    "code_php": "<?php\nfunction getUserFullName($userId) {\n    $user = getUser($userId);\n    $name = $user['first_name'] . ' ' . $user['last_name'];\n    return $name;\n}\n\nfunction getAdminFullName($adminId) {\n    $admin = getAdmin($adminId);\n    $name = $admin['first_name'] . ' ' . $admin['last_name'];\n    return $name;\n}",
+    "code_python": "def get_full_name(entity: dict) -> str:\n    return f\"{entity['first_name']} {entity['last_name']}\"\n\ndef get_user_full_name(user_id: int, db: Session) -> str:\n    user = get_user(user_id, db)\n    return get_full_name(user)\n\ndef get_admin_full_name(admin_id: int, db: Session) -> str:\n    admin = get_admin(admin_id, db)\n    return get_full_name(admin)",
+    "description": "Élimination de code dupliqué",
+    "categorie": "qualite_code",
+    "type_amelioration": "code_duplication",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "logique de concaténation centralisée",
+      "DRY principle respecté"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 3,
+    "code_php": "<?php\nfunction calculate($a, $b, $c, $d, $e, $f) {\n    $result = ($a + $b) * $c - ($d / $e) + $f;\n    if ($result > 100) {\n        $result = 100;\n    }\n    if ($result < 0) {\n        $result = 0;\n    }\n    return $result;\n}",
+    "code_python": "def calculate_score(\n    base_value: float,\n    bonus: float,\n    multiplier: float,\n    penalty: float,\n    divisor: float,\n    adjustment: float,\n    min_score: float = 0,\n    max_score: float = 100\n) -> float:\n    raw_score = (base_value + bonus) * multiplier\n    raw_score -= (penalty / divisor)\n    raw_score += adjustment\n    return max(min_score, min(max_score, raw_score))",
+    "description": "Fonction avec paramètres explicites et typés",
+    "categorie": "qualite_code",
+    "type_amelioration": "function_clarity",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "résultat entre min_score et max_score",
+      "paramètres nommés et typés"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 4,
+    "code_php": "<?php\nfunction getActiveUsers() {\n    global $db;\n    $users = array();\n    $result = mysql_query(\"SELECT * FROM users WHERE active=1\");\n    while($row = mysql_fetch_array($result)) {\n        if ($row['age'] >= 18) {\n            if ($row['email'] != '') {\n                $users[] = $row;\n            }\n        }\n    }\n    return $users;\n}",
+    "code_python": "from typing import List\n\ndef get_active_users(db: Session) -> List[User]:\n    return db.query(User).filter(\n        User.active == True,\n        User.age >= 18,\n        User.email != ''\n    ).all()",
+    "description": "Simplification avec ORM et filtres chaînés",
+    "categorie": "qualite_code",
+    "type_amelioration": "simplification",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "uniquement utilisateurs actifs",
+      "age >= 18",
+      "email non vide"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 5,
+    "code_php": "<?php\n// Get user\nfunction getUser($id) {\n    // Connect to database\n    $conn = connectDB();\n    // Query database\n    $sql = \"SELECT * FROM users WHERE id=\" . $id;\n    // Execute query\n    $result = mysql_query($sql);\n    // Fetch result\n    $user = mysql_fetch_array($result);\n    // Return user\n    return $user;\n}",
+    "code_python": "def get_user(user_id: int, db: Session) -> User:\n    \"\"\"\n    Retrieve a user by their ID.\n\n    Args:\n        user_id: The unique identifier of the user\n        db: Database session\n\n    Returns:\n        User object if found\n\n    Raises:\n        HTTPException: 404 if user not found\n    \"\"\"\n    user = db.query(User).filter(User.id == user_id).first()\n    if not user:\n        raise HTTPException(status_code=404,\n                          detail=\"User not found\")\n    return user",
+    "description": "Remplacement commentaires inutiles par docstring",
+    "categorie": "qualite_code",
+    "type_amelioration": "documentation",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "docstring Python standard",
+      "comportement documenté"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 6,
+    "code_php": "<?php\nfunction processOrder($order) {\n    // 200 lines of mixed logic\n    $total = 0;\n    foreach($order['items'] as $item) {\n        $price = $item['price'];\n        if ($item['discount'] > 0) {\n            $price = $price * (1 - $item['discount']/100);\n        }\n        $total += $price * $item['quantity'];\n    }\n    $tax = $total * 0.20;\n    $total_with_tax = $total + $tax;\n    sendConfirmationEmail($order['email'], $total_with_tax);\n    saveOrder($order, $total_with_tax);\n    return $total_with_tax;\n}",
+    "code_python": "def calculate_item_price(item: dict) -> float:\n    price = item['price']\n    if item.get('discount', 0) > 0:\n        price *= (1 - item['discount'] / 100)\n    return price * item['quantity']\n\ndef calculate_order_total(items: list) -> float:\n    subtotal = sum(\n        calculate_item_price(item) for item in items\n    )\n    return subtotal * 1.20\n\ndef process_order(order: dict, db: Session) -> float:\n    total = calculate_order_total(order['items'])\n    save_order(order, total, db)\n    send_confirmation_email(order['email'], total)\n    return total",
+    "description": "Décomposition fonction longue en fonctions courtes",
+    "categorie": "qualite_code",
+    "type_amelioration": "function_decomposition",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "total identique au calcul original",
+      "TVA 20% préservée",
+      "email envoyé après sauvegarde"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 7,
+    "code_php": "<?php\n$STATUS_ACTIVE = 1;\n$STATUS_INACTIVE = 0;\n$STATUS_PENDING = 2;\n$MAX_LOGIN_ATTEMPTS = 5;\n$SESSION_TIMEOUT = 3600;\n\nfunction checkStatus($user) {\n    global $STATUS_ACTIVE, $STATUS_INACTIVE,\n           $STATUS_PENDING, $MAX_LOGIN_ATTEMPTS;\n    if ($user['status'] == $STATUS_ACTIVE) {\n        return true;\n    }\n    return false;\n}",
+    "code_python": "from enum import Enum\n\nclass UserStatus(Enum):\n    ACTIVE = 1\n    INACTIVE = 0\n    PENDING = 2\n\nMAX_LOGIN_ATTEMPTS = 5\nSESSION_TIMEOUT = 3600\n\ndef check_status(user: dict) -> bool:\n    return user['status'] == UserStatus.ACTIVE.value",
+    "description": "Remplacement variables globales par Enum Python",
+    "categorie": "qualite_code",
+    "type_amelioration": "constants_enum",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "valeurs des statuts préservées",
+      "logique de vérification identique"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 8,
+    "code_php": "<?php\nfunction getUsers($type) {\n    if ($type == 'admin') {\n        return getAdmins();\n    } else if ($type == 'customer') {\n        return getCustomers();\n    } else if ($type == 'vendor') {\n        return getVendors();\n    } else {\n        return array();\n    }\n}",
+    "code_python": "from typing import List, Callable\n\nUSER_FETCHERS = {\n    'admin': get_admins,\n    'customer': get_customers,\n    'vendor': get_vendors\n}\n\ndef get_users(user_type: str, db: Session) -> List:\n    fetcher = USER_FETCHERS.get(user_type)\n    if not fetcher:\n        return []\n    return fetcher(db)",
+    "description": "Remplacement if/else par dictionnaire de fonctions",
+    "categorie": "qualite_code",
+    "type_amelioration": "pattern_simplification",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "types de users supportés identiques",
+      "liste vide si type inconnu"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 9,
+    "code_php": "<?php\nfunction getUserData($userId) {\n    $user = getUser($userId);\n    $name = $user['first_name'] . ' ' . $user['last_name'];\n    $email = $user['email'];\n    $age = date('Y') - date('Y', strtotime($user['birthdate']));\n    return array('name' => $name,\n                 'email' => $email,\n                 'age' => $age);\n}",
+    "code_python": "from pydantic import BaseModel\nfrom datetime import date\n\nclass UserData(BaseModel):\n    name: str\n    email: str\n    age: int\n\ndef get_user_data(user_id: int, db: Session) -> UserData:\n    user = get_user(user_id, db)\n    age = date.today().year - user.birthdate.year\n    return UserData(\n        name=f\"{user.first_name} {user.last_name}\",\n        email=user.email,\n        age=age\n    )",
+    "description": "Retourner un modèle Pydantic au lieu d'un tableau",
+    "categorie": "qualite_code",
+    "type_amelioration": "typed_return",
+    "type_transformation": "quality_fix",
+    "faille": null,
+    "cwe": null,
+    "severity": "low",
+    "invariant": [
+      "structure retournée identique",
+      "âge calculé correctement",
+      "types garantis par Pydantic"
+    ],
+    "source": "manuel_qualite"
+  },
+  {
+    "id": 10,
+    "code_php": "<?php\nfunction updateUser($id, $name, $email,\n                    $phone, $address, $city,\n                    $country, $zip) {\n    $sql = \"UPDATE users SET name='$name',\n            email='$email', phone='$phone',\n            address='$address', city='$city',\n            country='$country', zip='$zip'\n            WHERE id=$id\";\n    mysql_query($sql);\n}",
+    "code_python": "from pydantic import BaseModel\nfrom typing import Optional\n\nclass UserUpdate(BaseModel):\n    name: Optional[str] = None\n    email: Optional[str] = None\n    phone: Optional[str] = None\n    address: Optional[str] = None\n    city: Optional[str] = None\n    country: Optional[str] = None\n    zip_code: Optional[str] = None\n\ndef update_user(user_id: int,\n                data: UserUpdate,\n                db: Session) -> User:\n    user = db.query(User).filter(\n        User.id == user_id\n    ).first()\n    if not user:\n        raise HTTPException(status_code=404,\n                          detail=\"User not found\")\n    for field, value in data.dict(\n        exclude_unset=True\n    ).items():\n        setattr(user, field, value)\n    db.commit()\n    return user",
+    "description": "Remplacer paramètres multiples par modèle Pydantic",
+    "categorie": "qualite_code",
+    "type_amelioration": "parameter_object",
+    "type_transformation": "quality_fix",
+    "faille": "sql_injection",
+    "cwe": "CWE-89",
+    "severity": "critical",
+    "invariant": [
+      "tous les champs mis à jour",
+      "mise à jour partielle supportée"
+    ],
+    "source": "manuel_qualite"
+  }
+]
