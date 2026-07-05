@@ -1,11 +1,36 @@
+# Variables d'environnement
 .env
-.env
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Environnements virtuels
 .venv/
 venv/
-__pycache__/
-*.pyc
-.venv/
-venv/
+env/
+
+# VS Code
 .vscode/
+
+# JetBrains
+.idea/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Pytest
+.pytest_cache/
+
+# Distribution
+build/
+dist/
+*.egg-info/
