@@ -3,19 +3,18 @@ import faiss
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
 import torch
-from huggingface_hub import InferenceClient
-
+from groq import Groq
 # ─── CHARGEMENT DE LA BASE RAG ───────────────────────
 print("Chargement de la base RAG...")
 
 # Charger l'index FAISS
 index = faiss.read_index(
-    r"C:\Users\HP\Desktop\dataset\index_rag.faiss"
+    r"C:\Users\HP\Desktop\projetPfe-jlaikaMalak\dataset\index_rag.faiss"
 )
 
 # Charger les métadonnées
 with open(
-    r"C:\Users\HP\Desktop\dataset\metadata.json",
+    r"C:\Users\HP\Desktop\projetPfe-jlaikaMalak\dataset\metadata.json",
     "r", encoding="utf-8"
 ) as f:
     metadata = json.load(f)
@@ -64,6 +63,25 @@ def retriever(code_php: str, k: int = 5) -> list:
     return exemples
 
 # ─── GÉNÉRATEUR DE CODE ──────────────────────────────
+
+def appeler_llm(prompt: str, token: str) -> str:
+    """
+    Appelle Llama 3.3 70B via l'API Groq.
+    """
+    client = Groq(api_key=token)
+    
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.1,
+        max_tokens=800
+    )
+    
+    return response.choices[0].message.content
+
+
 def generer_code_python(
     code_php: str,
     module_info: dict,
@@ -74,6 +92,9 @@ def generer_code_python(
     Génère le code Python équivalent au code PHP
     en s'appuyant sur la base RAG et DeepSeek-Coder.
     """
+    import os
+
+    GROQ_TOKEN = os.getenv("GROQ_TOKEN")
 
     # Étape 1 — Récupérer les exemples similaires
     print(f"\n  Recherche RAG pour : {module_info.get('nom_original', '')}")
@@ -123,32 +144,18 @@ Invariants de sécurité à préserver obligatoirement :
 Failles à corriger dans le code Python généré :
 {failles_text}
 
-Génère le code Python moderne équivalent avec :
-- FastAPI pour les endpoints
-- Pydantic pour la validation
-- SQLAlchemy ORM (jamais de requêtes SQL dynamiques)
-- Gestion d'erreurs avec HTTPException
-- Annotations de types Python
-
-Réponds UNIQUEMENT avec le code Python, sans explication."""
+Génère le code Python moderne équivalent avec FastAPI, Pydantic, SQLAlchemy ORM, gestion d'erreurs avec HTTPException, et annotations de types Python.
+Réponds UNIQUEMENT avec le code Python."""
 
     # Étape 3 — Appeler DeepSeek-Coder
-    print(f"\n  Génération du code Python via DeepSeek-Coder...")
+    print(f"\n  Génération du code Python via DeepSeek-Coder 6.7B...")
     try:
-        client = InferenceClient(
-            model="deepseek-ai/DeepSeek-Coder-V2-Instruct",
-            token=None  # Utilise le token HuggingFace si disponible
-        )
-        response = client.text_generation(
-            prompt,
-            max_new_tokens=500,
-            temperature=0.1
-        )
-        code_python = response
+        code_python = appeler_llm(prompt, GROQ_TOKEN)
+        if not code_python or len(code_python.strip()) < 10:
+            raise Exception("Réponse vide du modèle")
     except Exception as e:
-        print(f"  ⚠️ LLM non disponible ({str(e)[:50]})")
+        print(f"  LLM non disponible : {type(e).__name__} - {str(e)[:150]}")
         print(f"  Mode démonstration — code Python généré localement")
-        # Code de fallback pour démonstration
         code_python = generer_code_fallback(
             module_info, invariants, failles
         )

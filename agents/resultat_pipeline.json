@@ -1,0 +1,49 @@
+{
+  "modules_livres": [
+    {
+      "nom": "get_user",
+      "code_python": "```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\nfrom sqlalchemy import create_engine, Column, Integer, String\nfrom sqlalchemy.ext.declarative import declarative_base\nfrom sqlalchemy.orm import sessionmaker\nfrom typing import Optional\n\n# Configuration de la base de données\nSQLALCHEMY_DATABASE_URL = \"sqlite:///example.db\"\nengine = create_engine(SQLALCHEMY_DATABASE_URL)\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\n\n# Définition du modèle de données\nBase = declarative_base()\n\nclass User(Base):\n    __tablename__ = \"users\"\n    id = Column(Integer, primary_key=True)\n    name = Column(String)\n    email = Column(String)\n\n# Création de la base de données\nBase.metadata.create_all(bind=engine)\n\n# Définition du modèle Pydantic pour la validation\nclass UserRequest(BaseModel):\n    id: int\n\napp = FastAPI()\n\n# Fonction pour récupérer un utilisateur\ndef get_user(db, user_id: int):\n    return db.query(User).filter(User.id == user_id).first()\n\n# Route pour récupérer un utilisateur\n@app.get(\"/users/{user_id}\")\nasync def read_user(user_id: int):\n    db = SessionLocal()\n    user = get_user(db, user_id)\n    if user is None:\n        raise HTTPException(status_code=404, detail=\"Utilisateur non trouvé\")\n    return user\n\n# Validation de longueur et de format\ndef validation_longueur(champ: str, min_length: int, max_length: int) -> bool:\n    return min_length <= len(champ) <= max_length\n\ndef validation_format(champ: str, pattern: str) -> bool:\n    import re\n    return bool(re.match(pattern, champ))\n\n# Exemple d'utilisation de la validation\n@app.post(\"/users/\")\nasync def create_user(user: UserRequest):\n    if not validation_longueur(str(user.id), 1, 10):\n        raise HTTPException(status_code=400, detail=\"ID utilisateur invalide\")\n    if not validation_format(str(user.id), \"^[0-9]+$\"):\n        raise HTTPException(status_code=400, detail=\"ID utilisateur invalide\")\n    db = SessionLocal()\n    user_exists = get_user(db, user.id)\n    if user_exists:\n        raise HTTPException(status_code=400, detail=\"Utilisateur déjà existant\")\n    new_user = User(id=user.id)\n    db.add(new_user)\n    db.commit()\n    db.refresh(new_user)\n    return new_user\n```",
+      "score_final": 92.0,
+      "iterations_necessaires": 1
+    }
+  ],
+  "modules_echoues": [
+    {
+      "nom": "validate_password",
+      "raison": "Nombre maximum d'itérations atteint (3) sans atteindre le seuil de qualité requis.",
+      "derniere_score": 74.0
+    }
+  ],
+  "historique_iterations": [
+    {
+      "module": "validate_password",
+      "historique": [
+        {
+          "iteration": 1,
+          "score_compose": 74.0,
+          "decision": "ITERER"
+        },
+        {
+          "iteration": 2,
+          "score_compose": 74.0,
+          "decision": "ITERER"
+        },
+        {
+          "iteration": 3,
+          "score_compose": 74.0,
+          "decision": "ARRET_ECHEC"
+        }
+      ]
+    },
+    {
+      "module": "get_user",
+      "historique": [
+        {
+          "iteration": 1,
+          "score_compose": 92.0,
+          "decision": "LIVRER"
+        }
+      ]
+    }
+  ]
+}
