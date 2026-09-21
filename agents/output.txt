@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "C:\Users\poste\projetPfe-jlaikaMalak\agents\crewai_pipeline.py", line 12, in <module>
+    from agent_developpeur import generer_code_python, extraire_code_module
+  File "C:\Users\poste\projetPfe-jlaikaMalak\agents\agent_developpeur.py", line 4, in <module>
+    from transformers import AutoTokenizer, AutoModel
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\transformers\__init__.py", line 808, in <module>
+    import_structure = define_import_structure(Path(__file__).parent / "models", prefix="models")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\transformers\utils\import_utils.py", line 3080, in define_import_structure
+    import_structure = create_import_structure_from_path(module_path)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\transformers\utils\import_utils.py", line 2797, in create_import_structure_from_path
+    import_structure[entry.name] = create_import_structure_from_path(entry.path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\transformers\utils\import_utils.py", line 2916, in create_import_structure_from_path
+    for _all_object in fetch__all__(file_content):
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\transformers\utils\import_utils.py", line 2690, in fetch__all__
+    def fetch__all__(file_content) -> list[str]:
+    
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\telemetry\telemetry.py", line 222, in handler
+    original_handler(signum, frame)
+KeyboardInterrupt
+^C

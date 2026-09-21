@@ -1,0 +1,140 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "LIVRER",
+          "score_final": 81.8,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.3333333333333333,
+            "cas_testes": 15,
+            "cas_equivalents": 5,
+            "divergences": [
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$y6zrvxdQQ6X1nSbIHlVOreRxGJeLBX.tJduMzpad.gKt8Uas76U5e",
+                "python": "$2b$12$aY0fBMNDptpaIl3cnHv.l.8Nc8KxpUqnlX33nfuC9CSv/eeNVxnKO"
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$kaZophNxfXcKoGwdSvMm1uLtFnih.kGTdM094FkF4/W2XT6T68RMi",
+                "python": "$2b$12$lXIfec7euNeXDIpYKLsb7uaMnZXNo2WR52ED3GgdFh5FLKJ5hxFTa"
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$5xm/Pbep0lQYrHLWP.Hj9unf6JH4hmIQ/BqguitF18pwlg.mCw.4m",
+                "python": "$2b$12$ETaQGfaQOFT0lFk1oWvQPuSvb3vTg.l8PUHFo4tA28UrN64J6rOIm"
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Trop court)"
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$DOjgkECH.P5JwCrwb4/1r.Ms/xnmO78XrG8VeXSDZOKQJ.T8CZgPu",
+                "python": "$2b$12$p0FS/G/PSh1jsSa.w8quzenOE0QLS6Icud5/SJbZjM.3FYEyPDo/."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$ZSOM3MqDaoVxIGcf35IIIuTm6tH9Nz1yMXHzNJaI5aLVCBKq7FzrW",
+                "python": "$2b$12$fCwZHgyKnKOAiEIM2j.GB.lPjhZVGIl535TvQoq9PfgdwQFMRlAra"
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$E0hew/5tcoZaAwMkbR798.Yn4XlAg1LIHHZE54gPoQYQ4JOI0ka8K",
+                "python": "$2b$12$WbfqR1GxgkW0IEWR7kTcc.htnBYSvsD7bokfumH11zDiuVSaCamH6"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$p1UN3Xu8nzrXNe0QqF4Wr.mZ7LqeCay/aYrt0fBPmeh4GtrcHY3ii",
+                "python": "$2b$12$ji9vTgimAwVc6M8HYT.xHuYnKeL4KoNV.keJDipZHMKJsOMjxBpXC"
+              }
+            ]
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null
+              }
+            ],
+            "score_formel": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "LIVRER",
+          "score_final": 76.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 3,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [
+      "login.py : from db import get_user_by_email",
+      "login.py : from utils import hash_password"
+    ],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

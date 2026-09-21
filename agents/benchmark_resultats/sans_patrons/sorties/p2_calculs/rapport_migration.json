@@ -1,0 +1,115 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "calculs.php",
+      "cible": "calculs.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "diviser",
+          "decision_finale": "LIVRER",
+          "score_final": 88.4,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.8,
+            "cas_testes": 15,
+            "cas_equivalents": 12,
+            "divergences": [
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (unsupported operand type(s) for /: 'str' and 'str')"
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (unsupported operand type(s) for /: 'str' and 'str')"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (unsupported operand type(s) for /: 'str' and 'str')"
+              }
+            ]
+          },
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "formater_prix",
+          "decision_finale": "LIVRER",
+          "score_final": 87.19999999999999,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.7333333333333333,
+            "cas_testes": 15,
+            "cas_equivalents": 11,
+            "divergences": [
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Montant invalide)"
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Montant invalide)"
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Montant invalide)"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Montant invalide)"
+              }
+            ]
+          },
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "calculer_remise",
+          "decision_finale": "LIVRER",
+          "score_final": 90.8,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.9333333333333333,
+            "cas_testes": 15,
+            "cas_equivalents": 14,
+            "divergences": [
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('<' not supported between instances of 'str' and 'int')"
+              }
+            ]
+          },
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

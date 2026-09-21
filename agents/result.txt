@@ -1,0 +1,254 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights: 100%|##########| 199/199 [00:00<00:00, 9515.01it/s]
+Base RAG chargée : 3060 exemples indexés
+
+============================================================
+PIPELINE CREWAI SMAML - DEMARRAGE
+============================================================
+┌────────────────────────── ✨ Update Available ✨ ───────────────────────────┐
+│                                                                             │
+│  A new version of CrewAI is available!                                      │
+│                                                                             │
+│  Current version: 1.14.7                                                    │
+│  Latest version:  1.15.1                                                    │
+│                                                                             │
+│  To update, run: uv sync --upgrade-package crewai                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────── 🚀 Crew Execution Started ─────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 2cab446d-d4f6-4c77-ba27-93114efa7fe4                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── 📋 Task Started ──────────────────────────────┐
+│                                                                             │
+│  Task Started                                                               │
+│  Name: Analyser ce code PHP et identifier toutes les fonctions,             │
+│          invariants de securite et failles potentielles.                    │
+│          Utilise l'outil 'Analyser le code PHP' avec ce code :              │
+│          <?php                                                              │
+│  function validatePassword($password) {                                     │
+│      if (strlen($password) < 8) {                                           │
+│          throw new Exception('Trop court');                                 │
+│      }                                                                      │
+│      return true;                                                           │
+│  }                                                                          │
+│                                                                             │
+│  function getUser($id) {                                                    │
+│      $sql = "SELECT * FROM users WHERE id=" . $id;                          │
+│      $result = mysql_query($sql);                                           │
+│      return mysql_fetch_array($result);                                     │
+│  }                                                                          │
+│  ?>                                                                         │
+│  ID: 47041a6c-902d-41b9-aef7-a79a9690dc79                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Agent Manager SMAML                                                 │
+│                                                                             │
+│  Task: Analyser ce code PHP et identifier toutes les fonctions,             │
+│          invariants de securite et failles potentielles.                    │
+│          Utilise l'outil 'Analyser le code PHP' avec ce code :              │
+│          <?php                                                              │
+│  function validatePassword($password) {                                     │
+│      if (strlen($password) < 8) {                                           │
+│          throw new Exception('Trop court');                                 │
+│      }                                                                      │
+│      return true;                                                           │
+│  }                                                                          │
+│                                                                             │
+│  function getUser($id) {                                                    │
+│      $sql = "SELECT * FROM users WHERE id=" . $id;                          │
+│      $result = mysql_query($sql);                                           │
+│      return mysql_fetch_array($result);                                     │
+│  }                                                                          │
+│  ?>                                                                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────Error executing listener call_llm_native_tools: litellm.BadRequestError: GroqException - {"error":{"message":"'messages.0' : for 'role:system' the following must be satisfied[('messages.0' : property 'cache_breakpoint' is unsupported)]","type":"invalid_request_error"}}
+
+ ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: litellm.BadRequestError: GroqException -                            │
+│  {"error":{"message":"'messages.0' : for 'role:system' the following must   │
+│  be satisfied[('messages.0' : property 'cache_breakpoint' is                │
+│  unsupported)]","type":"invalid_request_error"}}                            │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── 📋 Task Failure ──────────────────────────────┐
+│                                                                             │
+│  Task Failed                                                                │
+│  Name: Analyser ce code PHP et identifier toutes les fonctions,             │
+│          invariants de securite et failles potentielles.                    │
+│          Utilise l'outil 'Analyser le code PHP' avec ce code :Traceback (most recent call last):
+              │  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 1943, in kickoff
+
+│          <?php                                                              │
+    asyncio.get_running_loop()
+│RuntimeError: no running event loop
+  
+function validatePassword($password) {During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\poste\projetPfe-jlaikaMalak\agents\crewai_pipeline.py", line 233, in <module>
+                                     │
+│    resultat = lancer_crewai(code_php_test)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    if (strlen($password) < 8) {  File "C:\Users\poste\projetPfe-jlaikaMalak\agents\crewai_pipeline.py", line 207, in lancer_crewai
+                                           │
+│          throw new Exception('Trop court');                                     resultat = equipe.kickoff()
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\crew.py", line 1023, in kickoff
+│
+│      result = self._run_hierarchical_process()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\crew.py", line 1475, in _run_hierarchical_process
+    }                                                                      │
+│      return true;    return self._execute_tasks(self.tasks)
+                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\crew.py", line 1569, in _execute_tasks
+│
+│      task_output = task.execute_sync(
+}                  ^^^^^^^^^^^^^^^^^^
+                                                                          File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\task.py", line 580, in execute_sync
+  │
+│    return self._execute_core(agent, context, tools)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                                           File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\task.py", line 882, in _execute_core
+  │
+│  function getUser($id) {                                                      raise e
+    File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\task.py", line 790, in _execute_core
+│
+│      result = agent.execute_task(
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\agent\core.py", line 828, in execute_task
+    $sql = "SELECT * FROM users WHERE id=" . $id;                          │    result = self._handle_execution_error(e, task, context, tools)
+
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\agent\core.py", line 737, in _handle_execution_error
+      $result = mysql_query($sql);                                           │
+│      self._check_execution_error(e, task)
+    return mysql_fetch_array($result);  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\agent\core.py", line 704, in _check_execution_error
+                                     │
+│      raise e
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\agent\core.py", line 815, in execute_task
+}                                                                          │
+│      result = self._execute_without_timeout(task_prompt, task)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\agent\core.py", line 880, in _execute_without_timeout
+?>                                                                         │
+│      invoke_result = self.agent_executor.invoke(
+Agent:                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\experimental\agent_executor.py", line 2686, in invoke
+Agent Manager SMAML                                                 │
+│                                                                             │    self.kickoff()
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 1948, in kickoff
+
+│                                                                             │    return asyncio.run(_run_flow())
+
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+└─────────────────────────────────────────────────────────────────────────────┘  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 190, in run
+
+
+    return runner.run(main)
+┌─           ^^^^^^^^^^^^^^^^
+──────────────────────────────  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\asyncio\runners.py", line 118, in run
+ Crew Failure ────────────────────────────────┐
+    return self._loop.run_until_complete(task)
+│           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                                                               File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\asyncio\base_events.py", line 654, in run_until_complete
+│
+│    return future.result()
+             ^^^^^^^^^^^^^^^
+Crew Execution Failed  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 1934, in _run_flow
+                                                      │
+│  Name:     return await self.kickoff_async(
+crew           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2237, in kickoff_async
+                                                                 │
+│  ID:     await asyncio.gather(*tasks)
+2cab446d-d4f6-4c77-ba27-93114efa7fe4  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2477, in _execute_start_method
+                                   │
+│      await self._execute_listeners(start_method_name, result, finished_event_id)
+                                                                           File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2703, in _execute_listeners
+  │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ) = await self._execute_single_listener(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2913, in _execute_single_listener
+    await self._execute_listeners(
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2703, in _execute_listeners
+    ) = await self._execute_single_listener(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2909, in _execute_single_listener
+┌────────────────────────────── Tracing Status ──────────────────────────────    listener_result, finished_event_id = await self._execute_method(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2643, in _execute_method
+─┐
+│                                                                             │
+│  Info: Tracing is disabled.                                                 │
+    raise e
+│  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\runtime.py", line 2561, in _execute_method
+                                                                             │
+│  To enable tracing, do any one of these:                                    │    result = await asyncio.to_thread(ctx.run, method, *args, **kwargs)
+
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\asyncio\threads.py", line 25, in to_thread
+  • Set tracing=True in your Crew/Flow code                                  │
+│    return await loop.run_in_executor(None, func_call)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+• Set CREWAI_TRACING_ENABLED=true in your project's .env file  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\concurrent\futures\thread.py", line 58, in run
+              │
+│      result = self.fn(*self.args, **self.kwargs)
+• Run: crewai traces enable                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\flow\flow_wrappers.py", line 102, in __call__
+
+│                                                                             │    return self._meth(self._instance, *args, **kwargs)
+
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+└─────────────────────────────────────────────────────────────────────────────┘  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\experimental\agent_executor.py", line 1435, in call_llm_native_tools
+
+    raise e
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\experimental\agent_executor.py", line 1377, in call_llm_native_tools
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\utilities\agent_utils.py", line 490, in get_llm_response
+    answer = llm.call(
+             ^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\llm.py", line 1800, in call
+    result = self._handle_non_streaming_response(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\crewai\llm.py", line 1183, in _handle_non_streaming_response
+    response = litellm.completion(**params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\litellm\utils.py", line 1381, in wrapper
+    raise e
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\litellm\utils.py", line 1250, in wrapper
+    result = original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\litellm\main.py", line 3772, in completion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\litellm\litellm_core_utils\exception_mapping_utils.py", line 2328, in exception_type
+    raise e
+  File "C:\Users\poste\AppData\Local\Programs\Python\Python311\Lib\site-packages\litellm\litellm_core_utils\exception_mapping_utils.py", line 417, in exception_type
+    raise BadRequestError(
+litellm.exceptions.BadRequestError: litellm.BadRequestError: GroqException - {"error":{"message":"'messages.0' : for 'role:system' the following must be satisfied[('messages.0' : property 'cache_breakpoint' is unsupported)]","type":"invalid_request_error"}}
+

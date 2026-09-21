@@ -1,0 +1,60 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "ARRET_ECHEC",
+          "score_final": 52.0,
+          "iterations": 5,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "LIVRER",
+          "score_final": 76.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 2,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

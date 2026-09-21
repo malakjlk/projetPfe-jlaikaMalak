@@ -2,6 +2,7 @@ import subprocess
 import sys
 import json
 import re
+import ast
 from hypothesis import given, strategies as st, settings
 
 
@@ -39,13 +40,119 @@ def extraire_invariants_testables(invariants: list) -> list:
     return regles
 
 
-def verifier_syntaxe_python(code_python: str) -> dict:
+def detecter_noms_non_resolus(code_python: str) -> list:
     """
-    Vérifie que le code Python généré est syntaxiquement valide.
+    Détecte les noms UTILISÉS mais jamais définis ni importés
+    (ex: HTTPException employé sans `from fastapi import HTTPException`).
+
+    Pourquoi : compile() ne valide que la GRAMMAIRE. Un nom manquant
+    ne se manifeste qu'à l'exécution — le module était donc déclaré
+    "syntaxe valide" alors qu'il plantait sur toutes les entrées
+    (cas generer_rapport du benchmark : NameError sur 15/15 cas).
+
+    Analyse volontairement CONSERVATRICE : on collecte tous les noms
+    liés n'importe où dans le module (imports, def/class, paramètres,
+    affectations, boucles, with, except, compréhensions, global) sans
+    tenir compte des portées. On préfère rater un vrai défaut que
+    produire un faux positif.
+    """
+    import builtins as _builtins
+
+    try:
+        arbre = ast.parse(code_python)
+    except SyntaxError:
+        return []   # erreur de syntaxe : déjà signalée ailleurs
+
+    lies = set()
+    etoile = False   # `from x import *` : impossible de conclure
+
+    def lier_cible(noeud):
+        """Enregistre les noms liés par une affectation/boucle/with."""
+        if isinstance(noeud, ast.Name):
+            lies.add(noeud.id)
+        elif isinstance(noeud, (ast.Tuple, ast.List)):
+            for e in noeud.elts:
+                lier_cible(e)
+        elif isinstance(noeud, ast.Starred):
+            lier_cible(noeud.value)
+
+    def lier_arguments(args):
+        for a in (list(getattr(args, "posonlyargs", []))
+                  + list(args.args) + list(args.kwonlyargs)):
+            lies.add(a.arg)
+        if args.vararg:
+            lies.add(args.vararg.arg)
+        if args.kwarg:
+            lies.add(args.kwarg.arg)
+
+    for noeud in ast.walk(arbre):
+        if isinstance(noeud, ast.Import):
+            for alias in noeud.names:
+                lies.add(alias.asname or alias.name.split(".")[0])
+        elif isinstance(noeud, ast.ImportFrom):
+            for alias in noeud.names:
+                if alias.name == "*":
+                    etoile = True
+                lies.add(alias.asname or alias.name)
+        elif isinstance(noeud, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            lies.add(noeud.name)
+            lier_arguments(noeud.args)
+        elif isinstance(noeud, ast.Lambda):
+            lier_arguments(noeud.args)
+        elif isinstance(noeud, ast.ClassDef):
+            lies.add(noeud.name)
+        elif isinstance(noeud, ast.Assign):
+            for c in noeud.targets:
+                lier_cible(c)
+        elif isinstance(noeud, (ast.AnnAssign, ast.AugAssign)):
+            lier_cible(noeud.target)
+        elif isinstance(noeud, ast.NamedExpr):
+            lier_cible(noeud.target)
+        elif isinstance(noeud, (ast.For, ast.AsyncFor)):
+            lier_cible(noeud.target)
+        elif isinstance(noeud, ast.comprehension):
+            lier_cible(noeud.target)
+        elif isinstance(noeud, ast.withitem):
+            if noeud.optional_vars is not None:
+                lier_cible(noeud.optional_vars)
+        elif isinstance(noeud, ast.ExceptHandler):
+            if noeud.name:
+                lies.add(noeud.name)
+        elif isinstance(noeud, (ast.Global, ast.Nonlocal)):
+            lies.update(noeud.names)
+
+    if etoile:
+        return []
+
+    connus = (lies | set(dir(_builtins))
+              | {"self", "cls", "__name__", "__file__", "__doc__",
+                 "__package__", "__spec__", "__builtins__"})
+
+    manquants = []
+    for noeud in ast.walk(arbre):
+        if (isinstance(noeud, ast.Name)
+                and isinstance(noeud.ctx, ast.Load)
+                and noeud.id not in connus
+                and noeud.id not in manquants):
+            manquants.append(noeud.id)
+    return manquants
+
+
+def verifier_syntaxe_python(code_python: str,
+                            noms_externes: set = None) -> dict:
+    """
+    Vérifie que le code Python généré est STATIQUEMENT valide :
+    grammaire correcte ET aucun nom utilisé sans être défini/importé.
+
+    noms_externes : noms déjà définis AILLEURS dans le fichier final
+    (modules du même fichier générés précédemment). Sans eux, un
+    `class Admin(User)` serait signalé à tort alors que User est
+    défini quelques lignes plus haut dans le fichier assemblé.
     """
     resultat = {
         "syntaxe_valide": False,
-        "erreur": None
+        "erreur": None,
+        "noms_non_resolus": []
     }
 
     # Nettoyer le code (enlever les balises markdown si présentes)
@@ -60,6 +167,21 @@ def verifier_syntaxe_python(code_python: str) -> dict:
         resultat["syntaxe_valide"] = True
     except SyntaxError as e:
         resultat["erreur"] = str(e)
+        return resultat
+
+    # Grammaire correcte : on vérifie maintenant la résolution des noms
+    manquants = detecter_noms_non_resolus(code_nettoye)
+    if noms_externes:
+        manquants = [n for n in manquants if n not in noms_externes]
+    if manquants:
+        resultat["noms_non_resolus"] = manquants
+        resultat["syntaxe_valide"] = False
+        resultat["erreur"] = (
+            "Nom(s) utilisé(s) sans être défini(s) ni importé(s) : "
+            + ", ".join(manquants[:5])
+            + ". Ajoute les imports manquants (ex: "
+            + f"from fastapi import {manquants[0]}) ou définis-les."
+        )
 
     return resultat
 
@@ -83,11 +205,19 @@ def verifier_invariants_presents(
     code_lower = code_python.lower()
 
     patterns_invariants = {
-        "validation_longueur": ["len(", "strlen", ">= 8", "< 8"],
-        "validation_format": ["isupper", "preg_match", "regex", "re.match"],
-        "validation_type": ["isinstance", "isdigit", "is_numeric"],
-        "validation_existence": ["is not none", "if not", "raise"],
-        "controle_acces": ["role", "permission", "permissionerror"]
+        "validation_longueur": ["len(", "strlen", ">= 8", "< 8",
+                                ".length", "len (", "> 1000", "< 1000"],
+        "validation_format": ["isupper", "preg_match", "regex", "re.match",
+                              "re.search", "re.fullmatch", ".match(",
+                              "email", "filter_var", "@"],
+        "validation_type": ["isinstance", "isdigit", "is_numeric",
+                            "isnumeric", ".isdigit", ".isnumeric",
+                            "isdecimal", "type(", "int(", "float("],
+        "validation_existence": ["is not none", "if not", "raise",
+                                "is none", "isset", "empty", "if ",
+                                "== none", "!= none"],
+        "controle_acces": ["role", "permission", "permissionerror",
+                          "admin", "auth", "access", "privilege"]
     }
 
     for inv in invariants:
@@ -126,18 +256,25 @@ def verifier_failles_corrigees(
 
     # Patterns qui indiquent qu'une faille a été corrigée
     indicateurs_correction = {
-        "sql_injection": ["sqlalchemy", ".query(", "orm", ".filter("],
-        "command_injection": ["subprocess.run", "shlex", "shell=false"],
-        "file_inclusion": ["whitelist", "allowed_pages", "in allowed"],
-        "insecure_deserialization": ["json.loads", "pydantic", "basemodel"]
+        "sql_injection": ["sqlalchemy", ".query(", "orm", ".filter(",
+                          "text(", "bindparam", "session.execute"],
+        "command_injection": ["subprocess.run", "shlex", "shell=false",
+                              "subprocess.check_output", "shell = false"],
+        "file_inclusion": ["whitelist", "allowed_pages", "in allowed",
+                           "pathlib", "os.path.basename", "allowlist"],
+        "insecure_deserialization": ["json.loads", "pydantic", "basemodel",
+                                     "json.load", ".model_validate"]
     }
 
     # Patterns qui indiquent que la faille est toujours présente
     indicateurs_faille_presente = {
-        "sql_injection": ["mysql_query", "execute(f\"", "+ id", ". $id"],
-        "command_injection": ["shell_exec", "os.system(", "subprocess.call(true"],
+        "sql_injection": ["mysql_query", "execute(f\"", "execute(f'",
+                         "+ id", ". $id", "% (id", "format(sql"],
+        "command_injection": ["shell_exec", "os.system(", "os.popen(",
+                             "shell=true", "shell = true", "eval("],
         "file_inclusion": ["include($", "require($"],
-        "insecure_deserialization": ["pickle.loads", "unserialize"]
+        "insecure_deserialization": ["pickle.loads", "pickle.load",
+                                     "unserialize", "yaml.load("]
     }
 
     for faille in failles:
@@ -218,7 +355,8 @@ def agent_testeur(
     code_python: str,
     module_info: dict,
     invariants: list,
-    failles: list
+    failles: list,
+    noms_externes: set = None
 ) -> dict:
     """
     Agent Testeur principal — SMAML
@@ -238,12 +376,15 @@ def agent_testeur(
         "score_fonctionnel": 0.0
     }
 
-    # Étape 1 — Vérification syntaxique
-    print("  1. Vérification syntaxique...")
-    rapport["syntaxe"] = verifier_syntaxe_python(code_python)
+    # Étape 1 — Validité statique (grammaire + résolution des noms)
+    print("  1. Vérification syntaxique et résolution des noms...")
+    rapport["syntaxe"] = verifier_syntaxe_python(code_python, noms_externes)
     statut_syntaxe = "✅" if rapport["syntaxe"]["syntaxe_valide"] else "❌"
-    print(f"     {statut_syntaxe} Syntaxe valide : "
+    print(f"     {statut_syntaxe} Code statiquement valide : "
           f"{rapport['syntaxe']['syntaxe_valide']}")
+    if rapport["syntaxe"].get("noms_non_resolus"):
+        print(f"     ⚠️  Nom(s) non défini(s) ni importé(s) : "
+              f"{', '.join(rapport['syntaxe']['noms_non_resolus'][:5])}")
 
     # Étape 2 — Vérification des invariants
     print("  2. Vérification des invariants de sécurité...")

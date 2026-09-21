@@ -1,0 +1,8 @@
+projet,fichiers_total,fichiers_livres,modules_total,modules_livres,score_moyen,iterations_moyennes,iterations_totales,equivalence_moyenne_pct,proprietes_prouvees,proprietes_refutees,corrections_projet,projet_coherent,duree_s,erreur
+p1_validations,1,1,3,3,85.5,1.33,4,93.3,2,0,0,True,54.1,
+p2_calculs,1,1,3,3,88.8,1,3,82.2,0,0,0,True,15.5,
+p3_securite,1,0,3,2,72.8,2.33,7,0.0,0,0,0,True,37.4,
+p4_classes,1,1,2,2,92.0,1,2,,0,0,0,True,9.0,
+p5_heritage,1,1,3,3,92.0,1,3,,1,0,0,True,13.8,
+p6_application,3,3,3,3,83.3,1,3,33.3,1,0,0,True,17.9,
+p7_deserialisation,1,1,3,3,81.8,1,3,50.0,1,0,0,True,15.3,

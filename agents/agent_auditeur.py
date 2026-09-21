@@ -2,6 +2,7 @@ import subprocess
 import json
 import tempfile
 import os
+import sys
 
 
 def lancer_bandit(code_python: str) -> dict:
@@ -32,7 +33,7 @@ def lancer_bandit(code_python: str) -> dict:
 
     try:
         process = subprocess.run(
-            ["py", "-3.11", "-m", "bandit", "-f", "json", chemin_temp],
+            [sys.executable, "-m", "bandit", "-f", "json", chemin_temp],
             capture_output=True,
             text=True,
             timeout=30
@@ -126,7 +127,7 @@ def auditer_dependances() -> dict:
 
     try:
         process = subprocess.run(
-            ["py", "-3.11", "-m", "pip_audit", "--format", "json"],
+            [sys.executable, "-m", "pip_audit", "--format", "json"],
             capture_output=True,
             text=True,
             timeout=60

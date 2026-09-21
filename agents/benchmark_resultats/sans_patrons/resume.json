@@ -1,0 +1,12 @@
+{
+  "configuration": "sans_patrons",
+  "description": "Ablation : patrons de correction/validation désactivés",
+  "projets_testes": 7,
+  "projets_reussis": 7,
+  "score_moyen_global": 85.2,
+  "iterations_moyennes_globales": 1.24,
+  "total_proprietes_prouvees": 5,
+  "total_proprietes_refutees": 0,
+  "total_corrections_projet": 0,
+  "duree_totale_s": 163.0
+}

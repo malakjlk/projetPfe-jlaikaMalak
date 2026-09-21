@@ -1,0 +1,46 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "utilisateurs.php",
+      "cible": "utilisateurs.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "User",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "Admin",
+          "decision_finale": "ARRET_ECHEC",
+          "score_final": 52.0,
+          "iterations": 5,
+          "equivalence": null,
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "SuperAdmin",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 5,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

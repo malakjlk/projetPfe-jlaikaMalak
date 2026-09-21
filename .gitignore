@@ -34,3 +34,19 @@ Thumbs.db
 build/
 dist/
 *.egg-info/
+# SMAML — fichiers générés localement
+cache_smaml.db
+*.db
+resultat*.json
+
+# Journaux de tests
+test*.txt
+projet*.txt
+verif*.txt
+direct*.txt
+# Ancienne sauvegarde (contient une clé en dur)
+agents_backup_VICTOIRE/
+
+# Clés API
+gsk_*
+*.key

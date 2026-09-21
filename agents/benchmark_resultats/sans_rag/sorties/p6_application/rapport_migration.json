@@ -1,0 +1,148 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "LIVRER",
+          "score_final": 81.8,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.3333333333333333,
+            "cas_testes": 15,
+            "cas_equivalents": 5,
+            "divergences": [
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$PoXKaYey6paBVEHIlUpemevS9OyTgRAakyU37X3qS2gGHaOy/UHuK",
+                "python": "b'$2b$12$MFA70qwwA2US3IorRgVAqu6d8AQiBHocL7SY4ZqRecqh0FpuwCAcS'"
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$TQ2yhqMM2UCyyD3LoSnRM..uSLaRuX2phnxI.F8gIZQAgfHwcdIzO",
+                "python": "b'$2b$12$YFni3.iWcPQHN6mH9JdC8uKlbRyRF/zROdV3qgeOdJeaEKIrvv2mC'"
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$Q9K8DKHlVfNT3Q7RJguMeuamgVwTmTPCFF25KGHeI6jH51TDn.LO.",
+                "python": "b'$2b$12$uIRgg2KaWmCoGacHJ9WI..2pdrKg6CP7KmKejHTY8KdOOsYrcDO2i'"
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Trop court)"
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$M9ycHcxJ5YOrEnavJIjtm.H5ahkCdOJvVuJ.wFz6x0ZH5j8kzEMsO",
+                "python": "b'$2b$12$7Pf9nUDpCXIOyw76sOFYxOzKYe9L7gqKWkZLkfovX8XFfkMS54x9u'"
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$W8zyiOIEqcIGx8ynx3iM5ukVcpy6/aKC.eksqaOR0YcsrOfWkMpJ2",
+                "python": "b'$2b$12$QfG/Wxrxs1BepEAhGeMpKuiumngWc8kmyF6c4l5WGbIwaObzcsykq'"
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$twjnZIHCWCB07QkJH2/wPuti7L/f9yPx6D90HwF2gNbyWr1AIkgNW",
+                "python": "b'$2b$12$ZiNMoAytsT/sQbW6S6ctW.8vn4wSNy7Nr7hS.8kIWG.ElZIKm5b5a'"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$cLPENd8kicYoaqXhbSRueOSKmtqqUpcwO1TnFfoimoxzoTX61biza",
+                "python": "b'$2b$12$HiVu6P0U0pwFcYcmTRtjCuYXgBKd9kn1fbPfHj1O.b40zAbNvvnfW'"
+              }
+            ]
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null
+              }
+            ],
+            "score_formel": 1.0
+          }
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 3,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [
+    {
+      "tentative": 1,
+      "fichier": "login.py",
+      "defauts_corriges": [
+        "- appel get_user_by_email(...) avec 1 argument(s) : get_user_by_email() défini dans db.py attend 2 argument(s), mais l'appel en fournit 1"
+      ]
+    }
+  ],
+  "coherence_projet": {
+    "imports_valides": [
+      "login.py : from db import get_user_by_email",
+      "login.py : from utils import hash_password"
+    ],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

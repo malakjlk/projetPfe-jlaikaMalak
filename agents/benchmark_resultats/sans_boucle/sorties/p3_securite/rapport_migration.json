@@ -1,0 +1,143 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "securite.php",
+      "cible": "securite.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "get_user",
+          "decision_finale": "LIVRER",
+          "score_final": 86.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "generer_rapport",
+          "decision_finale": "ARRET_ECHEC",
+          "score_final": 50.6,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.0,
+            "cas_testes": 15,
+            "cas_equivalents": 0,
+            "divergences": [
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "a",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "abc",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "Password123",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "motdepasse",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (name 'HTTPException' is not defined)"
+              }
+            ]
+          },
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "chercher_produit",
+          "decision_finale": "LIVRER",
+          "score_final": 86.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

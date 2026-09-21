@@ -1,0 +1,64 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "calculs.php",
+      "cible": "calculs.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "diviser",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "formater_prix",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "calculer_remise",
+          "decision_finale": "LIVRER",
+          "score_final": 92.0,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

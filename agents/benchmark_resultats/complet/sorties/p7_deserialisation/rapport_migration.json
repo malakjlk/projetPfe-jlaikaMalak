@@ -1,0 +1,184 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "session.php",
+      "cible": "session.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "charger_session",
+          "decision_finale": "LIVRER",
+          "score_final": 94.0,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.6666666666666666,
+            "cas_testes": 15,
+            "cas_equivalents": 10,
+            "divergences": [
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur de désérialisation JSON)"
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 7 bytes in C:\\Us)",
+                "python": "accepte"
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 8 bytes in C:\\Us)",
+                "python": "accepte"
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 1 bytes in C:\\Us)",
+                "python": "accepte"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 20 bytes in C:\\U)",
+                "python": "accepte"
+              }
+            ]
+          },
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "afficher_page",
+          "decision_finale": "LIVRER",
+          "score_final": 100.0,
+          "iterations": 1,
+          "equivalence": null,
+          "verification_formelle": null
+        },
+        {
+          "nom_python": "sauvegarder_preferences",
+          "decision_finale": "LIVRER",
+          "score_final": 77.72,
+          "iterations": 1,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.06666666666666667,
+            "cas_testes": 15,
+            "cas_equivalents": 1,
+            "divergences": [
+              {
+                "entree": "a",
+                "type": "valeurs_differentes",
+                "php": "s:1:\"a\";",
+                "python": "\"a\""
+              },
+              {
+                "entree": "abc",
+                "type": "valeurs_differentes",
+                "php": "s:3:\"abc\";",
+                "python": "\"abc\""
+              },
+              {
+                "entree": "1234567",
+                "type": "valeurs_differentes",
+                "php": "s:7:\"1234567\";",
+                "python": "\"1234567\""
+              },
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": "s:8:\"12345678\";",
+                "python": "\"12345678\""
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": "s:11:\"Password123\";",
+                "python": "\"Password123\""
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": "s:10:\"motdepasse\";",
+                "python": "\"motdepasse\""
+              },
+              {
+                "entree": "éàçùè",
+                "type": "valeurs_differentes",
+                "php": "s:10:\"éàçùè\";",
+                "python": "\"\\u00e9\\u00e0\\u00e7\\u00f9\\u00e8\""
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": "s:25:\"mot de passe avec espaces\";",
+                "python": "\"mot de passe avec espaces\""
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": "s:25:\"<script>alert(1)</script>\";",
+                "python": "\"<script>alert(1)</script>\""
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": "s:11:\"' OR 1=1 --\";",
+                "python": "\"' OR 1=1 --\""
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "valeurs_differentes",
+                "php": "s:500:\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\";",
+                "python": "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\""
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "valeurs_differentes",
+                "php": "s:1500:\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\";",
+                "python": "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\""
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "rejette (Preferences vides)",
+                "python": "accepte"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": "s:20:\"12345678901234567890\";",
+                "python": "\"12345678901234567890\""
+              }
+            ]
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "acceptation ⇒ argument non nul",
+                "statut": "prouvee",
+                "contre_exemple": null
+              }
+            ],
+            "score_formel": 1.0
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}
