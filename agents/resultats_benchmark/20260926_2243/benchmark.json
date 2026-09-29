@@ -1,0 +1,100 @@
+{
+  "horodatage": "20260926_2243",
+  "projets": [
+    {
+      "nom": "p6_application",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p6_application",
+      "fichiers": 3
+    },
+    {
+      "nom": "p7_deserialisation",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p7_deserialisation",
+      "fichiers": 1
+    }
+  ],
+  "repetitions": 1,
+  "resultats": {
+    "complet": {
+      "agrege": {
+        "migrations_reussies": 2,
+        "migrations_totales": 2,
+        "modules": 3,
+        "taux_livraison": 16.6,
+        "score_confiance_moyen": 15.6,
+        "corrections_moyennes": 0,
+        "modules_sans_correction": 3,
+        "cas_non_testables": 2,
+        "injections_neutralisees": 0,
+        "divergences": 2.5,
+        "proprietes_prouvees": 1.5,
+        "proprietes_refutees": 0,
+        "escalades_humaines": 2.5,
+        "duree_s": 756.5
+      },
+      "details": [
+        {
+          "projet": "p6_application",
+          "passage": 1,
+          "duree_s": 356.8,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 0.0,
+            "score_confiance_moyen": 0,
+            "critere_fonctionnel": null,
+            "critere_securite": null,
+            "critere_comportemental": null,
+            "critere_proprietes": null,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 3,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 3,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 356.8
+          }
+        },
+        {
+          "projet": "p7_deserialisation",
+          "passage": 1,
+          "duree_s": 1156.3,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 33.3,
+            "score_confiance_moyen": 31.1,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 66.7,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 83.3,
+            "cas_non_testables": 1,
+            "injections_neutralisees": 0,
+            "divergences": 5,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 2,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 1156.3
+          }
+        }
+      ]
+    }
+  }
+}

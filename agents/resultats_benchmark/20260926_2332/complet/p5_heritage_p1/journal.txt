@@ -1,0 +1,313 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 4651.79it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : complet | RAG : True | boucle : True | mode : orchestre
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_vreipslj
+
+1 fichier(s) PHP trouvé(s) :
+  - p5_heritage\utilisateurs.php
+
+Ordre de migration (dépendances d'abord) :
+  1. utilisateurs.php
+
+████████████████████████████████████████████████████████████
+█  FICHIER : utilisateurs.php
+████████████████████████████████████████████████████████████
+  Analyste : 0 fonction(s), 3 classe(s), 0 faille(s)
+
+  [orchestration multi-agents] module User confié au Manager
+┌────────────────────────── ✨ Update Available ✨ ───────────────────────────┐
+│                                                                             │
+│  A new version of CrewAI is available!                                      │
+│                                                                             │
+│  Current version: 1.15.6                                                    │
+│  Latest version:  1.15.22                                                   │
+│                                                                             │
+│  To update, run: uv sync --upgrade-package crewai                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────── 🚀 Crew Execution Started ─────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 890f19b7-2113-4af8-8ac9-8e2f9a2f0d94                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── 📋 Task Started ──────────────────────────────┐
+│                                                                             │
+│  Task Started                                                               │
+│  Name: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class User {                                                               │
+│      private $nom;                                                          │
+│      private $email;                                                        │
+│                                                                             │
+│      public function obtenirNom() {                                         │
+│          return $this->nom;                                                 │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « User ». L'analyse du code et le plan de         │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│  ID: 01883f82-70d1-405b-8417-f988f92414a7                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│  Task: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class User {                                                               │
+│      private $nom;                                                          │
+│      private $email;                                                        │
+│                                                                             │
+│      public function obtenirNom() {                                         │
+│          return $this->nom;                                                 │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « User ». L'analyse du code et le plan de         │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ERROR:root:Google Gemini API error: 429 - You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite
+Please retry in 29.782737666s.
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.782737666s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}[0m
+┌─ERROR:crewai.flow.runtime:Error executing listener call_llm_native_tools: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.782737666s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}
+────────────────────────────── ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: Google Gemini API error: 429 - You exceeded your current quota,     │
+│  please check your plan and billing details. For more information on this   │
+│  error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To      │
+│  monitor your current usage, head to: https://ai.dev/rate-limit.            │
+│  * Quota exceeded for metric:                                               │
+│  generativelanguage.googleapis.com/generate_content_free_tier_requests,     │
+│  limit: 500, model: gemini-3.1-flash-lite                                   │
+│  Please retry in 29.782737666s.                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.782737666s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}[0m
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│  Task: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class User {                                                               │
+│      private $nom;                                                          │
+│      private $email;                                                        │
+│                                                                             │
+│      public function obtenirNom() {                                         │
+│          return $this->nom;                                                 │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « User ». L'analyse du code et le plan de         │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ERROR:root:Google Gemini API error: 429 - You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite
+Please retry in 29.523508851s.
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.523508851s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}[0m
+┌───────────────────────────────ERROR:crewai.flow.runtime:Error executing listener call_llm_native_tools: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.523508851s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}
+ ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: Google Gemini API error: 429 - You exceeded your current quota,     │
+│  please check your plan and billing details. For more information on this   │
+│  error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To      │
+│  monitor your current usage, head to: https://ai.dev/rate-limit.            │
+│  * Quota exceeded for metric:                                               │
+│  generativelanguage.googleapis.com/generate_content_free_tier_requests,     │
+│  limit: 500, model: gemini-3.1-flash-lite                                   │
+│  Please retry in 29.523508851s.                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.523508851s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}[0m
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│  Task: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class User {                                                               │
+│      private $nom;                                                          │
+│      private $email;                                                        │
+│                                                                             │
+│      public function obtenirNom() {                                         │
+│          return $this->nom;                                                 │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « User ». L'analyse du code et le plan de         │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ERROR:root:Google Gemini API error: 429 - You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite
+Please retry in 29.216696156s.
+ERROR:crewai.flow.runtime:Error executing listener call_llm_native_tools: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.216696156s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.216696156s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}[0m
+┌─────────────────────────────── ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: Google Gemini API error: 429 - You exceeded your current quota,     │
+│  please check your plan and billing details. For more information on this   │
+│  error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To      │
+│  monitor your current usage, head to: https://ai.dev/rate-limit.            │
+│  * Quota exceeded for metric:                                               │
+│  generativelanguage.googleapis.com/generate_content_free_tier_requests,     │
+│  limit: 500, model: gemini-3.1-flash-lite                                   │
+│  Please retry in 29.216696156s.                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 500, model: gemini-3.1-flash-lite\nPlease retry in 29.216696156s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-3.1-flash-lite'}, 'quotaValue': '500'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}[0m
+[CrewAIEventsBus] Warning: Event pairing mismatch. 'task_failed' closed 
+'agent_execution_started' (expected 'task_started')
+┌────────────────────────────── 📋 Task Failure ──────────────────────────────┐
+│                                                                             │
+│  Task Failed                                                                │
+│  Name: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :[CrewAIEventsBus                                                                 ]│ Warning: Event pairing mismatch. 
+'crew_kickoff_failed'│ closed
+'agent_execution_started' (  ```php                                                                     │
+expected │'crew_kickoff_started'  )
+class User {                                                               │
+│      private $nom;                                                          │
+│      private $email;                                                        │
+│
+  ⚠️  Orchestration interrompue : ClientError — 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.
+  📋 Étapes franchies : analyse, plan, decide
+  ⚠️  [couche projet] 2 invariant(s) de sécurité à préserver dans le code produit
+  ⚠️  [Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris.
+  ⚠️  Agents indisponibles : Manager
+
+  [orchestration multi-agents] module Admin confié au Manager
+
+  ⚠️  Aucun orchestrateur utilisable pour ce module (demandé : gemini, en panne : ['gemini']).
+  📋 Étapes franchies : analyse, plan, decide
+  ⚠️  [couche projet] 2 invariant(s) de sécurité à préserver dans le code produit
+  ⚠️  [Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris.
+  ⚠️  Agents indisponibles : Manager
+
+  [orchestration multi-agents] module SuperAdmin confié au Manager
+
+  ⚠️  Aucun orchestrateur utilisable pour ce module (demandé : gemini, en panne : ['gemini']).
+  📋 Étapes franchies : analyse, plan, decide
+  ⚠️  [couche projet] 2 invariant(s) de sécurité à préserver dans le code produit
+  ⚠️  [Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris.
+  ⚠️  Agents indisponibles : Manager
+                                                                             │
+│      public function obtenirNom() {                                         │
+│          return $this->nom;                                                 │
+│      }                                                                      │
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « User ». L'analyse du code et le plan de         │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── Crew Failure ────────────────────────────────┐
+│                                                                             │
+│  Crew Execution Failed                                                      │
+│  Name: crew                                                                 │
+│  ID: 890f19b7-2113-4af8-8ac9-8e2f9a2f0d94                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Tracing Status ───────────────────────────────┐
+│                                                                             │
+│  Info: Tracing is disabled.                                                 │
+│                                                                             │
+│  To enable tracing, do any one of these:                                    │
+│  • Set tracing=True in your Crew/Flow code                                  │
+│  • Set CREWAI_TRACING_ENABLED=true in your project's .env file              │
+│  • Run: crewai traces enable                                                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+  ✅ Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 0/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260926_2332\complet\p5_heritage_p1/
+  Orchestrateur    : gemini/gemini-3.1-flash-lite

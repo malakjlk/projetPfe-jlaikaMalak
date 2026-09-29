@@ -6,40 +6,6 @@ import ast
 from hypothesis import given, strategies as st, settings
 
 
-def extraire_invariants_testables(invariants: list) -> list:
-    """
-    Convertit les invariants textuels en règles Python
-    exploitables par Hypothesis.
-    """
-    regles = []
-
-    for inv in invariants:
-        desc = inv.get("description", "").lower()
-        type_inv = inv.get("type", "")
-
-        if "longueur" in type_inv or "len" in desc:
-            regles.append({
-                "type": "longueur_min",
-                "valeur": 8,
-                "description": inv.get("description", "")
-            })
-
-        if "majuscule" in desc or "format" in type_inv:
-            regles.append({
-                "type": "format_requis",
-                "pattern": "majuscule",
-                "description": inv.get("description", "")
-            })
-
-        if "existence" in type_inv:
-            regles.append({
-                "type": "non_vide",
-                "description": inv.get("description", "")
-            })
-
-    return regles
-
-
 def detecter_noms_non_resolus(code_python: str) -> list:
     """
     Détecte les noms UTILISÉS mais jamais définis ni importés
@@ -186,55 +152,338 @@ def verifier_syntaxe_python(code_python: str,
     return resultat
 
 
-def verifier_invariants_presents(
-    code_python: str,
-    invariants: list
-) -> dict:
-    """
-    Vérifie par analyse textuelle si les invariants
-    de sécurité semblent présents dans le code généré.
-    Version simplifiée — l'analyse formelle complète
-    nécessiterait Z3 sur le code exécutable.
-    """
-    resultat = {
-        "invariants_verifies": [],
-        "invariants_manquants": [],
-        "score": 0.0
-    }
+# ─── INVARIANTS : TEST DYNAMIQUE PUIS STRUCTUREL ─────
+# Chercher « len( » dans le texte ne prouve rien : le mot peut venir
+# d'un commentaire ou d'un calcul sans rapport. On exécute donc
+# réellement la fonction générée sur des entrées produites par
+# Hypothesis, et on cherche un CONTRE-EXEMPLE : une entrée invalide
+# que la fonction accepte quand même.
+#
+# Complémentarité avec le Vérificateur de propriétés : Z3 explore les
+# chemins symboliquement, Hypothesis tire des entrées concrètes. L'un
+# raisonne, l'autre essaie ; les deux exhibent des contre-exemples.
 
-    code_lower = code_python.lower()
+def _charger_module(code_python: str):
+    """
+    Exécute le code généré dans un espace isolé. Les bibliothèques
+    absentes sont remplacées par des doublures permissives : leur
+    absence ne doit pas empêcher de tester la logique métier.
+    """
+    code = code_python
+    if "```python" in code:
+        code = code.split("```python")[1]
+    if "```" in code:
+        code = code.split("```")[0]
 
-    patterns_invariants = {
-        "validation_longueur": ["len(", "strlen", ">= 8", "< 8",
-                                ".length", "len (", "> 1000", "< 1000"],
-        "validation_format": ["isupper", "preg_match", "regex", "re.match",
-                              "re.search", "re.fullmatch", ".match(",
-                              "email", "filter_var", "@"],
-        "validation_type": ["isinstance", "isdigit", "is_numeric",
-                            "isnumeric", ".isdigit", ".isnumeric",
-                            "isdecimal", "type(", "int(", "float("],
-        "validation_existence": ["is not none", "if not", "raise",
-                                "is none", "isset", "empty", "if ",
-                                "== none", "!= none"],
-        "controle_acces": ["role", "permission", "permissionerror",
-                          "admin", "auth", "access", "privilege"]
-    }
+    espace = {}
+    for _ in range(10):
+        try:
+            exec(code, espace)
+            return espace, None
+        except ModuleNotFoundError as e:
+            try:
+                import doublures_bdd
+                doublures_bdd.installer_module_absent(e.name)
+            except Exception:
+                return None, f"dépendance absente : {e.name}"
+        except Exception as e:
+            return None, f"{type(e).__name__} : {e}"
+    return None, "trop de dépendances absentes"
+
+
+def _fonction_cible(espace: dict, module_info: dict):
+    """Fonction à tester, d'après le plan de migration."""
+    nom = module_info.get("nom_python", "")
+    cible = espace.get(nom)
+    if callable(cible):
+        return cible, 1
+    # Classe : on teste la première méthode publique
+    if isinstance(cible, type):
+        for nom_methode in module_info.get("methodes_python", []) or []:
+            methode = getattr(cible, nom_methode, None)
+            if callable(methode):
+                try:
+                    return getattr(cible(), nom_methode), 1
+                except Exception:
+                    return methode, 2
+    for valeur in espace.values():
+        if callable(valeur) and getattr(valeur, "__module__", "") == "builtins":
+            continue
+    return None, 0
+
+
+def _proprietes_testables(invariants: list) -> list:
+    """
+    Traduit chaque invariant en propriété vérifiable :
+    « si la fonction ACCEPTE l'entrée, alors la règle est respectée ».
+    """
+    import re as _re
+    proprietes = []
+    for inv in invariants:
+        type_inv = (inv.get("type") or "").lower()
+        texte = f"{inv.get('code', '')} {inv.get('description', '')}"
+        nombres = _re.findall(r"\d+", texte)
+        seuil = int(nombres[0]) if nombres else 8
+
+        if type_inv == "validation_longueur":
+            proprietes.append({
+                "invariant": inv, "libelle": f"longueur ≥ {seuil}",
+                "strategie": "texte",
+                "regle": lambda v, s=seuil: isinstance(v, str) and len(v) >= s})
+        elif type_inv == "validation_format":
+            description = (inv.get("description", "") + inv.get("code", "")).lower()
+            if "majuscule" in description or "a-z" in description:
+                proprietes.append({
+                    "invariant": inv, "libelle": "au moins une majuscule",
+                    "strategie": "texte",
+                    "regle": lambda v: isinstance(v, str)
+                                       and any(c.isupper() for c in v)})
+        elif type_inv == "validation_existence":
+            proprietes.append({
+                "invariant": inv, "libelle": "argument non vide",
+                "strategie": "texte_ou_none",
+                "regle": lambda v: v is not None and v != ""})
+        elif type_inv == "validation_type":
+            def numerique(v):
+                try:
+                    float(v)
+                    return True
+                except (TypeError, ValueError):
+                    return False
+            proprietes.append({
+                "invariant": inv, "libelle": "valeur numérique",
+                "strategie": "texte",
+                "regle": numerique})
+        elif type_inv == "validation_intervalle":
+            borne = _re.search(r"([<>]=?)\s*(-?\d+(?:\.\d+)?)", texte)
+            if borne:
+                operateur, valeur = borne.group(1), float(borne.group(2))
+
+                def dans_intervalle(v, operateur=operateur, valeur=valeur):
+                    try:
+                        nombre = float(v)
+                    except (TypeError, ValueError):
+                        return True        # entrée non numérique : hors sujet
+                    # Le PHP rejette quand la condition est vraie :
+                    # « if ($x < 0) throw » garantit donc x >= 0.
+                    if operateur.startswith("<"):
+                        return nombre >= valeur
+                    return nombre <= valeur
+                proprietes.append({
+                    "invariant": inv,
+                    "libelle": f"valeur bornée ({operateur} {valeur:g} rejeté)",
+                    # Une borne porte sur des NOMBRES : envoyer du texte
+                    # ferait rejeter toutes les entrées, et le test ne
+                    # prouverait rien.
+                    "strategie": "nombre", "regle": dans_intervalle})
+        elif type_inv == "assainissement_sortie":
+            # Propriété sur la SORTIE : si l'entrée contient du HTML,
+            # la sortie ne doit plus contenir de balise brute.
+            def sortie_echappee(entree, sortie):
+                if not isinstance(entree, str) or not isinstance(sortie, str):
+                    return True
+                if not any(c in entree for c in "<>"):
+                    return True
+                return "<" not in sortie and ">" not in sortie
+            proprietes.append({
+                "invariant": inv, "libelle": "sortie échappée",
+                "strategie": "html", "regle_sortie": sortie_echappee})
+    return proprietes
+
+
+def tester_property_based(code_python: str, module_info: dict,
+                          invariants: list, max_exemples: int = 60) -> dict:
+    """
+    Exécute la fonction générée sur des entrées produites par Hypothesis
+    et cherche une entrée invalide qu'elle accepterait.
+    """
+    resultat = {"tests_executes": 0, "tests_reussis": 0,
+                "details": [], "verdicts": {}, "raison": None}
+
+    proprietes = _proprietes_testables(invariants)
+    if not proprietes:
+        resultat["raison"] = "aucun invariant traduisible en propriété"
+        return resultat
+
+    espace, erreur = _charger_module(code_python)
+    if espace is None:
+        resultat["raison"] = f"code non exécutable ({erreur})"
+        return resultat
+
+    fonction, nb_args = _fonction_cible(espace, module_info)
+    if fonction is None:
+        resultat["raison"] = "fonction cible introuvable dans le code généré"
+        return resultat
+
+    # Fonction asynchrone : l'appeler sans l'attendre renverrait une
+    # coroutine sans jamais lever d'exception — toute entrée paraîtrait
+    # acceptée, ce qui produirait de faux contre-exemples.
+    import asyncio
+    import inspect
+    if inspect.iscoroutinefunction(fonction):
+        fonction_brute = fonction
+
+        def appeler(*arguments):
+            return asyncio.run(fonction_brute(*arguments))
+    else:
+        appeler = fonction
+
+    for propriete in proprietes:
+        contre_exemple = []
+        acceptations = []
+
+        if propriete["strategie"] == "texte_ou_none":
+            strategie = st.one_of(st.none(), st.text(max_size=25))
+        elif propriete["strategie"] == "nombre":
+            strategie = st.one_of(
+                st.integers(min_value=-10000, max_value=10000),
+                st.floats(allow_nan=False, allow_infinity=False,
+                          min_value=-10000, max_value=10000))
+        elif propriete["strategie"] == "html":
+            # Du texte au hasard ne contient presque jamais de balise :
+            # on injecte des charges utiles réalistes.
+            strategie = st.one_of(
+                st.sampled_from(["<script>alert(1)</script>", "<b>gras</b>",
+                                 "a & b", "<img src=x onerror=1>", "'\""]),
+                st.text(max_size=25))
+        else:
+            strategie = st.text(max_size=25)
+
+        def construire(regle=propriete.get("regle"),
+                       regle_sortie=propriete.get("regle_sortie"),
+                       trace=contre_exemple, acceptees=acceptations):
+            # Hypothesis refuse une fonction de test ayant des valeurs
+            # par défaut : la fermeture les porte à sa place.
+            @settings(max_examples=max_exemples, deadline=None)
+            @given(strategie)
+            def verifier(valeur):
+                try:
+                    resultat_appel = appeler(valeur, *([1] * (nb_args - 1)))
+                except Exception:
+                    return      # entrée rejetée : comportement attendu
+                # La fonction a ACCEPTÉ l'entrée : la règle doit tenir.
+                acceptees.append(valeur)
+                if regle_sortie is not None:
+                    if not regle_sortie(valeur, resultat_appel):
+                        trace.append((valeur, resultat_appel))
+                        raise AssertionError(
+                            f"sortie non conforme pour {valeur!r}")
+                elif not regle(valeur):
+                    trace.append(valeur)
+                    raise AssertionError(f"entrée acceptée : {valeur!r}")
+            return verifier
+
+        resultat["tests_executes"] += 1
+        try:
+            construire()()
+            resultat["tests_reussis"] += 1
+            if acceptations:
+                verdict = "respecte"
+                detail = (f"aucun contre-exemple sur {max_exemples} entrées "
+                          f"(la fonction en a accepté certaines)")
+            else:
+                # La fonction a rejeté TOUTES les entrées : souvent un
+                # code qui plante. On ne peut rien conclure.
+                verdict = "non_teste"
+                detail = "la fonction rejette toutes les entrées testées"
+        except AssertionError:
+            verdict = "refute"
+            detail = f"entrée acceptée alors qu'elle viole la règle : {contre_exemple[-1]!r}" if contre_exemple else "contre-exemple trouvé"
+        except Exception as e:
+            verdict, detail = "non_teste", f"{type(e).__name__} : {e}"
+
+        resultat["verdicts"][propriete["libelle"]] = verdict
+        resultat["details"].append({
+            "propriete": propriete["libelle"], "verdict": verdict,
+            "detail": detail,
+            "invariant": propriete["invariant"].get("description", "")})
+    return resultat
+
+
+def verifier_invariants_presents(code_python: str, invariants: list,
+                                 tests_dynamiques: dict = None) -> dict:
+    """
+    Un invariant est considéré préservé si la fonction générée REFUSE
+    les entrées qui le violent.
+
+    Deux niveaux de preuve :
+      1. test dynamique (Hypothesis) : un contre-exemple prouve
+         que l'invariant n'est pas appliqué ;
+      2. à défaut (code non exécutable), analyse structurelle : existe-
+         t-il une garde qui lève une exception ?
+    """
+    resultat = {"invariants_verifies": [], "invariants_manquants": [],
+                "invariants_douteux": [], "preuves": [], "score": 0.0}
+
+    # Verdicts dynamiques, indexés par description d'invariant
+    dynamiques = {}
+    for detail in (tests_dynamiques or {}).get("details", []):
+        dynamiques[detail.get("invariant", "")] = detail
+
+    from agent_auditeur import (_extraire_gardes, _garde_correspondante,
+                                _seuil_invariant, _appel_correspondant)
+    gardes = _extraire_gardes(code_python)
 
     for inv in invariants:
-        type_inv = inv.get("type", "")
-        patterns = patterns_invariants.get(type_inv, [])
+        description = inv.get("description", "")
+        detail = dynamiques.get(description)
 
-        trouve = any(p in code_lower for p in patterns)
-
-        if trouve:
+        if detail and detail["verdict"] == "respecte":
             resultat["invariants_verifies"].append(inv)
+            resultat["preuves"].append({
+                "invariant": description, "verdict": "vérifié",
+                "source": f"test dynamique : {detail['detail']}"})
+            continue
+        if detail and detail["verdict"] == "refute":
+            # La fonction testée accepte une entrée invalide. Mais la
+            # règle peut être appliquée AILLEURS dans le module (modèle
+            # Pydantic, validation en amont) : le verdict est alors
+            # douteux plutôt que négatif.
+            garde, _ = _garde_correspondante(inv, gardes,
+                                             _seuil_invariant(inv))
+            if garde:
+                resultat["invariants_douteux"].append(inv)
+                resultat["preuves"].append({
+                    "invariant": description, "verdict": "douteux",
+                    "source": (f"contre-exemple sur la fonction migrée, mais "
+                               f"une garde existe ligne {garde['ligne']} : "
+                               f"{garde['texte'][:45]}")})
+            else:
+                resultat["invariants_manquants"].append(inv)
+                resultat["preuves"].append({
+                    "invariant": description, "verdict": "manquant",
+                    "source": f"contre-exemple : {detail['detail']}"})
+            continue
+
+        # Certains invariants sont des APPELS (échappement, hachage,
+        # comparaison de secret), pas des gardes : les chercher parmi
+        # les conditions reviendrait à les déclarer tous manquants.
+        appel = _appel_correspondant(inv, code_python)
+        if appel:
+            resultat["invariants_verifies"].append(inv)
+            resultat["preuves"].append({
+                "invariant": description, "verdict": "vérifié",
+                "source": f"appel attendu présent : {appel}"})
+            continue
+
+        garde, reserve = _garde_correspondante(inv, gardes,
+                                               _seuil_invariant(inv))
+        if garde and not reserve:
+            resultat["invariants_verifies"].append(inv)
+            resultat["preuves"].append({
+                "invariant": description, "verdict": "vérifié",
+                "source": f"garde ligne {garde['ligne']} : {garde['texte'][:60]}"})
         else:
             resultat["invariants_manquants"].append(inv)
+            resultat["preuves"].append({
+                "invariant": description, "verdict": "manquant",
+                "source": reserve or "aucune garde ne rejette l'entrée invalide"})
 
     total = len(invariants)
-    verifies = len(resultat["invariants_verifies"])
-    resultat["score"] = (verifies / total) if total > 0 else 1.0
-
+    # un invariant douteux compte pour la moitié
+    valeur = (len(resultat["invariants_verifies"])
+              + 0.5 * len(resultat["invariants_douteux"]))
+    resultat["score"] = (valeur / total) if total > 0 else 1.0
     return resultat
 
 
@@ -301,56 +550,6 @@ def verifier_failles_corrigees(
     return resultat
 
 
-def tester_property_based(regles: list) -> dict:
-    """
-    Démonstration de property-based testing avec Hypothesis
-    sur les règles de validation extraites.
-    """
-    resultat = {
-        "tests_executes": 0,
-        "tests_reussis": 0,
-        "details": []
-    }
-
-    for regle in regles:
-        if regle["type"] == "longueur_min":
-            valeur_min = regle["valeur"]
-            description = regle["description"]
-
-            def faire_test(valeur_min=valeur_min):
-                @settings(max_examples=50, deadline=None)
-                @given(st.text(min_size=0, max_size=20))
-                def test_longueur(mot_de_passe):
-                    # Vérifie que la règle de validation
-                    # est cohérente : un mot de passe valide
-                    # respecte toujours len >= valeur_min
-                    if len(mot_de_passe) >= valeur_min:
-                        assert len(mot_de_passe) >= valeur_min
-                    else:
-                        assert len(mot_de_passe) < valeur_min
-
-                test_longueur()
-
-            try:
-                faire_test()
-                resultat["tests_reussis"] += 1
-                resultat["details"].append({
-                    "regle": description,
-                    "statut": "réussi",
-                    "cas_testes": 50
-                })
-            except Exception as e:
-                resultat["details"].append({
-                    "regle": description,
-                    "statut": "échoué",
-                    "erreur": str(e)
-                })
-
-            resultat["tests_executes"] += 1
-
-    return resultat
-
-
 def agent_testeur(
     code_python: str,
     module_info: dict,
@@ -386,18 +585,38 @@ def agent_testeur(
         print(f"     ⚠️  Nom(s) non défini(s) ni importé(s) : "
               f"{', '.join(rapport['syntaxe']['noms_non_resolus'][:5])}")
 
-    # Étape 2 — Vérification des invariants
-    print("  2. Vérification des invariants de sécurité...")
-    rapport["invariants"] = verifier_invariants_presents(
-        code_python, invariants
+    # Étape 2 — Tests dynamiques : on EXÉCUTE la fonction générée sur
+    # des entrées produites par Hypothesis, et on cherche une entrée
+    # invalide qu'elle accepterait.
+    print("  2. Tests property-based (Hypothesis)...")
+    rapport["tests_property_based"] = tester_property_based(
+        code_python, module_info, invariants
     )
+    tests = rapport["tests_property_based"]
+    if tests["tests_executes"]:
+        print(f"     {tests['tests_reussis']}/{tests['tests_executes']} "
+              f"propriété(s) sans contre-exemple")
+        for detail in tests["details"]:
+            if detail["verdict"] != "respecte":
+                print(f"     ⚠️  {detail['propriete']} : {detail['detail'][:70]}")
+    else:
+        print(f"     non applicable ({tests['raison']})")
+
+    # Étape 3 — Invariants : verdict dynamique, sinon analyse structurelle
+    print("  3. Vérification des invariants de sécurité...")
+    rapport["invariants"] = verifier_invariants_presents(
+        code_python, invariants, rapport["tests_property_based"]
+    )
+    for preuve in rapport["invariants"]["preuves"]:
+        print(f"       {preuve['verdict']:<9} {preuve['invariant'][:36]:<38}"
+              f" {preuve['source'][:58]}")
     print(f"     Score invariants : "
           f"{rapport['invariants']['score']*100:.0f}% "
           f"({len(rapport['invariants']['invariants_verifies'])}"
           f"/{len(invariants)})")
 
-    # Étape 3 — Vérification des failles corrigées
-    print("  3. Vérification de la correction des failles...")
+    # Étape 4 — Vérification des failles corrigées
+    print("  4. Vérification de la correction des failles...")
     rapport["failles"] = verifier_failles_corrigees(
         code_python, failles
     )
@@ -405,14 +624,6 @@ def agent_testeur(
           f"{rapport['failles']['score']*100:.0f}% "
           f"({len(rapport['failles']['failles_corrigees'])}"
           f"/{len(failles)})")
-
-    # Étape 4 — Property-based testing
-    print("  4. Tests property-based (Hypothesis)...")
-    regles = extraire_invariants_testables(invariants)
-    rapport["tests_property_based"] = tester_property_based(regles)
-    print(f"     Tests exécutés : "
-          f"{rapport['tests_property_based']['tests_executes']}, "
-          f"réussis : {rapport['tests_property_based']['tests_reussis']}")
 
     # Score fonctionnel composé
     score_syntaxe = 1.0 if rapport["syntaxe"]["syntaxe_valide"] else 0.0

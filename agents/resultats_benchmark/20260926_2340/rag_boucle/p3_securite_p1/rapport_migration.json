@@ -1,0 +1,152 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "securite.php",
+      "cible": "securite.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "get_user",
+          "decision_finale": "ARRET_ECHEC",
+          "score_final": 76.70588235294117,
+          "iterations": 5,
+          "categorie_echec": "limite_structurelle",
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null
+        },
+        {
+          "nom_python": "generer_rapport",
+          "decision_finale": "LIVRER",
+          "score_final": 70.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.0,
+            "cas_testes": 6,
+            "cas_equivalents": 0,
+            "divergences": [
+              {
+                "entree": "test@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "inconnu@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "' OR '1'='1",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "'; DROP TABLE users; --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              }
+            ],
+            "base_simulee": {
+              "tables": [
+                "fastapi",
+                "produits",
+                "sqlalchemy",
+                "typing",
+                "users"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "nom",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [],
+            "requetes_python": [],
+            "effets_compares": 6
+          },
+          "verification_formelle": null,
+          "etat_structure": null
+        },
+        {
+          "nom_python": "chercher_produit",
+          "decision_finale": "LIVRER",
+          "score_final": 92.58823529411764,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [
+    {
+      "tentative": 1,
+      "fichier": "securite.py",
+      "defauts_corriges": [
+        "- from .models import Produit : Le module '.models' n'existe pas dans le projet (import halluciné par le LLM)"
+      ]
+    },
+    {
+      "tentative": 2,
+      "fichier": "securite.py",
+      "defauts_corriges": [
+        "- from .user_model import User : Le module '.user_model' n'existe pas dans le projet (import halluciné par le LLM)"
+      ]
+    }
+  ],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

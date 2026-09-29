@@ -28,6 +28,7 @@ from crewai import Agent, Task, Crew, Process, LLM
 from crewai.tools import tool
 
 from agent_analyste import analyser_code_php
+import configuration          # applique SMAML_CONFIG avant tout le reste
 import cache_smaml
 from agent_architecte import planifier_migration, reviser_module
 from agent_developpeur import (generer_code_python, nettoyer_code,
@@ -151,6 +152,8 @@ ETAT = {
     "modele_orchestrateur": "",
     "bascules_modele": [],
     "correction_demandee": False,
+    # Appels au LLM d'orchestration qui ont échoué (quota, surcharge…)
+    "echecs_llm": 0,
 }
 
 
@@ -174,6 +177,7 @@ def reinitialiser_etat(code_php: str):
     ETAT["replanifications"] = 0
     ETAT["decisions_manager"] = []
     ETAT["justifications_en_attente"] = {}
+    ETAT["echecs_llm"] = 0
     ETAT["modele_orchestrateur"] = ""      # écrit par appliquer_modele
     ETAT["bascules_modele"] = []
     # Une correction a-t-elle été demandée par le Réviseur depuis la
@@ -365,14 +369,41 @@ def _prendre_justification(agent: str):
         return file.pop(0) if file else None
 
 
+# Nombre d'échecs d'appel au LLM avant de changer de fournisseur.
+# CrewAI rattrape lui-même ces erreurs et relance l'agent : l'exception
+# n'arrive donc jamais jusqu'à kickoff(). Sans ce compteur, une panne
+# passagère du fournisseur ferait tourner le Manager en boucle sans que
+# le repli ne se déclenche jamais.
+SEUIL_ECHECS_LLM = int(os.getenv("SMAML_SEUIL_ECHECS", "3"))
+
+
+def signaler_echec_llm(message: str):
+    """Compte un appel au LLM échoué et bascule si le seuil est atteint."""
+    ETAT["echecs_llm"] = (ETAT.get("echecs_llm") or 0) + 1
+    if not est_panne_fournisseur(RuntimeError(message)):
+        return
+    if not BASCULE_AUTORISEE or ETAT["echecs_llm"] < SEUIL_ECHECS_LLM:
+        return
+    with _VERROU_MANAGER:
+        deja = any(b.get("raison", "").startswith("échecs répétés")
+                   for b in (ETAT.get("bascules_modele") or []))
+    if deja:
+        return          # une bascule par module suffit
+    _basculer(RuntimeError(
+        f"échecs répétés du fournisseur ({ETAT['echecs_llm']} appels) : "
+        f"{message[:120]}"))
+
+
 def _installer_ecoute_manager() -> bool:
     """Branche la capture sur le bus d'événements de CrewAI."""
     try:
-        from crewai.events import crewai_event_bus, ToolUsageStartedEvent
+        from crewai.events import (crewai_event_bus, ToolUsageStartedEvent,
+                                   LLMCallFailedEvent)
     except ImportError:
         try:   # versions antérieures de CrewAI
             from crewai.utilities.events import (crewai_event_bus,
-                                                 ToolUsageStartedEvent)
+                                                 ToolUsageStartedEvent,
+                                                 LLMCallFailedEvent)
         except ImportError:
             print("⚠️  Bus d'événements CrewAI introuvable : les "
                   "justifications du Manager ne seront pas capturées.")
@@ -386,12 +417,44 @@ def _installer_ecoute_manager() -> bool:
                                    getattr(event, "tool_args", {}))
         except Exception:
             pass          # la traçabilité ne doit jamais bloquer
+
+    @crewai_event_bus.on(LLMCallFailedEvent)
+    def _sur_echec_llm(source, event):
+        try:
+            signaler_echec_llm(str(getattr(event, "error", "")))
+        except Exception:
+            pass
     return True
 
 
 def _mention_cache(depuis_cache: bool) -> str:
     """Rend la réutilisation visible dans le message et le journal."""
     return " (résultat réutilisé depuis le cache)" if depuis_cache else ""
+
+
+def noms_definis_projet() -> set:
+    """
+    Noms définis par les modules déjà migrés du même fichier.
+
+    Sans eux, un module qui appelle une fonction migrée avant lui
+    (get_user_by_email appelle connect_database) serait déclaré
+    inexécutable, alors qu'il est correct dans le fichier assemblé.
+    """
+    import ast
+    noms = set()
+    try:
+        arbre = ast.parse(ETAT.get("code_python_projet") or "")
+    except SyntaxError:
+        return noms
+    for noeud in ast.walk(arbre):
+        if isinstance(noeud, (ast.FunctionDef, ast.AsyncFunctionDef,
+                              ast.ClassDef)):
+            noms.add(noeud.name)
+        elif isinstance(noeud, ast.Assign):
+            for cible in noeud.targets:
+                if isinstance(cible, ast.Name):
+                    noms.add(cible.id)
+    return noms
 
 
 def blocage_definitif() -> str:
@@ -545,6 +608,7 @@ def etat_structure() -> dict:
         "versions": {cle: len(v) for cle, v
                      in (ETAT.get("historique") or {}).items()},
         "modele_orchestrateur": ETAT.get("modele_orchestrateur"),
+        "echecs_llm": ETAT.get("echecs_llm") or 0,
         "bascules_modele": list(ETAT.get("bascules_modele") or []),
     }
 
@@ -809,11 +873,14 @@ def outil_testeur(note: str = "") -> str:
             "testeur",
             [ETAT["code_python"], ETAT["module"],
              analyse.get("invariants_securite", []),
-             analyse.get("failles_potentielles", [])],
+             analyse.get("failles_potentielles", []),
+             sorted(noms_definis_projet())],
             lambda: agent_testeur(
                 ETAT["code_python"], ETAT["module"],
                 analyse.get("invariants_securite", []),
                 analyse.get("failles_potentielles", []),
+                # noms définis par les modules déjà migrés du fichier
+                noms_externes=noms_definis_projet(),
             ))
         points = []
         syntaxe = rapport.get("syntaxe", {}) or {}
@@ -965,11 +1032,14 @@ def outil_auditeur(note: str = "") -> str:
         rapport, du_cache = cache_smaml.avec_cache(
             "auditeur",
             [ETAT["code_python"], analyse.get("invariants_securite", []),
-             ETAT["module"] or {}],
+             ETAT["module"] or {}, ETAT["rapport_formel"]],
             lambda: agent_auditeur(
                 ETAT["code_python"],
                 analyse.get("invariants_securite", []),
                 ETAT["module"] or {},
+                # Si le Vérificateur est déjà passé, ses contre-exemples
+                # priment sur l'analyse structurelle de l'Auditeur.
+                rapport_formel=ETAT["rapport_formel"],
             ))
         points = []
         bandit = (rapport.get("dimension_2_bandit", {}) or {}).get(
@@ -1203,6 +1273,12 @@ def outil_reviseur(note: str = "") -> str:
                 f"{decision.get('score_compose', 0):.1f}%, confiance "
                 f"{confiance.get('niveau', '?')} — {detail}).")
         if verdict in ("ITERER", "REANALYSE_COMPLETE"):
+            if os.getenv("SMAML_SANS_BOUCLE"):
+                # Ablation sans boucle : la décision est consignée telle
+                # quelle, mais aucune correction n'est demandée.
+                return (base + f" Échec de type {categorie}. Boucle de "
+                        f"correction désactivée pour cette mesure : la "
+                        f"mission s'achève sur cette décision." + recap)
             ETAT["correction_demandee"] = True
             instructions = (decision.get("feedback") or {}).get(
                 "instructions", [])
@@ -1404,6 +1480,12 @@ manager = Agent(
         "JUSTIFIE chaque activation : le champ context de chaque "
         "délégation commence par une ligne « JUSTIFICATION : j'active "
         "<spécialiste> parce que <raison tirée de l'état du module> ».\n"
+        "TES CONSIGNES SONT COURTES : deux phrases au maximum. Ne "
+        "recopie JAMAIS le code PHP ou Python dans une délégation, et "
+        "n'utilise ni bloc de code, ni guillemets triples, ni liste. "
+        "Chaque spécialiste lit lui-même le code dans l'espace de "
+        "travail partagé : le lui envoyer est inutile, ralentit la "
+        "mission et fait échouer l'appel.\n"
         "Chaque spécialiste te rappelle, dans sa réponse, ce qui a "
         "déjà été accompli : appuie-toi sur ces retours plutôt que de "
         "solliciter quelqu'un inutilement.\n"
@@ -1558,7 +1640,10 @@ def migrer_module_orchestre(code_php_module: str, module: dict,
             "Ta mission consiste à faire produire le code Python, à le "
             "faire vérifier, et à obtenir la décision du Réviseur. "
             "Détermine toi-même quels spécialistes solliciter et dans "
-            "quel ordre."
+            "quel ordre.\n"
+            "Tes consignes aux spécialistes tiennent en deux phrases et "
+            "ne contiennent jamais de code : ils lisent le code dans "
+            "l'espace de travail partagé."
     )
     mission_module = Task(
         description=description_mission,

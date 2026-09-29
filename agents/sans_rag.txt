@@ -1,0 +1,283 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 15749.91it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : réglages manuels | RAG : False | boucle : True | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_31mq_qtc
+
+3 fichier(s) PHP trouvé(s) :
+  - test_php_project\db.php
+  - test_php_project\login.php
+  - test_php_project\utils.php
+
+Usages de champs détectés (analyse projet) :
+  - getUserByEmail → champs utilisés par les appelants : ['password']
+
+Ordre de migration (dépendances d'abord) :
+  1. db.php
+  2. utils.php
+  3. login.php (dépend de : db.php, utils.php)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : db.php
+████████████████████████████████████████████████████████████
+  Analyste : 2 fonction(s), 0 classe(s), 1 faille(s)
+
+  [ablation] RAG désactivé pour : connectDatabase
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : connect_database
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+     ⚠️  argument non vide : la fonction rejette toutes les entrées testées
+  3. Vérification des invariants de sécurité...
+       vérifié   Rejet si la valeur est absente ou fa   garde ligne 27 : except Exception -> raise
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (19/19 cas)
+  Vérification formelle : ✅ PROUVÉE — connect_database : acceptation ⇒ argument non nul
+  Vérification formelle : ✅ PROUVÉE — connect_database : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : connect_database
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Rejet si la valeur est absente ou fausse   garde ligne 27 : except Exception -> raise
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : connect_database
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 98.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  Champs requis par les appelants de getUserByEmail : ['password']
+
+  [ablation] RAG désactivé pour : getUserByEmail
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user_by_email
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user_by_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user_by_email
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 97.9% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 97.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+████████████████████████████████████████████████████████████
+█  FICHIER : utils.php
+████████████████████████████████████████████████████████████
+  Analyste : 2 fonction(s), 0 classe(s), 0 faille(s)
+
+  [ablation] RAG désactivé pour : validatePassword
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : validate_password
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : 93% (14/15 cas)
+    ⚠️ Divergence sur 'éàçùè' : PHP=accepte / Python=rejette (Mot de passe trop court)
+  Vérification formelle : ✅ PROUVÉE — validate_password : acceptation ⇒ longueur ≥ 8
+
+Audit de sécurité du module : validate_password
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 9 : len(password) < 8
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : validate_password
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental    93.3%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 97.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 97.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  [ablation] RAG désactivé pour : sanitizeInput
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : sanitize_input
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Échappement des données avant restit   test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (15/15 cas)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : sanitize_input
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Échappement des données avant restitutio   appel attendu présent : html.escape
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+  📊 Score sécurité global : 100.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : sanitize_input
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 50%)  — Testeur
+  securite         100.0%  (poids 33%)  — Auditeur
+  comportemental   100.0%  (poids 17%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 100.0% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 100.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+████████████████████████████████████████████████████████████
+█  FICHIER : login.php
+████████████████████████████████████████████████████████████
+  Analyste : 1 fonction(s), 0 classe(s), 0 faille(s)
+
+  [ablation] RAG désactivé pour : login
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : login
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Comparaison d'identifiant ou de secr   appel attendu présent : comparaison de secret :         r
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (19/19 cas)
+  Vérification formelle : ✅ PROUVÉE — login : aucun appel sans autorisation (password) n'aboutit
+
+Audit de sécurité du module : login
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Comparaison d'identifiant ou de secret     appel attendu présent : comparaison de secret :         r
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : login
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 98.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+  ✅ login.py : from db import get_user_by_email
+  ✅ login.py : from utils import validate_password
+  ✅ Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 3/3
+  Cache : 0/10 réutilisation(s) (0%) — verification_formelle 0/5
+  Résultats dans   : outputs_projet/

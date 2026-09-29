@@ -2,80 +2,64 @@
 Migré automatiquement par SMAML depuis db.php
 """
 
-# ── connect_database (score 94.0%, 1 itération(s)) ──
-from typing import Any
+# ── connect_database (score 97.6%, 1 itération(s)) ──
+import logging
 from sqlalchemy import create_engine
-from sqlalchemy.engine import Engine
-from fastapi import HTTPException, status
+from sqlalchemy.exc import SQLAlchemyError
+from fastapi import HTTPException
 
-def connect_database() -> Engine:
+logger = logging.getLogger(__name__)
+
+def connect_database() -> "Engine":
     """
-    Initialise une connexion à la base de données MySQL en utilisant SQLAlchemy.
-    Lève une HTTPException avec le statut 500 si la connexion échoue,
-    remplaçant le `die()` de PHP.
+    Crée et retourne un moteur SQLAlchemy connecté à la base de données MySQL.
+    En cas d'échec, lève une HTTPException 503 (Service Unavailable) afin
+    de remplacer le comportement `die()` de PHP.
     """
-    host: str = "localhost"
-    user: str = "root"
-    password: str = ""
-    database: str = "users_db"
+    host = "localhost"
+    user = "root"
+    password = ""
+    database = "users_db"
 
     # Construction de l'URL de connexion SQLAlchemy
-    url: str = f"mysql+pymysql://{user}:{password}@{host}/{database}"
+    url = f"mysql+pymysql://{user}:{password}@{host}/{database}"
 
     try:
-        engine: Engine = create_engine(url, echo=False, future=True)
-        # Test rapide de la connexion
+        engine = create_engine(url, future=True)
+        # Test de connexion immédiat
         with engine.connect() as conn:
-            conn.execute("SELECT 1")
+            pass
         return engine
-    except Exception as exc:
-        # En cas d'échec, on lève une exception HTTP 500 au lieu de `die()`
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erreur connexion DB"
-        ) from exc
-
-
-# ── get_user_by_email (score 67.1%, 3 itération(s)) ──
-from typing import Optional, Dict, Any
-from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import SQLAlchemyError
-
-# La fonction connect_database() est déjà définie dans ce même fichier (db.py)
-# Elle doit retourner une instance de Session SQLAlchemy.
-
-def get_user_by_email(email: str) -> Dict[str, Any]:
-    """
-    Récupère l'utilisateur dont l'adresse e‑mail correspond à *email*.
-    Retourne un dictionnaire contenant les colonnes de la table `users`,
-    incluant notamment le champ `password` requis par les appelants.
-    """
-    if not email:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="L'e‑mail fourni est vide."
-        )
-
-    try:
-        db: Session = connect_database()          # connexion déjà fournie
-        # Utilisation d'une requête paramétrée via l'ORM pour éviter toute injection SQL
-        user = db.query(User).filter(User.email == email).first()
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Utilisateur non trouvé."
-            )
-        # Conversion de l'objet ORM en dictionnaire brut
-        return {
-            "id": user.id,
-            "email": user.email,
-            "password": user.password,
-            # Ajoutez d'autres champs si nécessaire
-        }
     except SQLAlchemyError as exc:
-        # Gestion générique des erreurs de base de données
+        logger.critical("Erreur connexion DB : %s", exc)
+        # Remplace `die("Erreur connexion DB")` par une exception HTTP
+        raise HTTPException(status_code=503, detail="Service unavailable")
+
+
+# ── get_user_by_email (score 97.9%, 2 itération(s)) ──
+from fastapi import HTTPException
+from sqlalchemy.orm import Session
+
+# Le modèle SQLAlchemy représentant la table `users` doit être importé depuis le module où il est défini.
+# Ici on suppose qu'il s'appelle `User` et qu'il possède au moins les champs `email` et `password`.
+from models import User  # type: ignore  # SMAML-HYPOTHESE: le modèle s'appelle bien `User` dans le projet
+
+
+def get_user_by_email(email: str, db: Session):
+    """
+    Récupère un utilisateur à partir de son adresse e‑mail.
+
+    Utilise l'ORM SQLAlchemy avec des filtres paramétrés afin d'éviter toute injection SQL.
+    Lève une HTTPException 404 si aucun utilisateur n'est trouvé.
+    Retourne l'instance SQLAlchemy `User`, qui inclut le champ `password` requis par les appelants.
+    """
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Erreur interne du serveur lors de la récupération de l'utilisateur."
-        ) from exc
+            status_code=404,
+            detail="Utilisateur non trouvé"
+        )
+    return user
+
+# elle ne crée pas de connexion elle‑même, conformément à l'instruction d'utiliser `connect_database()`
+# directement dans le contexte appelant si nécessaire.

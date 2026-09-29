@@ -1,0 +1,1013 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<?, ?it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : rag_boucle | RAG : True | boucle : True | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_in9s8hm0
+
+1 fichier(s) PHP trouvé(s) :
+  - p3_securite\securite.php
+
+Ordre de migration (dépendances d'abord) :
+  1. securite.php
+
+████████████████████████████████████████████████████████████
+█  FICHIER : securite.php
+████████████████████████████████████████████████████████████
+  Analyste : 3 fonction(s), 0 classe(s), 3 faille(s)
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 90.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       90.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 92.6% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 92.6% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : genererRapport
+  3 exemple(s) de migration trouvé(s) :
+    - [reseau] Ping un hôte réseau (score: 0.997)
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.996)
+    - [calcul_financier] Calcul du salaire net (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : generer_rapport
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 33% (1/3)
+
+  📊 Score fonctionnel global : 80.0%
+  Équivalence comportementale : 0% (0/19 cas)
+    ⚠️ Divergence sur 'test@example.com' : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur 'inconnu@example.com' : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur "' OR '1'='1" : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur "'; DROP TABLE users; --" : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur '' : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur 'a' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur 'abc' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur '1234567' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur '12345678' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur 'Password123' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur 'motdepasse' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur 'éàçùè' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur 'mot de passe avec espaces' : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur '<script>alert(1)</script>' : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur "' OR 1=1 --" : PHP=accepte / Python=rejette (Commande invalide : caractères non autorisés)
+    ⚠️ Divergence sur 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur '0' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+    ⚠️ Divergence sur '12345678901234567890' : PHP=accepte / Python=rejette (Erreur lors de l'exécution du rapport)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : generer_rapport
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 3
+     Score Bandit : 85%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 88.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : generer_rapport
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       80.0%  (poids 50%)  — Testeur
+  securite          88.0%  (poids 33%)  — Auditeur
+  comportemental     0.0%  (poids 17%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 69.3% (confiance faible)
+
+✅ DÉCISION : LIVRER
+   Score composé 69.3% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 90.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       90.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 92.6% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 92.6% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+  ❌ securite.py : from .models import Produit
+
+  🔁 BOUCLE CORRECTIVE PROJET — régénération des fichiers présentant des défauts d'intégration...
+
+  Régénération de securite.py (depuis securite.php) avec 1 défaut(s) à corriger :
+    - from .models import Produit : Le module '.models' n'existe pas dans le projet (import halluciné par le LLM)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : securite.php
+████████████████████████████████████████████████████████████
+  Analyste : 3 fonction(s), 0 classe(s), 3 faille(s)
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : User
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : greenlet, importlib-metadata, sqlalchemy, typing-extensions, zipp
+     Vulnérabilités trouvées : 0
+
+  📊 Score sécurité global : 100.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite         100.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 78.8% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 78.8% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : bug_simple → iterer
+     · 2 erreur(s) localisée(s) avec correction identifiée
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 90.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       90.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 92.6% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 92.6% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : genererRapport
+  3 exemple(s) de migration trouvé(s) :
+    - [reseau] Ping un hôte réseau (score: 0.997)
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.996)
+    - [calcul_financier] Calcul du salaire net (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : generer_rapport
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (3/3)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : generer_rapport
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 2
+     Score Bandit : 90%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+  📊 Score sécurité global : 96.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : generer_rapport
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 60%)  — Testeur
+  securite          96.0%  (poids 40%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 98.4% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.4% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : Produit
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : bug_simple → iterer
+     · 2 erreur(s) localisée(s) avec correction identifiée
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : Produit
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : limite_structurelle → repasser_architecte
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : Produit
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 3/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : limite_structurelle → repasser_architecte
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : Produit
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 4/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : limite_structurelle → repasser_architecte
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : Produit
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 5/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+❌ DÉCISION : ARRÊT (ÉCHEC)
+   Nombre maximum d'itérations atteint (5) sans atteindre le seuil de qualité requis. Le code reste statiquement invalide (inexécutable) : livraison refusée quel que soit le score.
+   Catégorie d'échec : limite_structurelle → escalade_humaine
+     · budget d'itérations épuisé (5/5)
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET — après correction 1
+============================================================
+  ❌ securite.py : from .user_model import User
+
+  🔁 BOUCLE CORRECTIVE PROJET — régénération des fichiers présentant des défauts d'intégration...
+
+  Régénération de securite.py (depuis securite.php) avec 1 défaut(s) à corriger :
+    - from .user_model import User : Le module '.user_model' n'existe pas dans le projet (import halluciné par le LLM)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : securite.php
+████████████████████████████████████████████████████████████
+  Analyste : 3 fonction(s), 0 classe(s), 3 faille(s)
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : User
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : bug_simple → iterer
+     · 2 erreur(s) localisée(s) avec correction identifiée
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : User
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : limite_structurelle → repasser_architecte
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : User
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 3/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : limite_structurelle → repasser_architecte
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : User
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 4/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : limite_structurelle → repasser_architecte
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : getUser
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.997)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+     ❌ Code statiquement valide : False
+     ⚠️  Nom(s) non défini(s) ni importé(s) : User
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 5/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+❌ DÉCISION : ARRÊT (ÉCHEC)
+   Nombre maximum d'itérations atteint (5) sans atteindre le seuil de qualité requis. Le code reste statiquement invalide (inexécutable) : livraison refusée quel que soit le score.
+   Catégorie d'échec : limite_structurelle → escalade_humaine
+     · budget d'itérations épuisé (5/5)
+     · 2 erreur(s) inchangée(s) malgré la correction précédente
+
+  Recherche RAG pour : genererRapport
+  3 exemple(s) de migration trouvé(s) :
+    - [reseau] Ping un hôte réseau (score: 0.997)
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.996)
+    - [calcul_financier] Calcul du salaire net (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : generer_rapport
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 33% (1/3)
+
+  📊 Score fonctionnel global : 80.0%
+  Équivalence comportementale : 0% (0/6 cas)
+    ⚠️ Divergence sur 'test@example.com' : PHP=accepte / Python=rejette (Commande invalide)
+    ⚠️ Divergence sur 'inconnu@example.com' : PHP=accepte / Python=rejette (Commande invalide)
+    ⚠️ Divergence sur "' OR '1'='1" : PHP=accepte / Python=rejette (Commande invalide)
+    ⚠️ Divergence sur "'; DROP TABLE users; --" : PHP=accepte / Python=rejette (Commande invalide)
+    ⚠️ Divergence sur '<script>alert(1)</script>' : PHP=accepte / Python=rejette (Commande invalide)
+    ⚠️ Divergence sur "' OR 1=1 --" : PHP=accepte / Python=rejette (Commande invalide)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : generer_rapport
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 2
+     Score Bandit : 90%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 90.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : generer_rapport
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       80.0%  (poids 50%)  — Testeur
+  securite          90.0%  (poids 33%)  — Auditeur
+  comportemental     0.0%  (poids 17%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 70.0% (confiance faible)
+
+✅ DÉCISION : LIVRER
+   Score composé 70.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : chercherProduit
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Supprimer un enregistrement (score: 0.996)
+    - [authentification] Authentification utilisateur (score: 0.996)
+    - [reseau] Ping un hôte réseau (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+  📊 Score fonctionnel global : 90.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       90.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 92.6% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 92.6% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET — après correction 2
+============================================================
+  ✅ Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 1/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260926_2340\rag_boucle\p3_securite_p1/

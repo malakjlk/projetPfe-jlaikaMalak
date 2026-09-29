@@ -1,0 +1,332 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "get_user_by_email",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": true,
+              "audite": true,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": {
+              "agent": "Réviseur",
+              "justification": "j'active Réviseur parce que toutes les étapes techniques (développement, audit, vérification) sont terminées. Il doit maintenant valider l'ensemble du travail pour finaliser la migration."
+            },
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 1 faille(s) de sévérité élevée dans le PHP d'origine : sql_injection",
+              "[couche projet] utilise l'extension mysql_* obsolète : aucun équivalent direct, passage obligatoire par l'ORM",
+              "[Développeur] la fonction lève une HTTPException 404 si aucun utilisateur n'est trouvé,",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-26T22:44:11",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que l'analyse et le plan de migration sont prêts et qu'il faut maintenant générer le code Python correspondant. Le développeur doit transformer la fonction PHP existante en une fonction Python sécurisée en utilisant les ressources de l'espace de travail.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour get_user_by_email (18 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-26T22:44:51",
+                "agent": "Auditeur",
+                "justification_manager": "j'active Auditeur de sécurité parce que le code PHP original contenait une vulnérabilité d'injection SQL critique. Il est impératif de vérifier que le nouveau code Python utilise des requêtes paramétrées pour éliminer ce risque.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Audit terminé. Score sécurité : 94.0% — niveau OK."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-26T22:45:58",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": "j'active Vérificateur de propriétés parce que le code doit être conforme aux spécifications fonctionnelles initiales. Il doit confirmer que la logique de récupération par email est correctement implémentée en Python.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 1 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-26T22:46:01",
+                "agent": "Réviseur",
+                "justification_manager": "j'active Réviseur parce que toutes les étapes techniques (développement, audit, vérification) sont terminées. Il doit maintenant valider l'ensemble du travail pour finaliser la migration.",
+                "issue": "refus_prerequis",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "PRÉREQUIS MANQUANT : je ne peux pas décider tant que toutes les vérifications n'ont pas été faites. Il manque encore le test fonctionnel, la comparaison des comportements. Fais d'abord intervenir les "
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-26T22:44:06",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que l'analyse et le plan de migration sont prêts et qu'il faut maintenant générer le code Python correspondant. Le développeur doit transformer la fonction PHP existante en une fonction Python sécurisée en utilisant les ressources de l'espace de travail.",
+                "tache": "Produire le module Python get_user_by_email en suivant le plan de migration établi."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-26T22:44:18",
+                "type": "delegation",
+                "agent_active": "Auditeur",
+                "justification": "j'active Auditeur de sécurité parce que le code PHP original contenait une vulnérabilité d'injection SQL critique. Il est impératif de vérifier que le nouveau code Python utilise des requêtes paramétrées pour éliminer ce risque.",
+                "tache": "Auditer le code Python généré pour s'assurer de l'absence de vulnérabilités d'injection SQL."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-26T22:44:56",
+                "type": "delegation",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "j'active Vérificateur de propriétés parce que le code doit être conforme aux spécifications fonctionnelles initiales. Il doit confirmer que la logique de récupération par email est correctement implémentée en Python.",
+                "tache": "Vérifier que le module Python respecte les propriétés fonctionnelles attendues."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-26T22:46:00",
+                "type": "delegation",
+                "agent_active": "Réviseur",
+                "justification": "j'active Réviseur parce que toutes les étapes techniques (développement, audit, vérification) sont terminées. Il doit maintenant valider l'ensemble du travail pour finaliser la migration.",
+                "tache": "Réviser le module Python et fournir une décision finale avec un score."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-26T22:46:10",
+                "type": "delegation",
+                "agent_active": "Testeur",
+                "justification": "j'active Testeur fonctionnel parce que le Réviseur exige une validation complète incluant les tests. Il doit s'assurer que le module se comporte comme prévu dans un environnement de test.",
+                "tache": "Effectuer les tests fonctionnels du module Python get_user_by_email."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-26T22:46:21",
+                "type": "delegation",
+                "agent_active": "Comparateur",
+                "justification": "j'active Comparateur parce que le Réviseur exige une comparaison des comportements entre l'ancien code PHP et le nouveau code Python. Il doit confirmer que la logique métier est préservée malgré le changement de langage.",
+                "tache": "Comparer le comportement du code PHP original avec le module Python généré."
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_auditeur": 1,
+              "rapport_formel": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "gemini/gemini-3.1-flash-lite",
+            "echecs_llm": 6,
+            "bascules_modele": []
+          }
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "hash_password",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "gemini/gemini-3.1-flash-lite",
+            "echecs_llm": 1,
+            "bascules_modele": []
+          }
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "login",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "gemini/gemini-3.1-flash-lite",
+            "echecs_llm": 1,
+            "bascules_modele": []
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 3
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

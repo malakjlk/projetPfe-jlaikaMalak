@@ -1,0 +1,1112 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "validation.php",
+      "cible": "validation.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "validate_password",
+          "decision_finale": "LIVRER",
+          "score_final": 86.2,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "validate_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "validate_password : acceptation ⇒ au moins une majuscule",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "valider_age : acceptation ⇒ valeur >= 18",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "validate_password",
+            "statut": "accepte",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": true,
+              "compare": true,
+              "proprietes_verifiees": true,
+              "audite": true,
+              "decide": true
+            },
+            "tentatives_correction": 1,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [],
+            "derniere_activation": {
+              "agent": "Réviseur",
+              "justification": null
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "score": 86.2,
+              "raison": "Score composé 86.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.",
+              "categorie_echec": null,
+              "confiance": {
+                "score": 86.2,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 84.00000000000001,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 78.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "[couche projet] 5 invariant(s) de sécurité à préserver dans le code produit",
+              "[Testeur] 2 invariant(s) absent(s) du code",
+              "[Auditeur] 2 protection(s) d'origine perdue(s)"
+            ],
+            "scores_successifs": [
+              86.2
+            ],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:38:20",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python du module validate_password n'existe pas encore et il faut le créer à partir du code PHP donné. Le code PHP est:",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour validate_password (24 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:38:24",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python n'existe pas encore et il doit le créer à partir du code PHP existant. Le code PHP est:",
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:39:49",
+                "agent": "Comparateur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 100% (0 divergence(s), 0 injection(s) neutralisée(s))."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-28T10:40:28",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 3 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-28T10:40:34",
+                "agent": "Testeur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 84.0%."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-28T10:42:08",
+                "agent": "Auditeur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Audit terminé. Score sécurité : 78.0% — niveau CRITIQUE."
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-28T10:42:11",
+                "agent": "Réviseur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [],
+                "iteration": 2,
+                "resultat": "Décision : LIVRER (score de confiance 86.2%, confiance elevee — fonctionnel 84%, securite 78%, comportemental 100%, proprietes 100%). Le module est validé, la mission peut s'achever. Vérifications eff"
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:38:17",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python du module validate_password n'existe pas encore et il faut le créer à partir du code PHP donné. Le code PHP est:",
+                "tache": "Produire le module Python nommé validate_password à partir du code PHP fourni, en suivant l'analyse et le plan déjà présents dans l'espace de travail partagé."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:38:23",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python n'existe pas encore et il doit le créer à partir du code PHP existant. Le code PHP est:",
+                "tache": "Produire le module Python nommé validate_password qui reproduit la logique du code PHP fourni, en suivant les exigences déjà analysées."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:38:46",
+                "type": "question",
+                "agent_active": "Comparateur",
+                "justification": "Peux-tu comparer le comportement du module Python validate_password avec le code PHP original et confirmer qu'ils sont fonctionnellement équivalents, notamment pour les cas de mot de passe trop court et sans majuscule?",
+                "tache": "Peux-tu comparer le comportement du module Python validate_password avec le code PHP original et confirmer qu'ils sont fonctionnellement équivalents, notamment pour les cas de mot de passe trop court et sans majuscule?"
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-28T10:39:51",
+                "type": "question",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "Peux‑tu valider que le module Python respecte toutes les propriétés attendues, notamment les messages d'exception, le type de retour et la gestion des entrées non‑string, ainsi que les invariants de sécurité?",
+                "tache": "Peux‑tu valider que le module Python respecte toutes les propriétés attendues, notamment les messages d'exception, le type de retour et la gestion des entrées non‑string, ainsi que les invariants de sécurité?"
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-28T10:40:30",
+                "type": "question",
+                "agent_active": "Testeur",
+                "justification": "Peux‑tu exécuter les tests fonctionnels sur le module validate_password et confirmer que tous les cas passent correctement?",
+                "tache": "Peux‑tu exécuter les tests fonctionnels sur le module validate_password et confirmer que tous les cas passent correctement?"
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-28T10:41:35",
+                "type": "question",
+                "agent_active": "Auditeur",
+                "justification": "Peux‑tu auditer le module validate_password pour confirmer qu'il ne présente aucune vulnérabilité de sécurité et qu'il respecte les invariants de sécurité (longueur minimale, majuscule, gestion des entrées)?",
+                "tache": "Peux‑tu auditer le module validate_password pour confirmer qu'il ne présente aucune vulnérabilité de sécurité et qu'il respecte les invariants de sécurité (longueur minimale, majuscule, gestion des entrées)?"
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-28T10:42:10",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Quelle est votre décision finale concernant le module validate_password, et quels scores attribuez‑vous aux critères fonctionnels et de sécurité?",
+                "tache": "Quelle est votre décision finale concernant le module validate_password, et quels scores attribuez‑vous aux critères fonctionnels et de sécurité?"
+              },
+              {
+                "ordre": 8,
+                "horodatage": "2026-09-28T10:42:13",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Pouvez‑vous préciser les corrections ciblées à apporter au module Python validate_password (ex. messages d'exception, gestion des entrées, logique, etc.)?",
+                "tache": "Pouvez‑vous préciser les corrections ciblées à apporter au module Python validate_password (ex. messages d'exception, gestion des entrées, logique, etc.)?"
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_testeur": 1,
+              "rapport_auditeur": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 2,
+            "bascules_modele": []
+          },
+          "confiance": {
+            "score": 86.2,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 84.00000000000001,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 78.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "validate_password",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « validate_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « validate_password : acceptation ⇒ au moins une majuscule » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « valider_age : acceptation ⇒ valeur >= 18 » : aucun contre-exemple trouvé par exploration symbolique",
+              "3 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "2 invariant(s) du code d'origine NON retrouvé(s) dans le code migré",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 5 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "nom_original": "validatePassword",
+          "code_php_source": "function validatePassword($password) {\n    if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }\n    if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }\n    return true;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "code": "if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }",
+                  "fonction": "validatePassword",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "code": "if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }",
+                  "fonction": "validatePassword",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "code": "if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }",
+                  "fonction": "validerEmail",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_manquants": [
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "code": "if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }",
+                  "fonction": "validerAge",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 18)",
+                  "code": "if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }",
+                  "fonction": "validerAge",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "manquant",
+                  "source": "contre-exemple : entrée acceptée alors qu'elle viole la règle : '0000000A'"
+                },
+                {
+                  "invariant": "Borne sur une valeur (< 18)",
+                  "verdict": "manquant",
+                  "source": "aucune garde ne rejette l'entrée invalide"
+                }
+              ],
+              "score": 0.6
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        },
+        {
+          "nom_python": "valider_email",
+          "decision_finale": "LIVRER",
+          "score_final": 80.2,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "validate_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "validate_password : acceptation ⇒ au moins une majuscule",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "valider_age : acceptation ⇒ valeur >= 18",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "valider_email",
+            "statut": "accepte",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": true,
+              "compare": true,
+              "proprietes_verifiees": true,
+              "audite": true,
+              "decide": true
+            },
+            "tentatives_correction": 1,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [],
+            "derniere_activation": {
+              "agent": "Réviseur",
+              "justification": null
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "score": 80.2,
+              "raison": "Score composé 80.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.",
+              "categorie_echec": null,
+              "confiance": {
+                "score": 80.2,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 76.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 70.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "[couche projet] 5 invariant(s) de sécurité à préserver dans le code produit",
+              "[Développeur] la fonction lève HTTPException, ce qui convient dans un contexte FastAPI mais",
+              "[Testeur] 3 invariant(s) absent(s) du code",
+              "[Auditeur] 3 protection(s) d'origine perdue(s)"
+            ],
+            "scores_successifs": [
+              80.2
+            ],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:43:19",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python du module valider_email n'existe pas encore. L'analyse du code PHP et le plan de migration sont déjà disponibles dans l'espace de travail partagé, il doit uniquement produire le code Python correspondant.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour valider_email (14 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:43:32",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": "j'active Vérificateur de propriétés parce que le code Python du module valider_email vient d'être produit et doit être vérifié pour conformité fonctionnelle et respect du plan de migration.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 3 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:44:48",
+                "agent": "Réviseur",
+                "justification_manager": null,
+                "issue": "refus_prerequis",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "PRÉREQUIS MANQUANT : je ne peux pas décider tant que toutes les vérifications n'ont pas été faites. Il manque encore le test fonctionnel, la comparaison des comportements, l'audit de sécurité. Fais d'"
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-28T10:44:52",
+                "agent": "Testeur",
+                "justification_manager": "j'active Testeur fonctionnel parce que le module Python a besoin d'une validation fonctionnelle pour confirmer qu'il accepte les emails valides et lève une exception pour les invalides, conformément au plan déjà présent.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 76.0%."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-28T10:44:56",
+                "agent": "Comparateur",
+                "justification_manager": "j'active Comparateur parce que nous devons comparer le comportement du module Python avec la fonction PHP d'origine pour garantir une correspondance fonctionnelle complète, comme requis avant la révision finale.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 100% (0 divergence(s), 0 injection(s) neutralisée(s))."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-28T10:46:09",
+                "agent": "Auditeur",
+                "justification_manager": "j'active Auditeur de sécurité parce que le Réviseur indique qu'un audit de sécurité est requis avant la décision finale, afin de vérifier l'absence de vulnérabilités dans le module Python valider_email.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Audit terminé. Score sécurité : 70.0% — niveau CRITIQUE."
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-28T10:46:14",
+                "agent": "Réviseur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [],
+                "iteration": 2,
+                "resultat": "Décision : LIVRER (score de confiance 80.2%, confiance elevee — fonctionnel 76%, securite 70%, comportemental 100%, proprietes 100%). Le module est validé, la mission peut s'achever. Vérifications eff"
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:43:17",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python du module valider_email n'existe pas encore. L'analyse du code PHP et le plan de migration sont déjà disponibles dans l'espace de travail partagé, il doit uniquement produire le code Python correspondant.",
+                "tache": "Écrire le module Python nommé valider_email qui reproduit la logique de la fonction PHP validerEmail, en suivant l'analyse et le plan déjà présents dans l'espace de travail partagé."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:43:24",
+                "type": "delegation",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "j'active Vérificateur de propriétés parce que le code Python du module valider_email vient d'être produit et doit être vérifié pour conformité fonctionnelle et respect du plan de migration.",
+                "tache": "Vérifier que le module Python valider_email implémente correctement la validation d'email, lève une exception avec le même message en cas d'email invalide, et retourne True sinon, conformément à l'analyse et au plan de migration déjà présents."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:43:47",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Veuillez fournir votre décision finale sur le module valider_email, incluant le score et la liste des vérifications réalisées.",
+                "tache": "Veuillez fournir votre décision finale sur le module valider_email, incluant le score et la liste des vérifications réalisées."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-28T10:44:51",
+                "type": "delegation",
+                "agent_active": "Testeur",
+                "justification": "j'active Testeur fonctionnel parce que le module Python a besoin d'une validation fonctionnelle pour confirmer qu'il accepte les emails valides et lève une exception pour les invalides, conformément au plan déjà présent.",
+                "tache": "Exécuter des tests fonctionnels sur le module Python valider_email, en vérifiant qu'il retourne True pour des adresses valides et lève une Exception avec le message \"Email invalide\" pour des adresses invalides, et rapporter les résultats."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-28T10:44:53",
+                "type": "delegation",
+                "agent_active": "Comparateur",
+                "justification": "j'active Comparateur parce que nous devons comparer le comportement du module Python avec la fonction PHP d'origine pour garantir une correspondance fonctionnelle complète, comme requis avant la révision finale.",
+                "tache": "Comparer le module Python valider_email avec la fonction PHP validerEmail en termes de résultats et d'exceptions pour un ensemble représentatif d'adresses email, et fournir un rapport de correspondance."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-28T10:45:57",
+                "type": "delegation",
+                "agent_active": "Auditeur",
+                "justification": "j'active Auditeur de sécurité parce que le Réviseur indique qu'un audit de sécurité est requis avant la décision finale, afin de vérifier l'absence de vulnérabilités dans le module Python valider_email.",
+                "tache": "Auditer le module Python valider_email pour détecter toute vulnérabilité potentielle (injection, mauvaise gestion d'exception, etc.) et fournir un rapport de sécurité."
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-28T10:46:10",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Quelle est votre décision finale sur le module valider_email, incluant le score global et la liste des vérifications effectuées?",
+                "tache": "Quelle est votre décision finale sur le module valider_email, incluant le score global et la liste des vérifications effectuées?"
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_formel": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_auditeur": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": {
+            "score": 80.2,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 76.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 70.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "valider_email",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « validate_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « validate_password : acceptation ⇒ au moins une majuscule » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « valider_age : acceptation ⇒ valeur >= 18 » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "3 invariant(s) du code d'origine NON retrouvé(s) dans le code migré",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 5 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "nom_original": "validerEmail",
+          "code_php_source": "function validerEmail($email) {\n    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }\n    return true;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "code": "if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }",
+                  "fonction": "validatePassword",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "code": "if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }",
+                  "fonction": "validerEmail",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_manquants": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "code": "if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }",
+                  "fonction": "validatePassword",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "code": "if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }",
+                  "fonction": "validerAge",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 18)",
+                  "code": "if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }",
+                  "fonction": "validerAge",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "manquant",
+                  "source": "aucune garde ne rejette l'entrée invalide"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 10 : not re.match('^[^@\\\\s]+@[^@\\\\s]+\\\\.[^@\\\\s]+$', email)"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 10 : not re.match('^[^@\\\\s]+@[^@\\\\s]+\\\\.[^@\\\\s]+$', email)"
+                },
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "manquant",
+                  "source": "aucune garde ne rejette l'entrée invalide"
+                },
+                {
+                  "invariant": "Borne sur une valeur (< 18)",
+                  "verdict": "manquant",
+                  "source": "aucune garde ne rejette l'entrée invalide"
+                }
+              ],
+              "score": 0.4
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        },
+        {
+          "nom_python": "valider_age",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "validate_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "validate_password : acceptation ⇒ au moins une majuscule",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "valider_age : acceptation ⇒ valeur >= 18",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "valider_age",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": true,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [],
+            "derniere_activation": {
+              "agent": "Réviseur",
+              "justification": null
+            },
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestration interrompue avant la décision finale du Réviseur (dernière décision : aucune). Le module n'a pas été validé.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 5 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestration interrompue avant la décision finale du Réviseur (dernière décision : aucune). Le module n'a pas été validé."
+            ],
+            "scores_successifs": [],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:47:31",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python du module valider_age n'existe pas encore. Le code PHP est:",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour valider_age (25 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:47:37",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": "j'active Vérificateur de propriétés parce que le module Python valider_age vient d'être produit et doit être vérifié pour conformité fonctionnelle et respect du plan de migration. Le code Python implémente la fonction valider_age qui doit lever ValueError pour les entrées non numériques et AssertionError pour les âges < 18, et retourner True sinon.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 3 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:47:42",
+                "agent": "Réviseur",
+                "justification_manager": null,
+                "issue": "refus_prerequis",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "PRÉREQUIS MANQUANT : je ne peux pas décider tant que toutes les vérifications n'ont pas été faites. Il manque encore le test fonctionnel, la comparaison des comportements, l'audit de sécurité. Fais d'"
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:46:28",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python du module valider_age n'existe pas encore. Le code PHP est:",
+                "tache": "Produire le module Python nommé valider_age qui reproduit la logique du code PHP fourni, en suivant l'analyse et le plan déjà présents dans l'espace de travail partagé."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:47:33",
+                "type": "delegation",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "j'active Vérificateur de propriétés parce que le module Python valider_age vient d'être produit et doit être vérifié pour conformité fonctionnelle et respect du plan de migration. Le code Python implémente la fonction valider_age qui doit lever ValueError pour les entrées non numériques et AssertionError pour les âges < 18, et retourner True sinon.",
+                "tache": "Vérifier que le module Python valider_age reproduit exactement la logique du code PHP, que les exceptions sont correctes et que le retour est True pour les âges valides."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:47:39",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Veuillez examiner le module Python valider_age ainsi que la vérification de propriétés et fournir votre décision finale avec le score et la liste des vérifications effectuées.",
+                "tache": "Veuillez examiner le module Python valider_age ainsi que la vérification de propriétés et fournir votre décision finale avec le score et la liste des vérifications effectuées."
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_formel": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": 63.4,
+            "indicateurs": {
+              "annotations_types": 0.5,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "valider_age",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [
+              "propriété « validate_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « validate_password : acceptation ⇒ au moins une majuscule » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « valider_age : acceptation ⇒ valeur >= 18 » : aucun contre-exemple trouvé par exploration symbolique"
+            ],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (3 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "validerAge",
+          "code_php_source": "function validerAge($age) {\n    if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }\n    if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }\n    return true;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

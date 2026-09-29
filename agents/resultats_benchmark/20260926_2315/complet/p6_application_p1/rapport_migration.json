@@ -1,0 +1,205 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "get_user_by_email",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 1 faille(s) de sévérité élevée dans le PHP d'origine : sql_injection",
+              "[couche projet] utilise l'extension mysql_* obsolète : aucun équivalent direct, passage obligatoire par l'ORM",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "gemini/gemini-3.1-flash-lite",
+            "echecs_llm": 3,
+            "bascules_modele": []
+          }
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "hash_password",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          }
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "login",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 3
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

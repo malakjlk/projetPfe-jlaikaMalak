@@ -1,3 +1,5 @@
+import re
+
 from tree_sitter import Language, Parser
 import tree_sitter_php as tsPHP
 import json
@@ -36,6 +38,27 @@ def analyser_code_php(code_php: str) -> dict:
     def get_text(node):
         return code_bytes[node.start_byte:node.end_byte].decode(
             "utf8", errors="ignore")
+
+    def _fonction_englobante(node) -> str:
+        parent = node.parent
+        while parent:
+            if parent.type in ("function_definition", "method_declaration"):
+                for child in parent.children:
+                    if child.type == "name":
+                        return get_text(child)
+                return ""
+            parent = parent.parent
+        return ""
+
+    def _ajouter_invariant(invariant: dict):
+        """Ajoute l'invariant s'il n'est pas déjà présent."""
+        cle = (invariant["type"], invariant["fonction"],
+               invariant["code"][:60])
+        for existant in rapport["invariants_securite"]:
+            if (existant["type"], existant["fonction"],
+                    existant["code"][:60]) == cle:
+                return
+        rapport["invariants_securite"].append(invariant)
 
     def parcourir(node):
 
@@ -104,6 +127,36 @@ def analyser_code_php(code_php: str) -> dict:
                                "fin": node.end_point[0] + 1}
                 })
 
+        # ─── ASSAINISSEMENT ET HACHAGE ───────────────
+        # Ces protections ne sont pas des « if » : ce sont des appels.
+        # Les chercher uniquement dans les conditions revenait à les
+        # ignorer, alors que ce sont les garanties les plus fortes du
+        # code d'origine.
+        if node.type == "function_call_expression":
+            appel = get_text(node)
+            fonction_parente = _fonction_englobante(node)
+
+            if any(f in appel for f in ["htmlspecialchars", "htmlentities",
+                                        "strip_tags", "addslashes"]):
+                _ajouter_invariant({
+                    "type": "assainissement_sortie",
+                    "description": "Échappement des données avant restitution",
+                    "code": appel[:150], "fonction": fonction_parente,
+                    "a_preserver": True})
+            if "filter_var" in appel and "SANITIZE" in appel.upper():
+                _ajouter_invariant({
+                    "type": "assainissement_sortie",
+                    "description": "Nettoyage de l'entrée utilisateur",
+                    "code": appel[:150], "fonction": fonction_parente,
+                    "a_preserver": True})
+            if any(f in appel for f in ["password_hash", "password_verify",
+                                        "crypt("]):
+                _ajouter_invariant({
+                    "type": "hachage_mot_de_passe",
+                    "description": "Mot de passe haché, jamais en clair",
+                    "code": appel[:150], "fonction": fonction_parente,
+                    "a_preserver": True})
+
         # ─── INVARIANTS DE SÉCURITÉ ──────────────────
         if node.type == "if_statement":
             contenu = get_text(node)
@@ -148,6 +201,44 @@ def analyser_code_php(code_php: str) -> dict:
                 rapport["invariants_securite"].append({
                     "type": "validation_existence",
                     "description": "Vérification d'existence de variable",
+                    "code": contenu[:150], "fonction": fonction_parente,
+                    "a_preserver": True})
+
+            # ── Gardes qui REJETTENT ──
+            # Un « if » suivi d'un throw, d'un die ou d'un return
+            # négatif est une garde : c'est ce qui empêche une donnée
+            # invalide de passer. Son contenu dit ce qu'elle protège.
+            rejette = any(mot in contenu for mot in
+                          ["throw", "die(", "exit(", "return false",
+                           "return null", "return FALSE", "return NULL"])
+            condition = contenu.split("{")[0]
+
+            if rejette:
+                borne = re.search(r"[<>]=?\s*-?\d+(?:\.\d+)?", condition)
+                if borne and "strlen" not in condition:
+                    _ajouter_invariant({
+                        "type": "validation_intervalle",
+                        "description": f"Borne sur une valeur ({borne.group()})",
+                        "code": contenu[:150], "fonction": fonction_parente,
+                        "a_preserver": True})
+
+                if re.search(r"!\s*\$\w+|===?\s*(false|null)|"
+                             r"(false|null)\s*===?", condition, re.IGNORECASE):
+                    _ajouter_invariant({
+                        "type": "validation_existence",
+                        "description": "Rejet si la valeur est absente ou fausse",
+                        "code": contenu[:150], "fonction": fonction_parente,
+                        "a_preserver": True})
+
+            # ── Comparaison d'identifiants ──
+            # « if ($user["password"] == $password) » est le cœur d'une
+            # authentification : la comparaison doit être préservée.
+            if re.search(r"(password|passwd|mot_de_passe|token|jeton|"
+                         r"secret|hash)", condition, re.IGNORECASE) and \
+                    re.search(r"===?|!==?", condition):
+                _ajouter_invariant({
+                    "type": "comparaison_authentification",
+                    "description": "Comparaison d'identifiant ou de secret",
                     "code": contenu[:150], "fonction": fonction_parente,
                     "a_preserver": True})
 

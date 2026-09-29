@@ -1,0 +1,744 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "validation.php",
+      "cible": "validation.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "validate_password",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "validate_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "validate_password : acceptation ⇒ au moins une majuscule",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "valider_age : acceptation ⇒ valeur >= 18",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "validate_password",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": true,
+              "compare": true,
+              "proprietes_verifiees": true,
+              "audite": true,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": {
+              "agent": "Analyste",
+              "justification": null
+            },
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 5 invariant(s) de sécurité à préserver dans le code produit",
+              "[Développeur] La fonction ne gère que les règles explicitement demandées (longueur et majuscule) ; d'autres règles éventuelles doivent être ajoutées séparément.",
+              "[Testeur] 2 invariant(s) absent(s) du code",
+              "[Auditeur] 2 protection(s) d'origine perdue(s)",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-27T22:43:12",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python n'existe pas encore et il faut le créer à partir du code PHP existant. Le code PHP est:",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour validate_password (23 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-27T22:43:16",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python du module validate_password n'existe pas encore dans l'espace de travail partagé. Le code PHP à migrer est:",
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-27T22:44:44",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que nous avons besoin du code Python correspondant au module validate_password. Le code PHP existant est:",
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-27T22:44:49",
+                "agent": "Comparateur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 100% (0 divergence(s), 0 injection(s) neutralisée(s))."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-27T22:44:54",
+                "agent": "Testeur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 84.0%."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-27T22:45:57",
+                "agent": "Développeur",
+                "justification_manager": null,
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-27T22:46:34",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 3 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 8,
+                "horodatage": "2026-09-27T22:47:47",
+                "agent": "Auditeur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Audit terminé. Score sécurité : 78.0% — niveau CRITIQUE."
+              },
+              {
+                "ordre": 9,
+                "horodatage": "2026-09-27T22:47:50",
+                "agent": "Testeur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 84.0%."
+              },
+              {
+                "ordre": 10,
+                "horodatage": "2026-09-27T22:47:55",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que les tests fonctionnels montrent un score de 84% et nous devons corriger le module Python validate_password pour atteindre 100% de réussite. Le code Python actuel et les cas de test échoués sont dans l'espace de travail partagé ainsi que l'analyse et le plan de migration.",
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 11,
+                "horodatage": "2026-09-27T22:48:56",
+                "agent": "Développeur",
+                "justification_manager": null,
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 12,
+                "horodatage": "2026-09-27T22:49:14",
+                "agent": "Comparateur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 100% (0 divergence(s), 0 injection(s) neutralisée(s))."
+              },
+              {
+                "ordre": 13,
+                "horodatage": "2026-09-27T22:50:45",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que les tests fonctionnels ont un score de 84% indiquant que le module Python ne lève pas les bonnes exceptions ou messages attendus. Nous devons corriger le code pour qu'il lève les messages exacts \"Mot de passe trop court\" et \"Majuscule requise\" et passe tous les tests.",
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Le code Python est DÉJÀ disponible (version 1) et aucune correction n'a été demandée par le Réviseur : inutile de le régénérer. Fais faire les vérifications qui manquent. — État du module validate_pas"
+              },
+              {
+                "ordre": 14,
+                "horodatage": "2026-09-27T22:50:49",
+                "agent": "Testeur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 84.0%."
+              },
+              {
+                "ordre": 15,
+                "horodatage": "2026-09-27T22:52:19",
+                "agent": "Analyste",
+                "justification_manager": null,
+                "issue": "deja_fait",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "L'analyse est DÉJÀ disponible dans l'espace de travail : 3 fonction(s), 5 invariant(s), 0 faille(s). Passe à l'étape suivante."
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-27T22:43:10",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python n'existe pas encore et il faut le créer à partir du code PHP existant. Le code PHP est:",
+                "tache": "Produire le module Python nommé validate_password reproduisant la logique du code PHP fourni."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-27T22:43:16",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python du module validate_password n'existe pas encore dans l'espace de travail partagé. Le code PHP à migrer est:",
+                "tache": "Produire le module Python nommé validate_password correspondant à la fonction PHP fournie."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-27T22:43:43",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que nous avons besoin du code Python correspondant au module validate_password. Le code PHP existant est:",
+                "tache": "Produire le module Python nommé validate_password qui reproduit la logique du code PHP fourni, en suivant l'analyse et le plan de migration déjà présents dans l'espace de travail partagé."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-27T22:44:46",
+                "type": "question",
+                "agent_active": "Comparateur",
+                "justification": "j'active Comparateur parce que nous devons vérifier que le module Python validate_password reproduit exactement la logique du code PHP fourni. Le code PHP et le code Python version 1 sont disponibles dans l'espace de travail partagé ainsi que l'analyse et le plan de migration.",
+                "tache": "Le module Python validate_password correspond-il fonctionnellement au code PHP original selon l'analyse et le plan de migration ?"
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-27T22:44:50",
+                "type": "question",
+                "agent_active": "Testeur",
+                "justification": "j'active Testeur fonctionnel parce que nous devons valider le bon fonctionnement du module Python validate_password avec des cas de test pertinents. Le code Python version 1 est dans l'espace de travail partagé ainsi que les exigences fonctionnelles tirées de l'analyse du code PHP.",
+                "tache": "Le module Python validate_password passe-t-il les tests unitaires couvrant les cas de mot de passe trop court, sans majuscule et valide ?"
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-27T22:45:56",
+                "type": "question",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le Testeur fonctionnel indique un score fonctionnel de 84%, donc le module Python ne passe pas tous les tests. Nous avons besoin des corrections nécessaires pour atteindre 100% de réussite.",
+                "tache": "Quelles modifications devez‑vous apporter au module Python validate_password pour corriger les échecs de tests identifiés par le Testeur fonctionnel ?"
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-27T22:46:00",
+                "type": "question",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "j'active Vérificateur de propriétés parce que nous devons vérifier que le module Python validate_password respecte les invariants de sécurité et les propriétés fonctionnelles attendues, notamment les deux invariants manquants signalés par le Testeur.",
+                "tache": "Le module Python validate_password satisfait‑il toutes les propriétés requises, y compris les invariants de sécurité et les règles de validation du mot de passe, ou quels sont les écarts ?"
+              },
+              {
+                "ordre": 8,
+                "horodatage": "2026-09-27T22:46:36",
+                "type": "question",
+                "agent_active": "Auditeur",
+                "justification": "j'active Auditeur de sécurité parce que nous devons obtenir l'audit de sécurité du module Python validate_password avant la décision finale du Réviseur. Le code Python version 1 et les vérifications de propriétés sont déjà dans l'espace de travail partagé.",
+                "tache": "Le module Python validate_password respecte‑t‑il les exigences de sécurité, notamment l'absence d'injection, la gestion des exceptions et les invariants de sécurité mentionnés, ou quels problèmes avez‑vous identifiés ?"
+              },
+              {
+                "ordre": 9,
+                "horodatage": "2026-09-27T22:47:49",
+                "type": "question",
+                "agent_active": "Testeur",
+                "justification": "j'active Testeur fonctionnel parce que nous avons besoin de connaître les cas de test qui ont échoué pour pouvoir corriger le module Python. Le Testeur a déjà indiqué un score fonctionnel de 84%.",
+                "tache": "Pouvez‑vous préciser quels scénarios de test (ex. mot de passe trop court, sans majuscule, etc.) ont échoué et les raisons de ces échecs dans le module Python validate_password ?"
+              },
+              {
+                "ordre": 10,
+                "horodatage": "2026-09-27T22:47:52",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que les tests fonctionnels montrent un score de 84% et nous devons corriger le module Python validate_password pour atteindre 100% de réussite. Le code Python actuel et les cas de test échoués sont dans l'espace de travail partagé ainsi que l'analyse et le plan de migration.",
+                "tache": "Corriger le module Python validate_password afin qu'il lève les bonnes exceptions avec les messages attendus et qu'il passe tous les tests unitaires, en respectant les invariants de sécurité."
+              },
+              {
+                "ordre": 11,
+                "horodatage": "2026-09-27T22:48:58",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "j'active Réviseur parce que nous avons terminé les étapes de génération, comparaison, vérification de propriétés et audit de sécurité du module Python validate_password et nous devons obtenir la décision finale ainsi que le score global.",
+                "tache": "Veuillez examiner le module Python validate_password, les résultats des tests fonctionnels (84%), de vérification de propriétés (3/3) et de l'audit de sécurité (78% critique) et fournir votre décision finale avec le score et les éventuelles demandes de correction ou de révision du plan."
+              },
+              {
+                "ordre": 12,
+                "horodatage": "2026-09-27T22:49:08",
+                "type": "question",
+                "agent_active": "Comparateur",
+                "justification": "j'active Comparateur parce que le Réviseur indique que la comparaison des comportements est manquante. Nous devons vérifier que le module Python validate_password correspond fonctionnellement au code PHP original.",
+                "tache": "Le module Python validate_password correspond‑il fonctionnellement au code PHP fourni selon l'analyse et le plan de migration ?"
+              },
+              {
+                "ordre": 13,
+                "horodatage": "2026-09-27T22:49:44",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que les tests fonctionnels ont un score de 84% indiquant que le module Python ne lève pas les bonnes exceptions ou messages attendus. Nous devons corriger le code pour qu'il lève les messages exacts \"Mot de passe trop court\" et \"Majuscule requise\" et passe tous les tests.",
+                "tache": "Corriger le module Python validate_password afin qu'il lève les exceptions avec les messages exacts requis et qu'il réussisse 100% des tests unitaires, en respectant les invariants de sécurité."
+              },
+              {
+                "ordre": 14,
+                "horodatage": "2026-09-27T22:50:47",
+                "type": "question",
+                "agent_active": "Testeur",
+                "justification": "j'active Testeur fonctionnel parce que nous avons besoin de connaître précisément quels scénarios échouent (ex. messages d'exception) afin de corriger le module Python. Le score actuel est 84% et le développeur n'a pas encore appliqué de corrections.",
+                "tache": "Pouvez‑vous fournir le détail des cas de test qui ont échoué, incluant les messages d'exception attendus et obtenus, pour le module Python validate_password ?"
+              },
+              {
+                "ordre": 15,
+                "horodatage": "2026-09-27T22:51:04",
+                "type": "delegation",
+                "agent_active": "Architecte",
+                "justification": "j'active Architecte de migration parce que le plan de migration actuel ne précise pas les messages d'exception exacts requis, ce qui cause des échecs de tests fonctionnels. Nous devons mettre à jour le plan pour inclure les messages \"Mot de passe trop court\" et \"Majuscule requise\" afin que le développeur puisse corriger le code.",
+                "tache": "Réviser le plan de migration du module validate_password afin d'ajouter les exigences précises sur les messages d'exception à lever pour les cas de mot de passe trop court et sans majuscule, en respectant les invariants de sécurité déjà identifiés."
+              },
+              {
+                "ordre": 16,
+                "horodatage": "2026-09-27T22:51:18",
+                "type": "question",
+                "agent_active": "Analyste",
+                "justification": "j'active Analyste de code legacy parce que l'Architecte de migration a besoin du rapport d'analyse du module validate_password qui est déjà présent dans l'espace de travail partagé afin de mettre à jour le plan de migration.",
+                "tache": "Pouvez‑vous fournir le rapport d'analyse du code PHP du module validate_password, incluant les exigences fonctionnelles et les messages d'exception attendus, tel qu'il est déjà stocké dans l'espace de travail partagé ?"
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_differentiel": 2,
+              "rapport_testeur": 3,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 12,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "validate_password",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « validate_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « validate_password : acceptation ⇒ au moins une majuscule » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « valider_age : acceptation ⇒ valeur >= 18 » : aucun contre-exemple trouvé par exploration symbolique",
+              "3 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "2 invariant(s) du code d'origine NON retrouvé(s) dans le code migré",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (5 point(s) vérifié(s), 5 hors de portée)."
+          },
+          "nom_original": "validatePassword",
+          "code_php_source": "function validatePassword($password) {\n    if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }\n    if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }\n    return true;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "code": "if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }",
+                  "fonction": "validatePassword",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "code": "if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }",
+                  "fonction": "validatePassword",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "code": "if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }",
+                  "fonction": "validerEmail",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_manquants": [
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "code": "if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }",
+                  "fonction": "validerAge",
+                  "a_preserver": true
+                },
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 18)",
+                  "code": "if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }",
+                  "fonction": "validerAge",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "manquant",
+                  "source": "contre-exemple : entrée acceptée alors qu'elle viole la règle : '0000000A'"
+                },
+                {
+                  "invariant": "Borne sur une valeur (< 18)",
+                  "verdict": "manquant",
+                  "source": "aucune garde ne rejette l'entrée invalide"
+                }
+              ],
+              "score": 0.6
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        },
+        {
+          "nom_python": "valider_email",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "valider_email",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 5 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": null,
+            "indicateurs": {},
+            "non_applicables": [],
+            "erreur": "aucun code produit"
+          },
+          "portee_verification": {
+            "module": "valider_email",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "validerEmail",
+          "code_php_source": "function validerEmail($email) {\n    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }\n    return true;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        },
+        {
+          "nom_python": "valider_age",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "valider_age",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 5 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": null,
+            "indicateurs": {},
+            "non_applicables": [],
+            "erreur": "aucun code produit"
+          },
+          "portee_verification": {
+            "module": "valider_age",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "validerAge",
+          "code_php_source": "function validerAge($age) {\n    if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }\n    if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }\n    return true;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

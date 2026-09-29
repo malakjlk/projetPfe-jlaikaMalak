@@ -1,0 +1,9 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 8362.55it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+Traceback (most recent call last):
+  File "C:\Users\poste\projetPfe-jlaikaMalak\agents\pipeline_complet.py", line 41, in <module>
+    import configuration          # applique SMAML_CONFIG avant tout le reste
+    ^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'configuration'

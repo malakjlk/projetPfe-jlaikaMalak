@@ -1,0 +1,304 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "get_user_by_email",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 1 faille(s) de sévérité élevée dans le PHP d'origine : sql_injection",
+              "[couche projet] utilise l'extension mysql_* obsolète : aucun équivalent direct, passage obligatoire par l'ORM",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 6,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": null,
+            "indicateurs": {},
+            "non_applicables": [],
+            "erreur": "aucun code produit"
+          },
+          "portee_verification": {
+            "module": "get_user_by_email",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "getUserByEmail",
+          "code_php_source": "function getUserByEmail($email) {\n    $sql = \"SELECT * FROM users WHERE email=\\\"\" . $email . \"\\\"\";\n    $result = mysql_query($sql);\n    return mysql_fetch_array($result);\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "hash_password",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": null,
+            "indicateurs": {},
+            "non_applicables": [],
+            "erreur": "aucun code produit"
+          },
+          "portee_verification": {
+            "module": "hash_password",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "hashPassword",
+          "code_php_source": "function hashPassword($password) {\n    if (strlen($password) < 8) {\n        throw new Exception(\"Trop court\");\n    }\n    return password_hash($password, PASSWORD_DEFAULT);\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "login",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": null,
+            "indicateurs": {},
+            "non_applicables": [],
+            "erreur": "aucun code produit"
+          },
+          "portee_verification": {
+            "module": "login",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "login",
+          "code_php_source": "function login($email, $password) {\n    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }\n    $user = getUserByEmail($email);\n    if ($user[\"password\"] != hashPassword($password)) {\n        throw new Exception(\"Identifiants incorrects\");\n    }\n    return $user[\"id\"];\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 3
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

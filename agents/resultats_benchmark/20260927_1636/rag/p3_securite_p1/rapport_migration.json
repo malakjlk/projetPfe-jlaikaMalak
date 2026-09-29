@@ -1,0 +1,388 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "securite.php",
+      "cible": "securite.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "get_user",
+          "decision_finale": "LIVRER",
+          "score_final": 92.58823529411764,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null,
+          "confiance": {
+            "score": 92.58823529411764,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 89.99999999999999,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5294117647058824
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.35294117647058826
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.11764705882352942
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 85.0,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 1.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "acces_donnees_parametre": 1.0,
+              "documentation": 1.0
+            },
+            "non_applicables": [],
+            "erreur": null
+          }
+        },
+        {
+          "nom_python": "generer_rapport",
+          "decision_finale": "LIVRER",
+          "score_final": 79.33333333333333,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.0,
+            "cas_testes": 19,
+            "cas_equivalents": 0,
+            "divergences": [
+              {
+                "entree": "test@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "inconnu@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "' OR '1'='1",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "'; DROP TABLE users; --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "a",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "abc",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "Password123",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "motdepasse",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande invalide)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Erreur lors de l'exécution du rapport)"
+              }
+            ],
+            "base_simulee": {
+              "tables": [
+                "exc",
+                "fastapi",
+                "models",
+                "produits",
+                "sqlalchemy",
+                "typing",
+                "users"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "nom",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [],
+            "requetes_python": [],
+            "effets_compares": 19
+          },
+          "verification_formelle": null,
+          "etat_structure": null,
+          "confiance": {
+            "score": 79.33333333333333,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 88.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3333333333333333
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.16666666666666666
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes"
+            ],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 66.7,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre"
+            ],
+            "erreur": null
+          }
+        },
+        {
+          "nom_python": "chercher_produit",
+          "decision_finale": "LIVRER",
+          "score_final": 92.58823529411764,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null,
+          "confiance": {
+            "score": 92.58823529411764,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 89.99999999999999,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5294117647058824
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.35294117647058826
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.11764705882352942
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 85.0,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 1.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "acces_donnees_parametre": 1.0,
+              "documentation": 1.0
+            },
+            "non_applicables": [],
+            "erreur": null
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "fichiers_en_echec": 0
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

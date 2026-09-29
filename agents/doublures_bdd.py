@@ -144,6 +144,20 @@ def etat_base(chemin: str) -> dict:
     return etat
 
 
+# Constructions d'ORM : le code interroge bien la base, mais à travers
+# une couche qui n'émet aucune requête observable par les doublures.
+# À distinguer d'un code qui n'accède PAS du tout à la base, lequel
+# constitue une vraie divergence de comportement.
+MOTIFS_ORM = re.compile(
+    r"\.query\s*\(|sessionmaker|declarative_base|\bSession\b"
+    r"|\.filter(_by)?\s*\(|relationship\s*\(", re.IGNORECASE)
+
+
+def code_utilise_orm(code: str) -> bool:
+    """Le code passe-t-il par un ORM plutôt que par du SQL direct ?"""
+    return bool(MOTIFS_ORM.search(code or ""))
+
+
 def code_utilise_bdd(code: str) -> bool:
     """Le code accède-t-il à une base de données ?"""
     return bool(re.search(
@@ -287,7 +301,16 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
             return dict.__getitem__(self, cle)
 
 
-    class _Curseur:
+    class _CurseurPermissif:
+        def __getattr__(self, nom):
+            if nom.startswith("__"):
+                raise AttributeError(nom)
+
+            def methode(*a, **k):
+                return self
+            return methode
+
+    class _Curseur(_CurseurPermissif):
         def __init__(self, cnx):
             self._cur = cnx.cursor()
             self.lastrowid = None
@@ -364,11 +387,31 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
 
     connexions_ouvertes = []
 
-    class _Connexion:
+    class _Permissif:
+        """
+        Toute méthode non prévue renvoie un curseur au lieu de lever
+        AttributeError. Les API de bases de données sont vastes
+        (raw_connection, execution_options, scalars…) : une méthode
+        oubliée ferait échouer le test sur un défaut de la doublure,
+        pas du code migré.
+        """
+
+        def __getattr__(self, nom):
+            if nom.startswith("__"):
+                raise AttributeError(nom)
+
+            def methode(*a, **k):
+                return self._curseur_permissif()
+            return methode
+
+    class _Connexion(_Permissif):
         def __init__(self, *a, **k):
             self._cnx = sqlite3.connect(chemin_bdd)
             self._cnx.row_factory = sqlite3.Row
             connexions_ouvertes.append(self._cnx)
+
+        def _curseur_permissif(self):
+            return _Curseur(self._cnx)
 
         def cursor(self, *a, **k):
             return _Curseur(self._cnx)
@@ -451,7 +494,9 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
 
         @property
         def url(self):
-            return "sqlite:///test"
+            # Le code généré accède parfois à moteur.url.database ou
+            # .render_as_string() : une chaîne lèverait AttributeError.
+            return _Permissif()
 
     def creer_moteur(*a, **k):
         return _Moteur()
@@ -512,7 +557,20 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
 # comportement comparé. On fournit donc un module permissif, créé à la
 # demande, qui laisse le code se charger.
 
-class _ObjetPermissif(Exception):
+class _MetaPermissive(type):
+    """
+    Rend permissif l'accès aux attributs de CLASSE. Le code ORM écrit
+    « User.email » : sans cela, Python lève « type object 'User' has no
+    attribute 'email' » avant même d'exécuter la requête.
+    """
+
+    def __getattr__(cls, nom):
+        if nom.startswith("__"):
+            raise AttributeError(nom)
+        return type(nom, (_ObjetPermissif,), {})()
+
+
+class _ObjetPermissif(Exception, metaclass=_MetaPermissive):
     """
     Remplace n'importe quel objet importé : instanciable, appelable,
     levable comme une exception, et transparent comme décorateur.

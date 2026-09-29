@@ -1,0 +1,573 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "session.php",
+      "cible": "session.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "charger_session",
+          "decision_finale": "LIVRER",
+          "score_final": 93.2,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.6666666666666666,
+            "cas_testes": 15,
+            "cas_equivalents": 10,
+            "divergences": [
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Le paramètre 'data' est requis.)"
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 7 bytes in C:\\Us)",
+                "python": "accepte"
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 8 bytes in C:\\Us)",
+                "python": "accepte"
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 1 bytes in C:\\Us)",
+                "python": "accepte"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 20 bytes in C:\\U)",
+                "python": "accepte"
+              }
+            ]
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "sauvegarder_preferences : acceptation ⇒ argument non nul",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "charger_session",
+            "statut": "accepte",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": true,
+              "compare": true,
+              "proprietes_verifiees": true,
+              "audite": true,
+              "decide": true
+            },
+            "tentatives_correction": 1,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [],
+            "derniere_activation": {
+              "agent": "Réviseur",
+              "justification": "j'active le Réviseur car toutes les étapes de vérification, test et comparaison sont désormais complétées. Veuillez examiner le module Python charger_session et fournir votre décision finale ainsi que votre score."
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "score": 93.2,
+              "raison": "Score composé 93.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.",
+              "categorie_echec": null,
+              "confiance": {
+                "score": 93.2,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 66.66666666666666,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "[couche projet] 1 faille(s) de sévérité élevée dans le PHP d'origine : insecure_deserialization",
+              "[couche projet] 1 invariant(s) de sécurité à préserver dans le code produit",
+              "[Développeur] La fonction renvoie un `dict` générique ; il faudra",
+              "[Comparateur] 5 divergence(s) de comportement entre le PHP d'origine et le Python produit"
+            ],
+            "scores_successifs": [
+              93.2
+            ],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-26T22:50:06",
+                "agent": "Développeur",
+                "justification_manager": "j'active le Développeur de migration parce que l'analyse et le plan sont prêts et qu'il faut maintenant générer le code Python correspondant au module charger_session. Veuillez produire le code Python en suivant strictement le plan de migration déjà établi dans l'espace de travail.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour charger_session (34 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-26T22:50:11",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": "j'active le Vérificateur de propriétés parce que le code Python a été généré et doit être validé techniquement avant la révision finale. Veuillez vérifier la conformité et la robustesse du code Python produit pour le module charger_session.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 1 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-26T22:51:33",
+                "agent": "Auditeur",
+                "justification_manager": "j'active l'Auditeur de sécurité parce que le code doit être audité pour garantir l'absence de vulnérabilités avant la validation finale. Veuillez effectuer un audit de sécurité complet sur le module Python charger_session.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Audit terminé. Score sécurité : 94.0% — niveau OK."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-26T22:52:15",
+                "agent": "Réviseur",
+                "justification_manager": "j'active le Réviseur parce que toutes les étapes techniques de développement, de vérification et d'audit sont terminées. Veuillez examiner le module Python charger_session et fournir votre décision finale ainsi que votre score.",
+                "issue": "refus_prerequis",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "PRÉREQUIS MANQUANT : je ne peux pas décider tant que toutes les vérifications n'ont pas été faites. Il manque encore le test fonctionnel, la comparaison des comportements. Fais d'abord intervenir les "
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-26T22:52:28",
+                "agent": "Testeur",
+                "justification_manager": "j'active le Testeur fonctionnel parce que le Réviseur exige une validation fonctionnelle complète avant de rendre sa décision. Veuillez tester le module Python charger_session pour garantir qu'il remplit sa fonction conformément aux attentes.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "compare",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 100.0%."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-26T22:52:33",
+                "agent": "Comparateur",
+                "justification_manager": "j'active le Comparateur parce que le Réviseur exige une comparaison des comportements entre le code PHP original et le nouveau module Python. Veuillez comparer le comportement du module Python avec celui du code PHP original pour assurer la fidélité de la migration.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 67% (5 divergence(s), 0 injection(s) neutralisée(s))."
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-26T23:05:47",
+                "agent": "Réviseur",
+                "justification_manager": "j'active le Réviseur car toutes les étapes de vérification, test et comparaison sont désormais complétées. Veuillez examiner le module Python charger_session et fournir votre décision finale ainsi que votre score.",
+                "issue": "execute",
+                "etapes_restantes_avant": [],
+                "iteration": 2,
+                "resultat": "Décision : LIVRER (score de confiance 93.2%, confiance elevee — fonctionnel 100%, securite 94%, comportemental 67%, proprietes 100%). Le module est validé, la mission peut s'achever. Vérifications eff"
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-26T22:50:02",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active le Développeur de migration parce que l'analyse et le plan sont prêts et qu'il faut maintenant générer le code Python correspondant au module charger_session. Veuillez produire le code Python en suivant strictement le plan de migration déjà établi dans l'espace de travail.",
+                "tache": "Générer le code Python pour le module charger_session."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-26T22:50:09",
+                "type": "delegation",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "j'active le Vérificateur de propriétés parce que le code Python a été généré et doit être validé techniquement avant la révision finale. Veuillez vérifier la conformité et la robustesse du code Python produit pour le module charger_session.",
+                "tache": "Vérifier le code Python produit."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-26T22:50:13",
+                "type": "delegation",
+                "agent_active": "Auditeur",
+                "justification": "j'active l'Auditeur de sécurité parce que le code doit être audité pour garantir l'absence de vulnérabilités avant la validation finale. Veuillez effectuer un audit de sécurité complet sur le module Python charger_session.",
+                "tache": "Auditer la sécurité du code Python."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-26T22:52:06",
+                "type": "delegation",
+                "agent_active": "Réviseur",
+                "justification": "j'active le Réviseur parce que toutes les étapes techniques de développement, de vérification et d'audit sont terminées. Veuillez examiner le module Python charger_session et fournir votre décision finale ainsi que votre score.",
+                "tache": "Réviser et valider le module Python."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-26T22:52:25",
+                "type": "delegation",
+                "agent_active": "Testeur",
+                "justification": "j'active le Testeur fonctionnel parce que le Réviseur exige une validation fonctionnelle complète avant de rendre sa décision. Veuillez tester le module Python charger_session pour garantir qu'il remplit sa fonction conformément aux attentes.",
+                "tache": "Effectuer les tests fonctionnels du module."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-26T22:52:30",
+                "type": "delegation",
+                "agent_active": "Comparateur",
+                "justification": "j'active le Comparateur parce que le Réviseur exige une comparaison des comportements entre le code PHP original et le nouveau module Python. Veuillez comparer le comportement du module Python avec celui du code PHP original pour assurer la fidélité de la migration.",
+                "tache": "Comparer les comportements PHP et Python."
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-26T23:05:44",
+                "type": "delegation",
+                "agent_active": "Réviseur",
+                "justification": "j'active le Réviseur car toutes les étapes de vérification, test et comparaison sont désormais complétées. Veuillez examiner le module Python charger_session et fournir votre décision finale ainsi que votre score.",
+                "tache": "Réviser et valider le module Python."
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "gemini/gemini-3.1-flash-lite",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          }
+        },
+        {
+          "nom_python": "afficher_page",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "sauvegarder_preferences : acceptation ⇒ argument non nul",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "afficher_page",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": false,
+              "compare": true,
+              "proprietes_verifiees": true,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": {
+              "agent": "Comparateur",
+              "justification": "j'active Comparateur parce que le réviseur exige une comparaison des comportements entre le PHP original et le Python produit. Le comparateur doit s'assurer que la logique de chargement de fichier est équivalente."
+            },
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 1 faille(s) de sévérité élevée dans le PHP d'origine : insecure_deserialization",
+              "[couche projet] 1 invariant(s) de sécurité à préserver dans le code produit",
+              "[couche projet] inclut un fichier dont le chemin est dynamique",
+              "[Développeur] la fonction ne fait aucune désérialisation, évitant ainsi le risque CWE‑502.",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-26T23:06:02",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que l'analyse et le plan sont prêts et qu'il faut maintenant produire le code Python correspondant. Le développeur doit créer le module afficher_page en se basant sur les documents déjà présents dans l'espace de travail.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour afficher_page (49 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-26T23:06:19",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": "j'active Vérificateur de propriétés parce que le code Python a été produit et doit être validé techniquement avant la révision finale. Le vérificateur doit s'assurer que le code respecte les contraintes de sécurité et de fonctionnalité définies dans le plan.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 1 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-26T23:07:30",
+                "agent": "Réviseur",
+                "justification_manager": "j'active Réviseur parce que le code a été produit et vérifié, il ne reste plus qu'à obtenir la validation finale. Le réviseur doit évaluer la qualité globale du module afficher_page et donner son score.",
+                "issue": "refus_prerequis",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "PRÉREQUIS MANQUANT : je ne peux pas décider tant que toutes les vérifications n'ont pas été faites. Il manque encore le test fonctionnel, la comparaison des comportements, l'audit de sécurité. Fais d'"
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-26T23:07:44",
+                "agent": "Comparateur",
+                "justification_manager": "j'active Comparateur parce que le réviseur exige une comparaison des comportements entre le PHP original et le Python produit. Le comparateur doit s'assurer que la logique de chargement de fichier est équivalente.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 100% (0 divergence(s), 0 injection(s) neutralisée(s))."
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-26T23:05:56",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que l'analyse et le plan sont prêts et qu'il faut maintenant produire le code Python correspondant. Le développeur doit créer le module afficher_page en se basant sur les documents déjà présents dans l'espace de travail.",
+                "tache": "Produire le code Python pour le module afficher_page en suivant le plan de migration établi."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-26T23:06:12",
+                "type": "delegation",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "j'active Vérificateur de propriétés parce que le code Python a été produit et doit être validé techniquement avant la révision finale. Le vérificateur doit s'assurer que le code respecte les contraintes de sécurité et de fonctionnalité définies dans le plan.",
+                "tache": "Vérifier la conformité et la sécurité du code Python produit pour le module afficher_page."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-26T23:06:27",
+                "type": "delegation",
+                "agent_active": "Réviseur",
+                "justification": "j'active Réviseur parce que le code a été produit et vérifié, il ne reste plus qu'à obtenir la validation finale. Le réviseur doit évaluer la qualité globale du module afficher_page et donner son score.",
+                "tache": "Réviser le code Python du module afficher_page et fournir une décision finale avec un score."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-26T23:07:40",
+                "type": "delegation",
+                "agent_active": "Testeur",
+                "justification": "j'active Testeur fonctionnel parce que le réviseur exige des tests complets avant de valider le module. Le testeur doit vérifier que le module afficher_page se comporte comme attendu.",
+                "tache": "Effectuer les tests fonctionnels du module afficher_page pour valider son comportement."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-26T23:07:42",
+                "type": "delegation",
+                "agent_active": "Comparateur",
+                "justification": "j'active Comparateur parce que le réviseur exige une comparaison des comportements entre le PHP original et le Python produit. Le comparateur doit s'assurer que la logique de chargement de fichier est équivalente.",
+                "tache": "Comparer le comportement du code PHP original avec le module Python produit pour afficher_page."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-26T23:07:48",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que l'analyse et le plan sont prêts et qu'il faut maintenant générer le code Python correspondant. Le développeur doit créer le module afficher_page en se basant sur les documents déjà présents dans l'espace de travail.",
+                "tache": "Produire le code Python pour le module afficher_page en suivant le plan de migration établi."
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_formel": 1,
+              "rapport_differentiel": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "gemini/gemini-3.1-flash-lite",
+            "echecs_llm": 6,
+            "bascules_modele": []
+          }
+        },
+        {
+          "nom_python": "sauvegarder_preferences",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "sauvegarder_preferences",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 1 faille(s) de sévérité élevée dans le PHP d'origine : insecure_deserialization",
+              "[couche projet] 1 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

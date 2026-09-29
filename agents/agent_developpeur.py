@@ -107,8 +107,20 @@ print(f"Base RAG chargée : {index.ntotal} exemples indexés "
 
 
 # ─── RETRIEVER ───────────────────────────────────────
+# Seules 60 des 3 060 entrées de la base ont une traduction Python :
+# les 3 000 fonctions issues de CodeSearchNet sont du PHP seul. Elles
+# restent dans l'index — elles aident à situer le code recherché — mais
+# ne peuvent pas servir d'exemple de migration. On élargit donc la
+# recherche, puis on ne retient que les paires réellement traduites.
+FACTEUR_ELARGISSEMENT = 40
+
+
 def retriever(code_php: str, k: int = 5) -> list:
-    """Cherche les k exemples les plus similaires dans la base RAG."""
+    """
+    Cherche les k exemples de MIGRATION les plus proches du code donné.
+    Un exemple n'est retenu que s'il contient les deux versions, PHP et
+    Python : c'est la paire qui a une valeur pédagogique pour le LLM.
+    """
     inputs = tokenizer(code_php, return_tensors="pt", truncation=True,
                        max_length=512, padding=True)
     with torch.no_grad():
@@ -119,13 +131,23 @@ def retriever(code_php: str, k: int = 5) -> list:
         faiss.normalize_L2(vecteur)
     else:
         normaliser_l2(vecteur)
-    distances, indices = index.search(vecteur, k)
+
+    candidats = min(len(metadata), max(k * FACTEUR_ELARGISSEMENT, 200))
+    distances, indices = index.search(vecteur, candidats)
+
     exemples = []
     for i, idx in enumerate(indices[0]):
-        if idx < len(metadata):
-            exemple = metadata[idx].copy()
-            exemple["score_similarite"] = float(distances[0][i])
-            exemples.append(exemple)
+        if idx >= len(metadata):
+            continue
+        entree = metadata[idx]
+        if not entree.get("code_python"):
+            continue                      # PHP seul : inutilisable
+        exemple = entree.copy()
+        exemple["score_similarite"] = float(distances[0][i])
+        exemple["rang_global"] = i + 1    # rang avant filtrage
+        exemples.append(exemple)
+        if len(exemples) == k:
+            break
     return exemples
 
 
@@ -280,7 +302,7 @@ def generer_code_python(
         print(f"\n  Recherche RAG pour : "
               f"{module_info.get('nom_original', '')}")
         exemples = retriever(code_php, k=3)
-        print(f"  {len(exemples)} exemples similaires trouvés :")
+        print(f"  {len(exemples)} exemple(s) de migration trouvé(s) :")
         for ex in exemples:
             print(f"    - [{ex.get('categorie', '')}] "
                   f"{ex.get('description', '')[:50]} "
@@ -289,13 +311,16 @@ def generer_code_python(
     # Étape 2 — Prompt enrichi
     exemples_text = ""
     for i, ex in enumerate(exemples):
-        php = ex.get('code_php', '')[:200]
-        py = ex.get('code_python', '')[:200]
-        if php and py:
-            exemples_text += f"""
-Exemple {i+1} :
-PHP : {php}
-Python : {py}
+        php = (ex.get("code_php") or "")[:450]
+        py = (ex.get("code_python") or "")[:450]
+        if not (php and py):
+            continue
+        exemples_text += f"""
+Exemple {i+1} — {ex.get('description', '')[:80]}
+PHP :
+{php}
+Python :
+{py}
 ---"""
 
     invariants_text = "\n".join([

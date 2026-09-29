@@ -1,0 +1,415 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11671.21it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : complet | RAG : True | boucle : True | mode : orchestre
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_0yesg4ye
+
+1 fichier(s) PHP trouvé(s) :
+  - p4_classes\classes.php
+
+Ordre de migration (dépendances d'abord) :
+  1. classes.php
+
+████████████████████████████████████████████████████████████
+█  FICHIER : classes.php
+████████████████████████████████████████████████████████████
+  Analyste : 0 fonction(s), 2 classe(s), 0 faille(s)
+
+  [orchestration multi-agents] module PanierAchat confié au Manager
+┌────────────────────────── ✨ Update Available ✨ ───────────────────────────┐
+│                                                                             │
+│  A new version of CrewAI is available!                                      │
+│                                                                             │
+│  Current version: 1.15.6                                                    │
+│  Latest version:  1.15.22                                                   │
+│                                                                             │
+│  To update, run: uv sync --upgrade-package crewai                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────── 🚀 Crew Execution Started ─────────────────────────┐
+│                                                                             │
+│  Crew Execution Started                                                     │
+│  Name: crew                                                                 │
+│  ID: 87fb629d-dce2-4581-8f0a-909a0979423c                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── 📋 Task Started ──────────────────────────────┐
+│                                                                             │
+│  Task Started                                                               │
+│  Name: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class PanierAchat {                                                        │
+│      private $articles = array();                                           │
+│      private $total = 0;                                                    │
+│                                                                             │
+│      public function ajouterArticle($nom, $prix) {                          │
+│          if ($prix < 0) {                                                   │
+│              throw new Exception("Prix negatif");                           │
+│          }                                                                  │
+│          $this->articles[] = $nom;                                          │
+│          $this->total += $prix;                                             │
+│          return true;                                                       │
+│      }                                                                      │
+│                                                                             │
+│      public function obtenirTotal() {                                       │
+│          return $this->total;                                               │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « PanierAchat ». L'analyse du code et le plan de  │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│  ID: bae53d5e-8717-4d1b-a513-343400f9ade0                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│  Task: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class PanierAchat {                                                        │
+│      private $articles = array();                                           │
+│      private $total = 0;                                                    │
+│                                                                             │
+│      public function ajouterArticle($nom, $prix) {                          │
+│          if ($prix < 0) {                                                   │
+│              throw new Exception("Prix negatif");                           │
+│          }                                                                  │
+│          $this->articles[] = $nom;                                          │
+│          $this->total += $prix;                                             │
+│          return true;                                                       │
+│      }                                                                      │
+│                                                                             │
+│      public function obtenirTotal() {                                       │
+│          return $this->total;                                               │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « PanierAchat ». L'analyse du code et le plan de  │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ERROR:root:OpenAI API call failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in 1m44.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+ERROR:root:OpenAI API call failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in 1m44.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+[┌───────────────────────────────CrewAIEventsBus ❌ LLM Error ]─────────────────────────────── Warning: Event pairing mismatch. 'llm_call_failed' closed 
+'flow_started' ─┐
+(│expected                                                                              'llm_call_started'│)
+
+│[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in 1m44.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}[0m
+  LLM Call FailedERROR:crewai.flow.runtime:Error executing listener call_llm_native_tools: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in 1m44.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+                                                            │
+│  Error: OpenAI API call failed: Error code: 429 - {'error': {'message':     │
+│  'Rate limit reached for model `openai/gpt-oss-120b` in organization        │
+│  `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per    │
+│  day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in  │
+│  1m44.544s. Need more tokens? Upgrade to Dev Tier today at                  │
+│  https://console.groq.com/settings/billing', 'type': 'tokens', 'code':      │
+│  'rate_limit_exceeded'}}                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: OpenAI API call failed: Error code: 429 - {'error': {'message':     │
+│  'Rate limit reached for model `openai/gpt-oss-120b` in organization        │
+│  `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per    │
+│  day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in  │
+│  1m44.544s. Need more tokens? Upgrade to Dev Tier today at                  │
+│  https://console.groq.com/settings/billing', 'type': 'tokens', 'code':      │
+│  'rate_limit_exceeded'}}                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1470. Please try again in 1m44.544s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}[0m
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│  Task: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class PanierAchat {                                                        │
+│      private $articles = array();                                           │
+│      private $total = 0;                                                    │
+│                                                                             │
+│      public function ajouterArticle($nom, $prix) {                          │
+│          if ($prix < 0) {                                                   │
+│              throw new Exception("Prix negatif");                           │
+│          }                                                                  │
+│          $this->articles[] = $nom;                                          │
+│          $this->total += $prix;                                             │
+│          return true;                                                       │
+│      }                                                                      │
+│                                                                             │
+│      public function obtenirTotal() {                                       │
+│          return $this->total;                                               │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « PanierAchat ». L'analyse du code et le plan de  │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ERROR:root:OpenAI API call failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in 2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+ERROR:root:OpenAI API call failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in 2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+[CrewAIEventsBus┌─]────────────────────────────── Warning: Event pairing mismatch.  ❌ LLM Error 'llm_call_failed'─────────────────────────────── closed 
+─┐
+'flow_started'│                                                                              │
+│  (LLM Call Failedexpected                                                             'llm_call_started'│)
+
+│ERROR:crewai.flow.runtime:Error executing listener call_llm_native_tools: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in 2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in 2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}[0m
+  Error: OpenAI API call failed: Error code: 429 - {'error': {'message':     │
+│  'Rate limit reached for model `openai/gpt-oss-120b` in organization        │
+│  `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per    │
+│  day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in  │
+│  2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at             │
+│  https://console.groq.com/settings/billing', 'type': 'tokens', 'code':      │
+│  'rate_limit_exceeded'}}                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: OpenAI API call failed: Error code: 429 - {'error': {'message':     │
+│  'Rate limit reached for model `openai/gpt-oss-120b` in organization        │
+│  `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per    │
+│  day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in  │
+│  2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at             │
+│  https://console.groq.com/settings/billing', 'type': 'tokens', 'code':      │
+│  'rate_limit_exceeded'}}                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198772, Requested 1526. Please try again in 2m8.735999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}[0m
+┌───────────────────────────── 🤖 Agent Started ──────────────────────────────┐
+│                                                                             │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│  Task: Obtenir un module Python validé à partir du code PHP suivant.        │
+│                                                                             │
+│  CODE PHP :                                                                 │
+│  ```php                                                                     │
+│  class PanierAchat {                                                        │
+│      private $articles = array();                                           │
+│      private $total = 0;                                                    │
+│                                                                             │
+│      public function ajouterArticle($nom, $prix) {                          │
+│          if ($prix < 0) {                                                   │
+│              throw new Exception("Prix negatif");                           │
+│          }                                                                  │
+│          $this->articles[] = $nom;                                          │
+│          $this->total += $prix;                                             │
+│          return true;                                                       │
+│      }                                                                      │
+│                                                                             │
+│      public function obtenirTotal() {                                       │
+│          return $this->total;                                               │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « PanierAchat ». L'analyse du code et le plan de  │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ERROR:root:OpenAI API call failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in 1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+ERROR:root:OpenAI API call failed: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in 1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+[CrewAIEventsBus┌─]────────────────────────────── Warning: Event pairing mismatch. 'llm_call_failed' ❌ LLM Error  closed 
+'flow_started'─────────────────────────────── ─┐(expected 
+│                                                                             'llm_call_started'│
+│  )LLM Call Failed
+                                                          [91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in 1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}[0m
+  ERROR:crewai.flow.runtime:Error executing listener call_llm_native_tools: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in 1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+│
+│  Error: OpenAI API call failed: Error code: 429 - {'error': {'message':     │
+│  'Rate limit reached for model `openai/gpt-oss-120b` in organization        │
+│  `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per    │
+│  day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in  │
+│  1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at            │
+│  https://console.groq.com/settings/billing', 'type': 'tokens', 'code':      │
+│  'rate_limit_exceeded'}}                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── ❌ LLM Error ────────────────────────────────┐
+│                                                                             │
+│  LLM Call Failed                                                            │
+│  Error: OpenAI API call failed: Error code: 429 - {'error': {'message':     │
+│  'Rate limit reached for model `openai/gpt-oss-120b` in organization        │
+│  `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per    │
+│  day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in  │
+│  1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at            │
+│  https://console.groq.com/settings/billing', 'type': 'tokens', 'code':      │
+│  'rate_limit_exceeded'}}                                                    │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198771, Requested 1486. Please try again in 1m51.023999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}[0m
+[CrewAIEventsBus] Warning: Event pairing mismatch. 'task_failed' closed 
+'agent_execution_started' (expected 'task_started')
+┌────────────────────────────── 📋 Task Failure ──────────────────────────────┐
+│                                                                             │
+│  Task Failed                                                                │
+│  Name: Obtenir un module Python validé à partir du code PHP suivant.        │
+[CrewAIEventsBus] Warning: Event pairing mismatch. │                                                                             'crew_kickoff_failed'│
+│ closed
+  'agent_execution_started'CODE PHP :                                                                  (expected 'crew_kickoff_started'│)
+
+│  ```php                                                                     │
+│  class PanierAchat {                                                        │
+│      private $articles = array();                                           │
+│      private $total = 0;                                                    │
+│                                                                             │
+│      public function ajouterArticle($nom, $prix) {
+  ⚠️  Orchestration interrompue : RateLimitError — Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01kw30dwcfectbvrnaz9m4zzjj` service tier `on_demand` on tokens per day (TPD): Limit 200
+  📋 Étapes franchies : analyse, plan, decide
+  ⚠️  [couche projet] 2 invariant(s) de sécurité à préserver dans le code produit
+  ⚠️  [Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris.
+  ⚠️  Agents indisponibles : Manager
+  🏛️  Architecture : modernisation non mesurée (aucun code produit)
+
+Portée de la vérification — PanierAchat
+   ○ non vérifié : l'équivalence comportementale : non testée
+   ○ non vérifié : aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables
+   ○ non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+   ○ non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+   → Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée).
+
+  [orchestration multi-agents] module outils_texte confié au Manager
+
+  ⚠️  Aucun orchestrateur utilisable pour ce module (demandé : groq, en panne : ['groq']).
+  📋 Étapes franchies : analyse, plan, decide
+  ⚠️  [couche projet] 2 invariant(s) de sécurité à préserver dans le code produit
+  ⚠️  [Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris.
+  ⚠️  Agents indisponibles : Manager
+  🏛️  Architecture : modernisation non mesurée (aucun code produit)
+
+Portée de la vérification — outils_texte
+   ○ non vérifié : l'équivalence comportementale : non testée
+   ○ non vérifié : aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables
+   ○ non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+   ○ non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+   → Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée).
+                          │
+│          if ($prix < 0) {                                                   │
+│              throw new Exception("Prix negatif");                           │
+│          }                                                                  │
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+│          $this->articles[] = $nom;                                          │
+│          $this->total += $prix;                                             │
+│          return true;                                                       │
+│      }                                                                      │
+│                                                                             │
+│      public function obtenirTotal() {                                       │
+│          return $this->total;                                               │
+│      }                                                                      │
+│  }                                                                          │
+│  ```                                                                        │
+│                                                                             │
+│  Le module à produire est « PanierAchat ». L'analyse du code et le plan de  │
+│  migration sont DÉJÀ disponibles dans l'espace de travail partagé : ne les  │
+│  fais pas refaire.                                                          │
+│  Ta mission consiste à faire produire le code Python, à le faire vérifier,  │
+│  et à obtenir la décision du Réviseur. Détermine toi-même quels             │
+│  spécialistes solliciter et dans quel ordre.                                │
+│  Tes consignes aux spécialistes tiennent en deux phrases et ne contiennent  │
+│  jamais de code : ils lisent le code dans l'espace de travail partagé.      │
+│  Agent: Manager de migration                                                │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────── Crew Failure ────────────────────────────────┐
+│                                                                             │
+│  Crew Execution Failed                                                      │
+│  Name: crew                                                                 │
+│  ID: 87fb629d-dce2-4581-8f0a-909a0979423c                                   │
+│                                                                             │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────── Tracing Status ───────────────────────────────┐
+│                                                                             │
+│  Info: Tracing is disabled.                                                 │
+│                                                                             │
+│  To enable tracing, do any one of these:                                    │
+│  • Set tracing=True in your Crew/Flow code                                  │
+│  • Set CREWAI_TRACING_ENABLED=true in your project's .env file              │
+│  • Run: crewai traces enable                                                │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+  ✅ Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 0/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260928_1037\complet\p4_classes_p1/
+
+============================================================
+PROPOSITION DE DÉCOUPAGE EN SERVICES
+============================================================
+2 service(s) candidat(s) — cohésion 100.0%, couplage 0.0%
+  • service_outilstexte : OutilsTexte
+  • service_panierachat : PanierAchat
+  Orchestrateur    : groq/openai/gpt-oss-120b
+WARNING:opentelemetry.exporter.otlp.proto.http.trace_exporter:Transient error Service Unavailable encountered while exporting span batch, retrying in 1.17s.
+WARNING:opentelemetry.exporter.otlp.proto.http.trace_exporter:Transient error Service Unavailable encountered while exporting span batch, retrying in 1.85s.
+WARNING:opentelemetry.exporter.otlp.proto.http.trace_exporter:Transient error Service Unavailable encountered while exporting span batch, retrying in 3.28s.

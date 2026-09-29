@@ -1,0 +1,64 @@
+{
+  "horodatage": "20260926_2315",
+  "projets": [
+    {
+      "nom": "p6_application",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p6_application",
+      "fichiers": 3
+    }
+  ],
+  "repetitions": 1,
+  "resultats": {
+    "complet": {
+      "agrege": {
+        "migrations_reussies": 1,
+        "migrations_totales": 1,
+        "modules": 3,
+        "taux_livraison": 0.0,
+        "score_confiance_moyen": 0,
+        "corrections_moyennes": 0,
+        "modules_sans_correction": 3,
+        "cas_non_testables": 3,
+        "injections_neutralisees": 0,
+        "divergences": 0,
+        "proprietes_prouvees": 0,
+        "proprietes_refutees": 0,
+        "escalades_humaines": 3,
+        "duree_s": 26.3
+      },
+      "details": [
+        {
+          "projet": "p6_application",
+          "passage": 1,
+          "duree_s": 26.3,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 0.0,
+            "score_confiance_moyen": 0,
+            "critere_fonctionnel": null,
+            "critere_securite": null,
+            "critere_comportemental": null,
+            "critere_proprietes": null,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 3,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 0,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 3,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 26.3
+          }
+        }
+      ]
+    }
+  }
+}

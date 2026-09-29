@@ -1,3 +1,4 @@
+import re
 import json
 
 
@@ -88,15 +89,42 @@ def planifier_migration(rapport_analyste: dict, code_php: str = "") -> dict:
     metriques = rapport_analyste.get("metriques", {})
 
     complexite = metriques.get("complexite_estimee", "faible")
-    if complexite == "elevee":
+
+    # ── Choix du pattern de migration ──
+    # Le nombre de failles ne dit rien de la stratégie : un fichier
+    # d'une fonction vulnérable se migre d'un coup, un fichier de
+    # vingt fonctions entrelacées non. Les critères retenus sont
+    # structurels : la taille, l'état partagé et les dépendances.
+    nb_modules = len(fonctions) + len(rapport_analyste.get("classes", []))
+    etat_partage = [v for v in rapport_analyste.get("variables_globales", [])
+                    if v in ("$_SESSION", "$_COOKIE")]
+    appels_internes = _appels_internes(code_php, [f["nom"] for f in fonctions])
+    nb_liens = sum(len(d) for d in appels_internes.values())
+
+    raisons = []
+    if nb_modules > 8:
+        raisons.append(f"{nb_modules} modules")
+    if etat_partage:
+        raisons.append(f"état partagé ({', '.join(etat_partage)})")
+    if nb_liens > 5:
+        raisons.append(f"{nb_liens} appels entre modules")
+
+    if raisons:
         pattern = "Strangler Fig"
-        pattern_desc = "Migration progressive module par module"
+        pattern_desc = ("Migration progressive : les modules sont "
+                        "remplacés un à un, l'ancien et le nouveau code "
+                        "coexistant pendant la transition")
     else:
         pattern = "Big Bang"
-        pattern_desc = "Migration complète en une fois"
+        pattern_desc = ("Migration complète en une fois : le fichier est "
+                        "assez petit et peu couplé pour être remplacé "
+                        "d'un bloc")
 
     hypotheses_plan = [
-        f"complexité estimée « {complexite} » → pattern {pattern}",
+        (f"pattern {pattern} — " + (", ".join(raisons) if raisons
+         else f"{nb_modules} module(s), pas d'état partagé, "
+              f"{nb_liens} appel(s) interne(s)")),
+        f"complexité estimée « {complexite} » (nombre de failles)",
         "cible FastAPI + Pydantic : les modules sont exposables en API",
     ]
 
@@ -121,10 +149,17 @@ def planifier_migration(rapport_analyste: dict, code_php: str = "") -> dict:
             "nom_python": convertir_nom(fonction["nom"]),
             "parametres": fonction["parametres"],
             "lignes_source": fonction.get("lignes", {}),
+            # L'Analyste rattache chaque faille à sa fonction : on
+            # s'appuie dessus. Chercher le nom de la fonction dans le
+            # code de la faille ne marchait jamais, puisqu'un appel
+            # « mysqli_query($conn, $sql) » ne contient pas le nom de
+            # la fonction qui l'entoure.
             "priorite": "haute" if any(
-                f["type"] in ["sql_injection", "command_injection"]
+                f.get("fonction") == fonction["nom"]
+                and f["type"] in ("sql_injection", "command_injection",
+                                  "insecure_deserialization",
+                                  "file_inclusion")
                 for f in failles
-                if fonction["nom"].lower() in f.get("code", "").lower()
             ) else "normale"
         }
         _annoter_module(module, code_php)
@@ -176,8 +211,16 @@ def planifier_migration(rapport_analyste: dict, code_php: str = "") -> dict:
         plan["modules"].append(module)
         plan["ordre_migration"].append(module["nom_python"])
 
-    # ── Réordonner : une classe parente doit être migrée AVANT
-    #    sa classe enfant (sinon class Admin(User) échoue).
+    # ── Réordonner : une fonction appelée doit être migrée AVANT
+    #    celle qui l'appelle, sinon le Développeur n'a pas son
+    #    contexte et le Testeur la déclare inexécutable.
+    for module in plan["modules"]:
+        _completer_pour_services(module, code_php, appels_internes)
+
+    plan["modules"] = _trier_par_appels(plan["modules"], appels_internes)
+
+    # ── Puis : une classe parente avant sa classe enfant
+    #    (sinon class Admin(User) échoue).
     plan["modules"] = _trier_par_heritage(plan["modules"])
     plan["ordre_migration"] = [m["nom_python"] for m in plan["modules"]]
 
@@ -217,6 +260,17 @@ def planifier_migration(rapport_analyste: dict, code_php: str = "") -> dict:
         for m in plan["modules"] for p in m["points_attention"]]
 
     return plan
+
+
+def _completer_pour_services(module: dict, code_php: str, appels: dict):
+    """
+    Ajoute au module ce dont le découpage en services a besoin : son
+    code d'origine (pour en déduire les tables) et les modules qu'il
+    appelle (pour mesurer la cohésion).
+    """
+    module["code_source"] = _source_module(
+        code_php, module["nom_original"], module.get("type", "fonction"))
+    module["appelle"] = sorted(appels.get(module["nom_original"], set()))
 
 
 def _annoter_module(module: dict, code_php: str):
@@ -297,6 +351,49 @@ def reviser_module(module: dict, erreurs_persistantes: list) -> dict:
         f"type limite structurelle")
     revise["changements_revision"] = changements
     return revise
+
+
+def _appels_internes(code_php: str, noms_fonctions: list) -> dict:
+    """
+    Qui appelle qui, à l'intérieur du fichier.
+
+    Sert à deux choses : choisir le pattern de migration (un fichier
+    très entrelacé se migre progressivement) et ordonner les modules.
+    """
+    appels = {nom: set() for nom in noms_fonctions}
+    if not code_php:
+        return appels
+    for nom in noms_fonctions:
+        source = _source_module(code_php, nom, "fonction")
+        for autre in noms_fonctions:
+            if autre == nom:
+                continue
+            if re.search(rf"\b{re.escape(autre)}\s*\(", source):
+                appels[nom].add(autre)
+    return appels
+
+
+def _trier_par_appels(modules: list, appels: dict) -> list:
+    """Une fonction appelée passe avant celle qui l'appelle."""
+    if not appels:
+        return modules
+    restants = list(modules)
+    ordonnes, places = [], set()
+    # Tri topologique simple ; en cas de cycle (récursivité croisée),
+    # l'ordre d'origine est conservé pour les modules restants.
+    for _ in range(len(restants)):
+        progres = False
+        for module in list(restants):
+            requis = appels.get(module["nom_original"], set())
+            if all(r in places or r not in
+                   {m["nom_original"] for m in modules} for r in requis):
+                ordonnes.append(module)
+                places.add(module["nom_original"])
+                restants.remove(module)
+                progres = True
+        if not progres:
+            break
+    return ordonnes + restants
 
 
 def _trier_par_heritage(modules: list) -> list:
@@ -386,3 +483,227 @@ function login($u) { session_start(); $_SESSION['u'] = $_POST['u']; eval($u); }
     assert rev["cible_migration"] == "classe_python" and rev["revision"] == 1
     assert outils["cible_migration"] == "fonctions_module"
     print("✅ Points d'attention et révision du plan opérationnels")
+
+# ═══ DÉCOUPAGE EN SERVICES ════════════════════════════
+# Le sujet demande un refactoring vers une architecture moderne, dont
+# les microservices. Ce découpage est une PROPOSITION d'architecture,
+# pas un déploiement : le système ne génère ni conteneurs, ni API
+# inter-services, ni bases séparées. Il indique où passent les
+# frontières, et ce qui s'oppose à les tracer.
+#
+# Critère retenu : la cohésion par les DONNÉES d'abord (un service
+# possède ses tables), puis par les APPELS. C'est la règle classique
+# du découpage par domaine : ce qui change ensemble reste ensemble.
+
+MOTIF_TABLE = re.compile(
+    r"\b(?:FROM|JOIN|INTO|UPDATE|TABLE)\s+[`\"']?([A-Za-z_][A-Za-z0-9_]*)",
+    re.IGNORECASE)
+
+
+def tables_utilisees(code: str) -> set:
+    """Tables lues ou écrites par un code PHP."""
+    exclus = {"if", "select", "where", "set", "values", "exists"}
+    return {t.lower() for t in MOTIF_TABLE.findall(code or "")
+            if t.lower() not in exclus}
+
+
+def decouper_en_services(modules: list) -> dict:
+    """
+    Regroupe les modules d'un projet en services candidats.
+
+    modules : [{"nom": str, "fichier": str, "code": str,
+                "appelle": set(noms)}]
+
+    Retourne les services, leurs dépendances mutuelles, les métriques
+    de cohésion et de couplage, et les obstacles au découpage.
+    """
+    if not modules:
+        return {"services": [], "obstacles": [], "metriques": {}}
+
+    noms = [m["nom"] for m in modules]
+    tables = {m["nom"]: tables_utilisees(m.get("code", "")) for m in modules}
+    appels = {m["nom"]: {a for a in (m.get("appelle") or set()) if a in noms}
+              for m in modules}
+
+    # ── Regroupement : union-find ──
+    parent = {nom: nom for nom in noms}
+
+    def racine(nom):
+        while parent[nom] != nom:
+            parent[nom] = parent[parent[nom]]
+            nom = parent[nom]
+        return nom
+
+    def unir(a, b):
+        ra, rb = racine(a), racine(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    # 1. Deux modules qui touchent la même table appartiennent au même
+    #    service : une table ne peut pas être possédée par deux services.
+    for i, a in enumerate(noms):
+        for b in noms[i + 1:]:
+            if tables[a] & tables[b]:
+                unir(a, b)
+
+    # 2. Un module SANS données suit ceux qui l'utilisent :
+    #    - appelé par un seul domaine → il le rejoint ;
+    #    - appelé par plusieurs → c'est une bibliothèque partagée, pas
+    #      un service (la dupliquer vaut mieux qu'un service technique
+    #      dont tout le monde dépend) ;
+    #    - n'appelle et n'est appelé par personne → il rejoint le
+    #      domaine qu'il appelle, sinon il reste seul.
+    appele_par = {nom: {autre for autre in noms if nom in appels[autre]}
+                  for nom in noms}
+    bibliotheques = []
+
+    def domaine_de(nom):
+        """Domaine du module : sa racine s'il porte des données."""
+        r = racine(nom)
+        return r if any(tables[m] for m in noms if racine(m) == r) else None
+
+    # Deux règles, appliquées en alternance jusqu'à stabilisation.
+    # L'ordre compte : un module se rattache d'abord aux données qu'il
+    # UTILISE, ensuite seulement à ceux qui l'utilisent. Sans cela, un
+    # utilitaire appelé par deux domaines serait rattaché au premier
+    # rencontré au lieu de devenir une bibliothèque partagée.
+    for _ in range(len(modules) + 1):
+        change = False
+
+        # Règle A — le module rejoint le domaine dont il lit les données
+        for module in modules:
+            nom = module["nom"]
+            if tables[nom] or nom in bibliotheques or domaine_de(nom):
+                continue
+            domaines = {d for d in (domaine_de(a) for a in appels[nom]) if d}
+            if len(domaines) == 1:
+                unir(domaines.pop(), nom)
+                change = True
+
+        # Règle B — sinon, il suit ceux qui l'appellent ; appelé par
+        # plusieurs domaines, c'est une bibliothèque, pas un service
+        for module in modules:
+            nom = module["nom"]
+            if tables[nom] or nom in bibliotheques or domaine_de(nom):
+                continue
+            domaines = {d for d in (domaine_de(a) for a in appele_par[nom])
+                        if d}
+            if len(domaines) == 1:
+                unir(domaines.pop(), nom)
+                change = True
+            elif len(domaines) > 1:
+                bibliotheques.append(nom)
+                change = True
+
+        if not change:
+            break
+
+    # ── Constitution des services ──
+    groupes = {}
+    for nom in noms:
+        if nom in bibliotheques:
+            continue
+        groupes.setdefault(racine(nom), []).append(nom)
+
+    services = []
+    for numero, (_, membres) in enumerate(sorted(groupes.items()), 1):
+        tables_service = set().union(*(tables[m] for m in membres)) or set()
+        nom_service = ("service_" + sorted(tables_service)[0]
+                       if tables_service else f"service_{membres[0].lower()}")
+        services.append({
+            "nom": nom_service,
+            "modules": sorted(membres),
+            "tables": sorted(tables_service),
+            "fichiers": sorted({m["fichier"] for m in modules
+                                if m["nom"] in membres}),
+        })
+
+    # ── Dépendances entre services ──
+    service_de = {m: s["nom"] for s in services for m in s["modules"]}
+    for bibliotheque in bibliotheques:
+        service_de[bibliotheque] = "bibliothèque partagée"
+    internes = externes = 0
+    for service in services:
+        dependances = set()
+        for membre in service["modules"]:
+            for appele in appels[membre]:
+                if service_de[appele] == "bibliothèque partagée":
+                    continue      # un appel local, pas un appel réseau
+                if service_de[appele] == service["nom"]:
+                    internes += 1
+                else:
+                    externes += 1
+                    dependances.add(service_de[appele])
+        service["depend_de"] = sorted(dependances)
+
+    total = internes + externes
+    metriques = {
+        "services": len(services),
+        "cohesion": round(100 * internes / total, 1) if total else 100.0,
+        "couplage": round(100 * externes / total, 1) if total else 0.0,
+        "appels_internes": internes,
+        "appels_inter_services": externes,
+    }
+
+    # ── Obstacles au découpage ──
+    obstacles = []
+    partagees = {}
+    for service in services:
+        for table in service["tables"]:
+            partagees.setdefault(table, []).append(service["nom"])
+    for table, proprietaires in partagees.items():
+        if len(proprietaires) > 1:
+            obstacles.append(
+                f"la table « {table} » est utilisée par "
+                f"{len(proprietaires)} services : une seule doit la posséder, "
+                f"les autres devront passer par son API")
+
+    for module in modules:
+        code = module.get("code", "")
+        if "$_SESSION" in code:
+            obstacles.append(
+                f"« {module['nom']} » dépend de l'état de session PHP : "
+                f"à porter en jeton ou en service de session partagé")
+        if re.search(r"\bglobal\s+\$", code):
+            obstacles.append(
+                f"« {module['nom']} » utilise une variable globale : "
+                f"l'état doit devenir explicite avant tout découpage")
+
+    if externes:
+        obstacles.append(
+            f"{externes} appel(s) deviendraient des appels réseau : "
+            f"prévoir la gestion des pannes et des délais")
+
+    if len(services) == 1:
+        obstacles.append(
+            "un seul service se dégage : le projet est trop couplé ou trop "
+            "petit pour être découpé, un monolithe modulaire est préférable")
+
+    return {"services": services, "metriques": metriques,
+            "bibliotheques_partagees": sorted(bibliotheques),
+            "obstacles": sorted(set(obstacles))}
+
+
+def resume_services(decoupage: dict) -> str:
+    """Rendu lisible, pour le journal et le rapport."""
+    if not decoupage.get("services"):
+        return "découpage en services non applicable"
+    lignes = []
+    m = decoupage["metriques"]
+    lignes.append(f"{m['services']} service(s) candidat(s) — "
+                  f"cohésion {m['cohesion']}%, couplage {m['couplage']}%")
+    if decoupage.get("bibliotheques_partagees"):
+        lignes.append("  • bibliothèque partagée (à dupliquer dans chaque "
+                      "service plutôt qu'à exposer) : "
+                      + ", ".join(decoupage["bibliotheques_partagees"]))
+    for service in decoupage["services"]:
+        dependances = (" → dépend de " + ", ".join(service["depend_de"])
+                       if service["depend_de"] else "")
+        lignes.append(f"  • {service['nom']} : "
+                      f"{', '.join(service['modules'])}"
+                      + (f" [tables : {', '.join(service['tables'])}]"
+                         if service["tables"] else "")
+                      + dependances)
+    for obstacle in decoupage["obstacles"]:
+        lignes.append(f"  ⚠️  {obstacle}")
+    return "\n".join(lignes)

@@ -30,8 +30,11 @@ from datetime import datetime
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+import zipfile
+
 import cache_smaml
 import crewai_pipeline
+import pipeline_complet
 from pipeline_complet import migrer_fichier, migrer_projet
 
 app = FastAPI(title="SMAML — Migration d'application PHP → Python")
@@ -101,11 +104,17 @@ def avancement_en_direct() -> dict:
     lieu d'un écran figé pendant plusieurs minutes.
     """
     etat = crewai_pipeline.ETAT
+    progression = pipeline_complet.PROGRESSION
     try:
         structure = crewai_pipeline.etat_structure()
     except Exception:
-        return {}
+        structure = {}
     return {
+        # état fichier par fichier (projet complet)
+        "fichiers": list(progression.get("fichiers") or []),
+        "statuts_fichiers": dict(progression.get("statuts") or {}),
+        "fichier_courant": progression.get("fichier_courant"),
+        "modules_termines": list(progression.get("modules_termines") or []),
         "module": structure.get("module"),
         "statut": structure.get("statut"),
         "etapes": structure.get("etapes"),
@@ -136,6 +145,18 @@ async def migrer_projet_endpoint(fichier: UploadFile = File(...)):
     dossier_sortie = tempfile.mkdtemp(prefix="smaml_sortie_")
 
     identifiant = _nouvelle_tache(fichier.filename)
+    pipeline_complet.reinitialiser_progression([])
+
+    # Code PHP d'origine, pour l'afficher à côté du Python généré
+    fichiers_php = {}
+    try:
+        with zipfile.ZipFile(chemin_zip) as archive:
+            for nom in archive.namelist():
+                if nom.lower().endswith(".php"):
+                    fichiers_php[os.path.basename(nom)] = archive.read(
+                        nom).decode("utf-8", errors="replace")
+    except zipfile.BadZipFile:
+        pass
 
     def travail():
         rapport = migrer_projet(chemin_zip, dossier_sortie=dossier_sortie)
@@ -146,6 +167,7 @@ async def migrer_projet_endpoint(fichier: UploadFile = File(...)):
                           "r", encoding="utf-8") as f:
                     fichiers[nom] = f.read()
         return {"rapport": rapport, "fichiers_python": fichiers,
+                "fichiers_php": fichiers_php,
                 "cache": cache_smaml.statistiques()}
 
     def nettoyage():
@@ -170,13 +192,22 @@ async def migrer_fichier_endpoint(fichier: UploadFile = File(...)):
 
     dossier = tempfile.mkdtemp(prefix="smaml_fichier_")
     chemin = os.path.join(dossier, os.path.basename(fichier.filename))
+    contenu_php = await fichier.read()
     with open(chemin, "wb") as f:
-        f.write(await fichier.read())
+        f.write(contenu_php)
+    pipeline_complet.reinitialiser_progression([chemin])
 
     identifiant = _nouvelle_tache(fichier.filename)
 
     def travail():
+        nom = os.path.basename(chemin)
+        pipeline_complet.PROGRESSION["fichier_courant"] = nom
+        pipeline_complet.PROGRESSION["statuts"][nom] = "en_cours"
         resultat = migrer_fichier(chemin, contexte_projet={})
+        tout_livre = all(m.get("decision_finale") == "LIVRER"
+                         for m in resultat.get("modules", []))
+        pipeline_complet.PROGRESSION["statuts"][nom] = (
+            "livre" if tout_livre else "partiel")
         # Même forme que la migration de projet : le frontend
         # n'a ainsi qu'un seul format à savoir lire.
         modules = [{k: v for k, v in m.items() if k != "code_python"}
@@ -201,6 +232,8 @@ async def migrer_fichier_endpoint(fichier: UploadFile = File(...)):
                 },
                 "cache": cache_smaml.statistiques(),
             },
+            "fichiers_php": {os.path.basename(chemin):
+                             contenu_php.decode("utf-8", errors="replace")},
             "fichiers_python": {
                 os.path.splitext(os.path.basename(chemin))[0] + ".py":
                     resultat.get("code_python_final")

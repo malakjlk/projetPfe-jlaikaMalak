@@ -1,0 +1,180 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10629.04it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : rag_boucle | RAG : True | boucle : True | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_5oj22xw8
+
+1 fichier(s) PHP trouvé(s) :
+  - p5_heritage\utilisateurs.php
+
+Ordre de migration (dépendances d'abord) :
+  1. utilisateurs.php
+
+████████████████████████████████████████████████████████████
+█  FICHIER : utilisateurs.php
+████████████████████████████████████████████████████████████
+  Analyste : 0 fonction(s), 3 classe(s), 0 faille(s)
+
+  Recherche RAG pour : User
+  3 exemple(s) de migration trouvé(s) :
+    - [calcul_financier] Calcul du salaire net (score: 0.993)
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.993)
+    - [donnees] Charger des données utilisateur sérialisées (score: 0.992)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : User
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : User
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+  📊 Score sécurité global : 100.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : User
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 60%)  — Testeur
+  securite         100.0%  (poids 40%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 100.0% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 100.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : Admin
+  3 exemple(s) de migration trouvé(s) :
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.996)
+    - [calcul_financier] Calcul du salaire net (score: 0.996)
+    - [validation] Validation de l'âge (score: 0.996)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : Admin
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (code non exécutable (NameError : name 'User' is not defined))
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      garde ligne 17 : len(id) < 1
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : ✅ PROUVÉE — bannir_utilisateur : acceptation ⇒ longueur ≥ 1
+
+Audit de sécurité du module : Admin
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 17 : len(id) < 1
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : Admin
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 97.9% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 97.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+  Recherche RAG pour : SuperAdmin
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation de l'âge (score: 0.996)
+    - [controle_acces] Vérifier l'accès à une ressource (score: 0.996)
+    - [authentification] Vérifier les tentatives de connexion (score: 0.996)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : SuperAdmin
+  1. Vérification syntaxique et résolution des noms...
+     ✅ Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (code non exécutable (NameError : name 'Admin' is not defined))
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de type numérique         garde ligne 20 : not isinstance(id, (int, float))
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+  📊 Score fonctionnel global : 100.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : SuperAdmin
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de type numérique             garde ligne 20 : not isinstance(id, (int, float))
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+  📊 Score sécurité global : 94.0%
+  🚦 Niveau d'alerte : OK
+
+Révision du module : SuperAdmin
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 60%)  — Testeur
+  securite          94.0%  (poids 40%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 97.6% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 97.6% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+  ✅ Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 1/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260926_2337\rag_boucle\p5_heritage_p1/

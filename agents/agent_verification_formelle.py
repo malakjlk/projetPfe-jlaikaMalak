@@ -194,6 +194,46 @@ psycopg2 = _SMAMLModule()
 pymysql = _SMAMLModule()
 mysql = _SMAMLModule(connector=_SMAMLModule())
 
+class _SMAMLAuto(Exception):
+    """
+    Remplace n'importe quel nom importé d'une bibliothèque absente :
+    instanciable, appelable, utilisable comme classe de base, et
+    levable comme exception. Sans lui, un import inhabituel
+    (« from sqlalchemy.pool import QueuePool ») empêcherait CrossHair
+    de charger le code, et aucune propriété ne serait vérifiable.
+    """
+    def __init__(self, *a, **k):
+        super().__init__(*[str(x) for x in a][:1])
+    def __call__(self, *a, **k):
+        if len(a) == 1 and callable(a[0]) and not k:
+            return a[0]            # décorateur transparent
+        return self
+    def __getattr__(self, nom):
+        return type(nom, (_SMAMLAuto,), {})()
+    def __iter__(self):
+        return iter(())
+
+
+class _SMAMLModuleBDD:
+    """Remplace sqlite3, mysql.connector, psycopg2, pymysql."""
+    Error = Exception
+    DatabaseError = Exception
+    IntegrityError = Exception
+    OperationalError = Exception
+    def __init__(self, **sous):
+        for nom, valeur in sous.items():
+            setattr(self, nom, valeur)
+    def connect(self, *a, **k): return _SMAMLConnexion()
+    def __getattr__(self, nom):
+        def methode(*a, **k): return _SMAMLConnexion()
+        return methode
+
+sqlite3 = _SMAMLModuleBDD()
+psycopg2 = _SMAMLModuleBDD()
+pymysql = _SMAMLModuleBDD()
+mysql = _SMAMLModuleBDD(connector=_SMAMLModuleBDD())
+
+
 class _SMAMLTexte:
     """Résultat de sqlalchemy.text() : son str() est la requête."""
     def __init__(self, requete): self._requete = str(requete)
@@ -225,22 +265,57 @@ IMPORTS_A_NEUTRALISER = re.compile(
 )
 
 
+def _noms_importes(ligne: str) -> list:
+    """Noms qu'une ligne d'import fait apparaître dans le code."""
+    ligne = ligne.strip().rstrip("\\").strip()
+    noms = []
+    if ligne.startswith("from "):
+        partie = ligne.split(" import ", 1)[-1]
+    elif ligne.startswith("import "):
+        partie = ligne[len("import "):]
+    else:
+        return noms
+    for morceau in partie.replace("(", "").replace(")", "").split(","):
+        morceau = morceau.strip()
+        if not morceau or morceau == "*":
+            continue
+        if " as " in morceau:
+            noms.append(morceau.split(" as ")[-1].strip())
+        else:
+            noms.append(morceau.split(".")[0].strip())
+    return [n for n in noms if n.isidentifier()]
+
+
 def _neutraliser_imports(code: str) -> str:
     """
-    Commente tous les imports SAUF ceux de la bibliothèque
-    standard sûre (re, math, html, typing...), pour que
-    CrossHair puisse charger le code sans dépendances externes
-    (fastapi, pydantic, ni modules du projet comme 'db'/'outils').
+    Remplace les imports externes par des LIAISONS vers des doublures,
+    au lieu de les commenter.
+
+    Commenter l'import laissait le nom indéfini : la moindre
+    bibliothèque non prévue (sqlalchemy.pool, jose, bcrypt...)
+    provoquait « Could not import your code » et rendait TOUTES les
+    propriétés du module invérifiables. Ici, chaque nom importé est lié
+    à la doublure existante si elle existe, sinon à un objet permissif.
     """
     stdlib_ok = ("import re", "import math", "import html",
                  "import json", "import typing", "from typing",
-                 "from math", "from html", "import datetime")
+                 "from math", "from html", "import datetime",
+                 "import os", "import sys", "import logging",
+                 "from datetime", "from decimal", "import decimal",
+                 "from enum", "import enum", "from abc", "import abc",
+                 "from functools", "import functools",
+                 "from collections", "import collections")
 
     def remplacer(m):
         ligne = m.group(0).strip()
         if any(ligne.startswith(s) for s in stdlib_ok):
             return m.group(0)
-        return "# [neutralisé pour vérif. formelle] " + ligne
+        noms = _noms_importes(ligne)
+        if not noms:
+            return "# [neutralisé pour vérif. formelle] " + ligne
+        liaisons = "; ".join(
+            f"{nom} = globals().get({nom!r}, _SMAMLAuto)" for nom in noms)
+        return f"{liaisons}  # [remplacé] {ligne[:60]}"
 
     return IMPORTS_A_NEUTRALISER.sub(remplacer, code)
 
@@ -283,6 +358,56 @@ def _compter_params_cible(code: str, nom_cible: str) -> int:
     return len(params)
 
 
+def _lier_noms_inconnus(code: str) -> str:
+    """
+    Lie les noms utilisés mais jamais définis dans le module.
+
+    Le code généré référence souvent un modèle ORM (« User ») sans
+    l'importer : il vient d'un autre fichier du projet. CrossHair
+    échoue alors sur « NameError: name 'User' is not defined » et
+    AUCUNE propriété du module n'est vérifiable. On lie donc ces noms
+    à une doublure permissive, après le code pour ne rien écraser.
+    """
+    import ast
+    import builtins
+
+    try:
+        arbre = ast.parse(code)
+    except SyntaxError:
+        return ""
+
+    definis, utilises = set(dir(builtins)), set()
+    for noeud in ast.walk(arbre):
+        if isinstance(noeud, (ast.FunctionDef, ast.AsyncFunctionDef,
+                              ast.ClassDef)):
+            definis.add(noeud.name)
+            for argument in getattr(noeud.args, "args", []) if hasattr(
+                    noeud, "args") else []:
+                definis.add(argument.arg)
+        elif isinstance(noeud, (ast.Import, ast.ImportFrom)):
+            for alias in noeud.names:
+                definis.add((alias.asname or alias.name).split(".")[0])
+        elif isinstance(noeud, ast.Name) and isinstance(noeud.ctx,
+                                                       (ast.Store, ast.Del)):
+            definis.add(noeud.id)
+        elif isinstance(noeud, ast.Name) and isinstance(noeud.ctx, ast.Load):
+            utilises.add(noeud.id)
+        elif isinstance(noeud, ast.arg):
+            definis.add(noeud.arg)
+
+    inconnus = sorted(n for n in utilises - definis if n.isidentifier())
+    if not inconnus:
+        return ""
+    liaisons = "\n".join(
+        f"{nom} = globals().get({nom!r}, _SMAMLAuto)" for nom in inconnus)
+    # Les liaisons sont placées AVANT le code : un nom inconnu peut
+    # être utilisé dès le chargement du module (classe de base,
+    # valeur par défaut d'un paramètre, décorateur). Une définition
+    # réelle plus bas dans le code les remplacera de toute façon.
+    return ("# Noms utilisés sans être définis dans le module\n"
+            + liaisons + "\n\n")
+
+
 def _stubber_classes_manquantes(code: str) -> str:
     """
     Crée un stub pour chaque classe parente dont l'import a été
@@ -316,7 +441,7 @@ def _preparer_code(code_python: str, nom_fonction: str):
     code = _neutraliser_imports(code_python)
     code = _stubber_classes_manquantes(code)
     classe = _detecter_classe_methode(code, nom_fonction)
-    return code, classe
+    return _lier_noms_inconnus(code) + code, classe
 
 
 def _appel_cible(classe, nom_fonction: str, liste_args: str,
@@ -331,6 +456,7 @@ def construire_harnais(code_python: str, nom_fonction: str,
                        contrats: list, param: str) -> str:
     code = _neutraliser_imports(code_python)
     code = _stubber_classes_manquantes(code)
+    code = _lier_noms_inconnus(code) + code
 
     # La cible est-elle une méthode de classe ou une fonction ?
     classe = _detecter_classe_methode(code, nom_fonction)
@@ -436,7 +562,11 @@ MOTS_ACCES = ("role", "rôle", "permission", "droit", "admin", "auth",
 
 PARAMS_ACCES = ("role", "roles", "user", "utilisateur", "current_user",
                 "token", "jeton", "session", "auth", "is_admin",
-                "est_admin", "permission", "droits", "acl")
+                "est_admin", "permission", "droits", "acl",
+                # un identifiant ou un secret vaut autorisation :
+                # « aucune connexion sans mot de passe » est une
+                # propriété de contrôle d'accès à part entière
+                "password", "passwd", "mot_de_passe", "secret", "hash")
 
 
 def invariant_de_controle_acces(invariants: list):
@@ -513,7 +643,13 @@ def lancer_crosshair(chemin: str, timeout: int = 120) -> dict:
         refutations[m.group(1)] = m.group(2)[:120]
 
     if p.returncode != 0 and not refutations and sortie.strip():
-        return {"ok": False, "raison": sortie.strip()[:200]}
+        # Le traceback de CrossHair commence par des lignes internes
+        # sans intérêt : on remonte la cause réelle (NameError,
+        # ImportError…), sinon le diagnostic est illisible.
+        lignes = [l.strip() for l in sortie.strip().splitlines() if l.strip()]
+        cause = next((l for l in reversed(lignes)
+                      if "Error" in l and "File " not in l), lignes[-1])
+        return {"ok": False, "raison": cause[:200]}
     return {"ok": True, "refutations": refutations}
 
 

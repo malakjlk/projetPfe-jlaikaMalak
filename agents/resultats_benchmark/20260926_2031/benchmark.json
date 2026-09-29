@@ -1,0 +1,69 @@
+{
+  "horodatage": "20260926_2031",
+  "projets": [
+    {
+      "nom": "p1_validations",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p1_validations",
+      "fichiers": 1
+    }
+  ],
+  "repetitions": 1,
+  "resultats": {
+    "complet": {
+      "agrege": {
+        "migrations_reussies": 1,
+        "migrations_totales": 1,
+        "modules": 3,
+        "taux_livraison": 100.0,
+        "score_confiance_moyen": 82.2,
+        "critere_fonctionnel": 78.7,
+        "critere_securite": 72.7,
+        "critere_comportemental": 100.0,
+        "critere_proprietes": 100.0,
+        "corrections_moyennes": 0,
+        "modules_sans_correction": 3,
+        "equivalence_moyenne": 100.0,
+        "cas_non_testables": 0,
+        "injections_neutralisees": 0,
+        "divergences": 0,
+        "proprietes_prouvees": 9,
+        "proprietes_refutees": 0,
+        "escalades_humaines": 0,
+        "duree_s": 804.9
+      },
+      "details": [
+        {
+          "projet": "p1_validations",
+          "passage": 1,
+          "duree_s": 804.9,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "score_confiance_moyen": 82.2,
+            "critere_fonctionnel": 78.7,
+            "critere_securite": 72.7,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 9,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 804.9
+          }
+        }
+      ]
+    }
+  }
+}

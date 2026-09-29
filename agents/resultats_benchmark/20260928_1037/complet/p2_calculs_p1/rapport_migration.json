@@ -1,0 +1,619 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "calculs.php",
+      "cible": "calculs.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "diviser",
+          "decision_finale": "LIVRER",
+          "score_final": 83.2,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "calculer_remise : acceptation ⇒ valeur >= 0",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": {
+            "module": "diviser",
+            "statut": "accepte",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": true,
+              "compare": true,
+              "proprietes_verifiees": true,
+              "audite": true,
+              "decide": true
+            },
+            "tentatives_correction": 1,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [],
+            "derniere_activation": {
+              "agent": "Réviseur",
+              "justification": null
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "score": 83.2,
+              "raison": "Score composé 83.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.",
+              "categorie_echec": null,
+              "confiance": {
+                "score": 83.2,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 80.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 74.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Développeur] La fonction lève HTTPException avec le code 400 pour les erreurs de validation, conformément aux exigences.",
+              "[Testeur] 1 invariant(s) absent(s) du code",
+              "[Auditeur] 1 protection(s) d'origine perdue(s)"
+            ],
+            "scores_successifs": [
+              83.2
+            ],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:50:04",
+                "agent": "Développeur",
+                "justification_manager": "Écrire le code Python du module diviser selon le plan de migration.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour diviser (32 lignes). Il doit maintenant être vérifié."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:50:08",
+                "agent": "Vérificateur de propriétés",
+                "justification_manager": "Vérifier que le module Python respecte les exigences fonctionnelles et de style.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Vérification de propriétés : 1 propriété(s) prouvée(s), 0 réfutée(s), 0 non vérifiable(s). Familles couvertes : invariants métier, injection SQL, contrôle d'accès."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:53:08",
+                "agent": "Testeur",
+                "justification_manager": "Exécuter des tests fonctionnels sur le module diviser et rendre compte des résultats.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "compare",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Test terminé. Code exécutable : True. Score fonctionnel : 80.0%."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-28T10:53:14",
+                "agent": "Comparateur",
+                "justification_manager": "Comparer le comportement du module Python avec la fonction PHP d'origine et rendre compte de la conformité.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Équivalence comportementale : 100% (0 divergence(s), 0 injection(s) neutralisée(s))."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-28T10:54:35",
+                "agent": "Auditeur",
+                "justification_manager": "Auditer le module Python pour détecter d'éventuelles vulnérabilités de sécurité.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Audit terminé. Score sécurité : 74.0% — niveau CRITIQUE."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-28T10:54:38",
+                "agent": "Réviseur",
+                "justification_manager": null,
+                "issue": "execute",
+                "etapes_restantes_avant": [],
+                "iteration": 2,
+                "resultat": "Décision : LIVRER (score de confiance 83.2%, confiance elevee — fonctionnel 80%, securite 74%, comportemental 100%, proprietes 100%). Le module est validé, la mission peut s'achever. Vérifications eff"
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:50:00",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "Écrire le code Python du module diviser selon le plan de migration.",
+                "tache": "Écrire le code Python du module diviser selon le plan de migration."
+              },
+              {
+                "ordre": 2,
+                "horodatage": "2026-09-28T10:50:06",
+                "type": "delegation",
+                "agent_active": "Vérificateur de propriétés",
+                "justification": "Vérifier que le module Python respecte les exigences fonctionnelles et de style.",
+                "tache": "Vérifier que le module Python respecte les exigences fonctionnelles et de style."
+              },
+              {
+                "ordre": 3,
+                "horodatage": "2026-09-28T10:50:10",
+                "type": "delegation",
+                "agent_active": "Testeur",
+                "justification": "Exécuter des tests fonctionnels sur le module diviser et rendre compte des résultats.",
+                "tache": "Exécuter des tests fonctionnels sur le module diviser et rendre compte des résultats."
+              },
+              {
+                "ordre": 4,
+                "horodatage": "2026-09-28T10:53:09",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Veuillez donner votre décision finale sur le module Python, incluant votre score et la liste des vérifications effectuées.",
+                "tache": "Veuillez donner votre décision finale sur le module Python, incluant votre score et la liste des vérifications effectuées."
+              },
+              {
+                "ordre": 5,
+                "horodatage": "2026-09-28T10:53:12",
+                "type": "delegation",
+                "agent_active": "Comparateur",
+                "justification": "Comparer le comportement du module Python avec la fonction PHP d'origine et rendre compte de la conformité.",
+                "tache": "Comparer le comportement du module Python avec la fonction PHP d'origine et rendre compte de la conformité."
+              },
+              {
+                "ordre": 6,
+                "horodatage": "2026-09-28T10:53:22",
+                "type": "delegation",
+                "agent_active": "Auditeur",
+                "justification": "Auditer le module Python pour détecter d'éventuelles vulnérabilités de sécurité.",
+                "tache": "Auditer le module Python pour détecter d'éventuelles vulnérabilités de sécurité."
+              },
+              {
+                "ordre": 7,
+                "horodatage": "2026-09-28T10:54:37",
+                "type": "question",
+                "agent_active": "Réviseur",
+                "justification": "Veuillez fournir votre décision finale sur le module Python, incluant votre score global et la liste des vérifications effectuées.",
+                "tache": "Veuillez fournir votre décision finale sur le module Python, incluant votre score global et la liste des vérifications effectuées."
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "rapport_formel": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_auditeur": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": {
+            "score": 83.2,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 80.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 74.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 67.4,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0,
+              "style_declaratif": 0.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "diviser",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « calculer_remise : acceptation ⇒ valeur >= 0 » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "1 invariant(s) du code d'origine NON retrouvé(s) dans le code migré",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "nom_original": "diviser",
+          "code_php_source": "function diviser($a, $b) {\n    if ($b == 0) {\n        throw new Exception(\"Division par zero\");\n    }\n    return $a / $b;\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 0)",
+                  "code": "if ($pourcentage < 0 || $pourcentage > 100) {\n        throw new Exception(\"Pourcentage invalide\");\n    }",
+                  "fonction": "calculerRemise",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_manquants": [
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "code": "if (!is_numeric($montant)) {\n        throw new Exception(\"Montant invalide\");\n    }",
+                  "fonction": "formaterPrix",
+                  "a_preserver": true
+                }
+              ],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "manquant",
+                  "source": "aucune garde ne rejette l'entrée invalide"
+                },
+                {
+                  "invariant": "Borne sur une valeur (< 0)",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 29 : b == 0"
+                }
+              ],
+              "score": 0.5
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        },
+        {
+          "nom_python": "formater_prix",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "formater_prix",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": true,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": {
+              "agent": "Développeur",
+              "justification": "j'active Développeur de migration parce que le code Python du module formater_prix n'existe pas encore. CODE PHP : function formaterPrix($montant) { if (!is_numeric($montant)) { throw new Exception(\"Montant invalide\"); } return number_format($montant, 2) . \" EUR\"; } Le développeur doit créer une fonction Python qui lève une exception ValueError pour un montant non numérique et retourne une chaîne formatée avec deux décimales et le suffixe ' EUR'."
+            },
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Développeur] on utilise HTTPException (FastAPI) pour signaler les erreurs de validation, conformément aux exigences du projet.",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:54:44",
+                "agent": "Développeur",
+                "justification_manager": "j'active Développeur de migration parce que le code Python du module formater_prix n'existe pas encore. CODE PHP : function formaterPrix($montant) { if (!is_numeric($montant)) { throw new Exception(\"Montant invalide\"); } return number_format($montant, 2) . \" EUR\"; } Le développeur doit créer une fonction Python qui lève une exception ValueError pour un montant non numérique et retourne une chaîne formatée avec deux décimales et le suffixe ' EUR'.",
+                "issue": "execute",
+                "etapes_restantes_avant": [
+                  "teste",
+                  "compare",
+                  "proprietes_verifiees",
+                  "audite",
+                  "decide"
+                ],
+                "iteration": 1,
+                "resultat": "Code Python généré pour formater_prix (19 lignes). Il doit maintenant être vérifié."
+              }
+            ],
+            "decisions_manager": [
+              {
+                "ordre": 1,
+                "horodatage": "2026-09-28T10:54:41",
+                "type": "delegation",
+                "agent_active": "Développeur",
+                "justification": "j'active Développeur de migration parce que le code Python du module formater_prix n'existe pas encore. CODE PHP : function formaterPrix($montant) { if (!is_numeric($montant)) { throw new Exception(\"Montant invalide\"); } return number_format($montant, 2) . \" EUR\"; } Le développeur doit créer une fonction Python qui lève une exception ValueError pour un montant non numérique et retourne une chaîne formatée avec deux décimales et le suffixe ' EUR'.",
+                "tache": "Produire le module Python nommé formater_prix équivalent à la fonction PHP fournie."
+              }
+            ],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "code_python": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "groq/openai/gpt-oss-120b",
+            "echecs_llm": 6,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": 63.4,
+            "indicateurs": {
+              "annotations_types": 0.5,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "formater_prix",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "formaterPrix",
+          "code_php_source": "function formaterPrix($montant) {\n    if (!is_numeric($montant)) {\n        throw new Exception(\"Montant invalide\");\n    }\n    return number_format($montant, 2) . \" EUR\";\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        },
+        {
+          "nom_python": "calculer_remise",
+          "decision_finale": "ESCALADE_HUMAINE",
+          "score_final": 0.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": null,
+          "verification_formelle": null,
+          "etat_structure": {
+            "module": "calculer_remise",
+            "statut": "escalade_humaine",
+            "etapes": {
+              "analyse": true,
+              "plan": true,
+              "code_genere": false,
+              "teste": false,
+              "compare": false,
+              "proprietes_verifiees": false,
+              "audite": false,
+              "decide": true
+            },
+            "tentatives_correction": 0,
+            "max_tentatives": 5,
+            "replanifications": 0,
+            "agents_indisponibles": [
+              {
+                "agent": "Manager",
+                "criticite": "non bloquant"
+              }
+            ],
+            "derniere_activation": null,
+            "derniere_decision": {
+              "verdict": "ESCALADE_HUMAINE",
+              "score": 0.0,
+              "raison": "Orchestrateur indisponible (quota ou service) : le module doit être repris.",
+              "categorie_echec": null,
+              "confiance": null
+            },
+            "points_attention": [
+              "[couche projet] 2 invariant(s) de sécurité à préserver dans le code produit",
+              "[Réviseur] reprise humaine nécessaire : Orchestrateur indisponible (quota ou service) : le module doit être repris."
+            ],
+            "scores_successifs": [],
+            "journal": [],
+            "decisions_manager": [],
+            "versions": {
+              "analyse": 1,
+              "plan": 1,
+              "module": 1,
+              "decision": 1
+            },
+            "modele_orchestrateur": "",
+            "echecs_llm": 0,
+            "bascules_modele": []
+          },
+          "confiance": null,
+          "modernisation": {
+            "score": null,
+            "indicateurs": {},
+            "non_applicables": [],
+            "erreur": "aucun code produit"
+          },
+          "portee_verification": {
+            "module": "calculer_remise",
+            "decision": "ESCALADE_HUMAINE",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (0 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "calculerRemise",
+          "code_php_source": "function calculerRemise($prix, $pourcentage) {\n    if ($pourcentage < 0 || $pourcentage > 100) {\n        throw new Exception(\"Pourcentage invalide\");\n    }\n    return $prix - ($prix * $pourcentage / 100);\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "score": 0.0
+            },
+            "failles": {
+              "score": 0.0,
+              "failles_persistantes": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [],
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

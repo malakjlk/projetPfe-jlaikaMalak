@@ -1,0 +1,33 @@
+{
+  "horodatage": "20260927_2233",
+  "projets": [
+    {
+      "nom": "p1_validations",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p1_validations",
+      "fichiers": 1
+    }
+  ],
+  "repetitions": 1,
+  "resultats": {
+    "complet": {
+      "agrege": {
+        "modules": 0,
+        "migrations_reussies": 0,
+        "duree_s": 303.6
+      },
+      "details": [
+        {
+          "projet": "p1_validations",
+          "passage": 1,
+          "duree_s": 303.6,
+          "interrompu": false,
+          "code_retour": 1,
+          "mesures": {
+            "modules": 0,
+            "duree_s": 303.6
+          }
+        }
+      ]
+    }
+  }
+}

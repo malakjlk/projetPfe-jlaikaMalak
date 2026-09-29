@@ -27,7 +27,8 @@ import zipfile
 import tempfile
 
 from agent_analyste import analyser_code_php
-from agent_architecte import planifier_migration
+from agent_architecte import (planifier_migration, decouper_en_services,
+                              resume_services)
 from agent_developpeur import (
     generer_code_python,
     extraire_code_module,
@@ -38,6 +39,9 @@ from agent_testeur import agent_testeur
 from agent_testeur_differentiel import tester_equivalence
 from agent_verification_formelle import verifier_formellement
 from agent_auditeur import agent_auditeur
+import configuration          # applique SMAML_CONFIG avant tout le reste
+import modernisation
+import portee_verification
 import cache_smaml
 from agent_reviseur import agent_reviseur
 
@@ -57,6 +61,12 @@ from agent_reviseur import agent_reviseur
 # Conserver le mode direct permet des mesures reproductibles et la
 # comparaison des deux approches d'orchestration.
 MODE_ORCHESTRE = os.getenv("SMAML_MODE", "direct").lower() == "orchestre"
+
+# Étude d'ablation : sans boucle de correction, le code est généré UNE
+# fois, vérifié et noté, mais jamais renvoyé au Développeur. Les quatre
+# vérifications et le score de confiance restent actifs — ce sont les
+# instruments de mesure, on ne les débranche jamais.
+SANS_BOUCLE = bool(os.getenv("SMAML_SANS_BOUCLE"))
 
 
 # ─── Réconciliation preuve formelle / heuristiques ───────────
@@ -377,6 +387,22 @@ def formater_contexte(contexte_projet: dict) -> str:
 # (ton pipeline existant, transformé en fonction)
 # ═════════════════════════════════════════════════════
 
+# ═══ AVANCEMENT DE LA MIGRATION ═══════════════════════
+# Registre mis à jour au fil du projet, lu par l'API pour afficher
+# l'état fichier par fichier pendant la migration. Il ne sert qu'à
+# l'observation : la logique de migration ne le lit jamais.
+PROGRESSION = {"fichiers": [], "statuts": {}, "fichier_courant": None,
+               "modules_termines": []}
+
+
+def reinitialiser_progression(fichiers: list):
+    PROGRESSION["fichiers"] = [os.path.basename(f) for f in fichiers]
+    PROGRESSION["statuts"] = {os.path.basename(f): "en_attente"
+                              for f in fichiers}
+    PROGRESSION["fichier_courant"] = None
+    PROGRESSION["modules_termines"] = []
+
+
 def migrer_fichier(
     chemin_php: str,
     contexte_projet: dict,
@@ -514,6 +540,7 @@ def migrer_fichier(
             print(f"  Champs requis par les appelants de "
                   f"{module['nom_original']} : {sorted(champs)}")
 
+        scores_successifs = []
         feedback = None
         code_python = None
         decision = None
@@ -606,8 +633,8 @@ def migrer_fichier(
                 for div in rapport_diff["divergences"]:
                     print(f"    ⚠️ Divergence sur "
                           f"{repr(div['entree'])[:40]} : "
-                          f"PHP={str(div.get('php'))[:40]} / "
-                          f"Python={str(div.get('python'))[:40]}")
+                          f"PHP={str(div.get('php'))[:60]} / "
+                          f"Python={str(div.get('python'))[:120]}")
                 # Le score d'équivalence pèse 30% du score fonctionnel
                 rapport_testeur["score_fonctionnel"] = (
                     rapport_testeur["score_fonctionnel"] * 0.7
@@ -661,8 +688,11 @@ def migrer_fichier(
                     _reconcilier_testeur(rapport_testeur, types_prouves,
                                          rapport_diff, rapport_formel)
 
+            # Le Vérificateur s'est déjà prononcé : ses contre-exemples
+            # priment sur l'analyse structurelle de l'Auditeur.
             rapport_auditeur = agent_auditeur(
-                code_python, invariants_module, module
+                code_python, invariants_module, module,
+                rapport_formel=rapport_formel
             )
             if types_prouves:
                 _reconcilier_auditeur(rapport_auditeur, types_prouves)
@@ -681,11 +711,31 @@ def migrer_fichier(
                 break
             if decision["decision"] == "ARRET_ECHEC":
                 break
+            if SANS_BOUCLE:
+                # Ablation : on garde la décision telle quelle (souvent
+                # ITERER) sans jamais régénérer. C'est le premier code
+                # produit qui est mesuré.
+                break
             # ITERER ou REANALYSE_COMPLETE → on récupère
             # le feedback et on régénère
             feedback = decision.get("feedback")
 
         codes_python_precedents.append(nettoyer_code(code_python))
+
+        PROGRESSION["modules_termines"].append({
+            "fichier": os.path.basename(chemin_php),
+            "module": module["nom_python"],
+            "decision": decision.get("decision"),
+            "score": decision.get("score_compose"),
+        })
+
+        # Modernisation : mesurée dans les deux modes. Placée ici, et
+        # non dans la branche du mode direct, sinon la variable
+        # n'existe pas quand le Manager a conduit la migration.
+        mesure_modernisation = modernisation.mesurer_modernisation(
+            code_python or "")
+        print(f"  🏛️  Architecture : "
+              f"{modernisation.resume_modernisation(mesure_modernisation)}")
 
         resultat_fichier["modules"].append({
             "nom_python": module["nom_python"],
@@ -704,7 +754,39 @@ def migrer_fichier(
             # agents indisponibles et points d'attention. Présent
             # uniquement en mode orchestré.
             "etat_structure": etat_module,
+            # Détail du score de confiance, dans LES DEUX modes : sans
+            # lui, l'étude d'ablation ne peut pas comparer les critères
+            # un à un entre configurations.
+            "confiance": decision.get("confiance"),
+            # Modernisation de l'architecture produite. Mesure
+            # indépendante du score de confiance : un code peut être
+            # correct sans être moderne, et l'inverse.
+            "modernisation": mesure_modernisation,
+            # Utilisés par la proposition de découpage en services :
+            # les tables se lisent dans le PHP d'origine, et les appels
+            # donnent la cohésion entre modules.
+            # Portée de la vérification : ce qui a été établi, et sur
+            # quoi. « Équivalent » sans périmètre ne veut rien dire.
+            "portee_verification": None,     # complétée juste après
+            "nom_original": module.get("nom_original"),
+            "code_php_source": module.get("code_source", "")[:2000],
+            "appelle": sorted(module.get("appelle") or []),
         })
+
+        # Attestation : établie une fois tous les rapports réunis
+        entree_module = resultat_fichier["modules"][-1]
+        # Le rapport du Testeur peut manquer si l'orchestration s'est
+        # interrompue avant qu'il n'intervienne : l'attestation doit
+        # alors dire ce qui n'a pas pu être vérifié, pas échouer.
+        rapport_disponible = rapport_testeur if isinstance(
+            rapport_testeur, dict) else {}
+        entree_module["rapport_testeur"] = {
+            "invariants": rapport_disponible.get("invariants"),
+            "failles": rapport_disponible.get("failles"),
+        }
+        attestation = portee_verification.portee_verification(entree_module)
+        entree_module["portee_verification"] = attestation
+        print("\n" + portee_verification.resume_portee(attestation))
 
         # Signature pour le contexte des fichiers suivants
         # ET pour les modules suivants de CE MÊME fichier
@@ -964,6 +1046,11 @@ def migrer_projet(
     print("=" * 60)
     print("SMAML — MIGRATION D'APPLICATION COMPLÈTE")
     print("=" * 60)
+    reglages = configuration.description_active()
+    print(f"  Configuration : {reglages['configuration']} "
+          f"| RAG : {reglages['rag']} "
+          f"| boucle : {reglages['boucle_correction']} "
+          f"| mode : {reglages['mode']}")
 
     # 1. Préparer (ZIP → dossier)
     dossier = preparer_projet(chemin_projet)
@@ -1027,6 +1114,10 @@ def migrer_projet(
         Réutilisée par la boucle principale ET par la boucle
         corrective au niveau projet.
         """
+        nom_fichier = os.path.basename(chemin_php)
+        PROGRESSION["fichier_courant"] = nom_fichier
+        PROGRESSION["statuts"][nom_fichier] = "en_cours"
+
         resultat = migrer_fichier(
             chemin_php, contexte_projet, max_iterations,
             usages_champs=usages_champs,
@@ -1064,6 +1155,9 @@ def migrer_projet(
         # Mettre à jour le contexte pour les fichiers suivants
         contexte_projet[nom_py] = resultat["fonctions_migrees"]
 
+        PROGRESSION["statuts"][nom_fichier] = (
+            "livre" if tout_livre else "partiel")
+
         return {
             "source": resultat["fichier_source"],
             "cible": nom_py,
@@ -1074,6 +1168,7 @@ def migrer_projet(
             ]
         }
 
+    reinitialiser_progression(ordre)
     for chemin_php in ordre:
         entree = traiter_fichier(chemin_php)
         rapport_global["fichiers_migres"].append(entree)
@@ -1208,6 +1303,41 @@ def migrer_projet(
             if etat.get("modele_orchestrateur"):
                 modeles.add(etat["modele_orchestrateur"])
             bascules += len(etat.get("bascules_modele") or [])
+    # ── Proposition de découpage en services ──
+    # Refactoring d'architecture : le système indique où passeraient
+    # les frontières de services et ce qui s'y oppose. C'est une
+    # proposition, pas un déploiement.
+    modules_projet = []
+    for fichier in rapport_global.get("fichiers_migres", []):
+        source = os.path.basename(fichier.get("source", ""))
+        for module in fichier.get("modules", []):
+            modules_projet.append({
+                "nom": module.get("nom_original") or module["nom_python"],
+                "fichier": source,
+                "code": module.get("code_php_source", ""),
+                "appelle": set(module.get("appelle") or []),
+            })
+
+    # Appels ENTRE fichiers : l'Architecte ne voit que l'intérieur d'un
+    # fichier, or un service se découpe à l'échelle du projet. Sans
+    # cela, « login » et « getUserByEmail » paraîtraient indépendants
+    # alors que le premier appelle le second.
+    noms_projet = {m["nom"] for m in modules_projet}
+    for module in modules_projet:
+        for autre in noms_projet:
+            if autre == module["nom"]:
+                continue
+            if re.search(rf"\b{re.escape(autre)}\s*\(", module["code"] or ""):
+                module["appelle"].add(autre)
+    if modules_projet:
+        decoupage = decouper_en_services(modules_projet)
+        rapport_global["decoupage_services"] = decoupage
+        print("\n" + "=" * 60)
+        print("PROPOSITION DE DÉCOUPAGE EN SERVICES")
+        print("=" * 60)
+        print(resume_services(decoupage))
+
+    rapport_global["reglages"] = configuration.description_active()
     rapport_global["orchestrateurs_utilises"] = sorted(modeles)
     rapport_global["basculements_orchestrateur"] = bascules
     if len(modeles) > 1:
@@ -1222,7 +1352,12 @@ def migrer_projet(
 # ─── LANCEMENT EN LIGNE DE COMMANDE ──────────────────
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage : python pipeline_projet.py <app.zip | dossier>")
+        print("Usage : py pipeline_complet.py <app.zip> [dossier_sortie]")
         sys.exit(1)
 
-    migrer_projet(sys.argv[1])
+    # Le dossier de sortie est fourni par le benchmark, qui range chaque
+    # mesure dans son propre dossier.
+    if len(sys.argv) > 2:
+        migrer_projet(sys.argv[1], dossier_sortie=sys.argv[2])
+    else:
+        migrer_projet(sys.argv[1])

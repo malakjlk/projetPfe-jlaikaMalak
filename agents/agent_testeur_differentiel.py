@@ -470,6 +470,7 @@ def tester_equivalence(code_php: str, code_python: str,
     # les effets de bord comparables.
     utilise_bdd = (doublures_bdd.code_utilise_bdd(code_php)
                    or doublures_bdd.code_utilise_bdd(code_py))
+    python_utilise_orm = doublures_bdd.code_utilise_orm(code_py)
     dossier_bdd = tempfile.mkdtemp(prefix="smaml_bdd_") if utilise_bdd else None
     bdd_php = bdd_py = None
     if utilise_bdd:
@@ -509,6 +510,19 @@ def tester_equivalence(code_php: str, code_python: str,
                 or ("introuvable" in exc_py)
                 or ("no module named" in exc_py)):
             cas_non_executables += 1
+            continue
+
+        # ORM : quand le Python passe par SQLAlchemy ORM
+        # (db.query(User).filter(...)), aucune requête SQL n'est émise
+        # à travers les doublures. Il n'y a alors rien à comparer :
+        # compter une divergence serait faux. Le cas est écarté, et la
+        # raison est rapportée.
+        if (utilise_bdd and python_utilise_orm and res_php.get("requetes")
+                and not res_py.get("requetes")):
+            cas_non_executables += 1
+            rapport["raison_non_comparable"] = (
+                "le code Python interroge la base via un ORM : aucune "
+                "requête observable, comparaison impossible")
             continue
 
         verdict = comparer(res_php, res_py, arguments[0] if arguments else None)
@@ -567,8 +581,9 @@ def tester_equivalence(code_php: str, code_python: str,
         # en isolation (dépendances inter-fichiers)
         rapport["statut"] = "non_testable"
         rapport["score_equivalence"] = None
-        rapport["raison"] = ("La fonction dépend d'autres modules du "
-                             "projet — non exécutable en isolation")
+        rapport["raison"] = rapport.get("raison_non_comparable") or (
+            "La fonction dépend d'autres modules du projet — non "
+            "exécutable en isolation")
 
     return rapport
 
