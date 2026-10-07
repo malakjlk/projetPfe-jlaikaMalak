@@ -1,0 +1,518 @@
+{
+  "fichiers_migres": [
+    {
+      "source": "db.php",
+      "cible": "db.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "decision_finale": "ITERER",
+          "score_final": 82.00000000000001,
+          "iterations": 1,
+          "categorie_echec": "bug_simple",
+          "equivalence": null,
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null,
+          "confiance": {
+            "score": 82.00000000000001,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 70.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5294117647058824
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.35294117647058826
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.11764705882352942
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 90.5,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 1.0,
+              "injection_dependances": 1.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "acces_donnees_parametre": 0.5,
+              "documentation": 0.5,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "fonctions_pures",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "get_user_by_email",
+            "decision": "ITERER",
+            "verifie": [
+              "propriété « get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 faille(s) du PHP d'origine corrigée(s) dans le code migré"
+            ],
+            "non_verifie": [
+              "l'équivalence comportementale : non testée",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (2 point(s) vérifié(s), 4 hors de portée)."
+          },
+          "nom_original": "getUserByEmail",
+          "code_php_source": "function getUserByEmail($email) {\n    $sql = \"SELECT * FROM users WHERE email=\\\"\" . $email . \"\\\"\";\n    $result = mysql_query($sql);\n    return mysql_fetch_array($result);\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [
+                {
+                  "faille": "sql_injection",
+                  "cwe": "CWE-89",
+                  "severity": "critical",
+                  "action": "Remplacer par équivalent Python sécurisé"
+                }
+              ],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "decision_finale": "LIVRER",
+          "score_final": 88.2,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.3333333333333333,
+            "cas_testes": 15,
+            "cas_equivalents": 5,
+            "divergences": [
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$cDeIFggyRkT8zdF8B863fuFV/qJvPkP5B55loVDX.AXAllWd.Pqou",
+                "python": "$2b$12$rFMGdkT7uJUGU1JYH7J07eetW/EcJRsHf40QRXk7qFORtH/PD9gCC"
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$ljALw5vPrnEV40jRyFZgouIQwR5P2AKfkIKEvTPzTNwLXNKzgjJNu",
+                "python": "$2b$12$48Kn9wHAtRrJLICAMlGRZudU0Phrcm5mHlSgz/P09L/f8KQgTKiRe"
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$mMtwp0Fn6TY4u/3ly94aJuHb24iOKrAQ3hN/uNE1l/SGwJ6tTWWxK",
+                "python": "$2b$12$iXNh9TdqGOwu8yAIRaqr1ejULDQvcA998J2ihqG5b8Sb.oSe7Gk9y"
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Trop court)"
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$xRo2h/yZjOpqbyYVa7StCePVljkeJWAC9fcYZyMmWBEbTx9c.HqwK",
+                "python": "$2b$12$CP/7tySPw1.ResXE79YZROqzL8Mdx8YKbla7KWeYu7qdwd2oe7BAi"
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$H3JousaScOXdRxbNwHFk/.bEVQ11oYCg6W98/4MV6KvatlDaMJ3RK",
+                "python": "$2b$12$VJlukH96wbxbz0Pu2lsp6eG8SAa9l1xG4DXrUGjrHOYTY/yBi61vG"
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$3IgewsAc/W5TbRSqF1UtS.H969b4xB320z7JoEkBVl3HnLyZR9vjG",
+                "python": "$2b$12$kW9DAp.USOUt3JnGFLRAxeHZm6ILyWSC.dB2BGX6fInlBPFlpfGEC"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)"
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)"
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$M4BFgrMZ.NsclrPPtg2NxuTnSl1CHhNuq1YAuYJcGYL0vhnolQSPO",
+                "python": "$2b$12$nBBDfDZkKXX1Z.Axdwi5QOCRiG2LI6DiGozua3QwJ73gT9HcavpNW"
+              }
+            ]
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "hash_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null,
+          "confiance": {
+            "score": 88.2,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 33.33333333333333,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "hash_password",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (33% de concordance), exécution réelle des deux codes",
+              "propriété « hash_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "nom_original": "hashPassword",
+          "code_php_source": "function hashPassword($password) {\n    if (strlen($password) < 8) {\n        throw new Exception(\"Trop court\");\n    }\n    return password_hash($password, PASSWORD_DEFAULT);\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "fonction": "hashPassword",
+                  "code": "if (strlen($password) < 8) {\n        throw new Exception(\"Trop court\");\n    }",
+                  "obligatoire": true
+                },
+                {
+                  "type": "hachage_mot_de_passe",
+                  "description": "Mot de passe haché, jamais en clair",
+                  "fonction": "hashPassword",
+                  "code": "password_hash($password, PASSWORD_DEFAULT)",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Mot de passe haché, jamais en clair",
+                  "verdict": "vérifié",
+                  "source": "appel attendu présent : bcrypt"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "login",
+          "decision_finale": "LIVRER",
+          "score_final": 98.2,
+          "iterations": 1,
+          "categorie_echec": null,
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 15,
+            "cas_equivalents": 15,
+            "divergences": []
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "login : aucun appel sans autorisation (password) n'aboutit",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "controle_acces"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "etat_structure": null,
+          "confiance": {
+            "score": 98.2,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "portee_verification": {
+            "module": "login",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « login : aucun appel sans autorisation (password) n'aboutit » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "nom_original": "login",
+          "code_php_source": "function login($email, $password) {\n    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }\n    $user = getUserByEmail($email);\n    if ($user[\"password\"] != hashPassword($password)) {\n        throw new Exception(\"Identifiants incorrects\");\n    }\n    return $user[\"id\"];\n}",
+          "appelle": [],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "fonction": "login",
+                  "code": "if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }",
+                  "obligatoire": true
+                },
+                {
+                  "type": "comparaison_authentification",
+                  "description": "Comparaison d'identifiant ou de secret",
+                  "fonction": "login",
+                  "code": "if ($user[\"password\"] != hashPassword($password)) {\n        throw new Exception(\"Identifiants incorrects\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 13 : not re.match('^[^@\\\\s]+@[^@\\\\s]+\\\\.[^@\\\\s]+$', email)"
+                },
+                {
+                  "invariant": "Comparaison d'identifiant ou de secret",
+                  "verdict": "vérifié",
+                  "source": "appel attendu présent : comparaison de secret :     if user[\"password\"] != hash_password(passw"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 2,
+    "fichiers_en_echec": 1
+  },
+  "corrections_projet": [
+    {
+      "tentative": 1,
+      "fichier": "login.py",
+      "defauts_corriges": [
+        "- appel get_user_by_email(...) avec 1 argument(s) : get_user_by_email() défini dans db.py attend 2 argument(s), mais l'appel en fournit 1"
+      ]
+    }
+  ],
+  "coherence_projet": {
+    "imports_valides": [
+      "login.py : from db import get_user_by_email",
+      "login.py : from utils import hash_password"
+    ],
+    "imports_casses": [],
+    "coherent": true
+  }
+}

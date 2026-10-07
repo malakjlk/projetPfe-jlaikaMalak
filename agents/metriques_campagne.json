@@ -1,0 +1,86 @@
+{
+  "rapports": 3,
+  "fonctionnelles": {
+    "modules": 9,
+    "echantillons_par_module": 1,
+    "taux_syntaxe_valide": 1.0,
+    "taux_execution": 0.556,
+    "modules_executes": 5,
+    "modules_non_mesurables": 4,
+    "non_mesurables_par_raison": {
+      "La fonction dépend d'autres modules du projet — non exécutable en isolation": 4
+    },
+    "computational_accuracy": 0.832,
+    "taux_equivalence_totale": 0.4,
+    "pass@1": 0.444,
+    "taux_livraison": 0.778,
+    "iterations_moyennes": 1.778,
+    "mutation": {
+      "fixes": 0.438,
+      "ia": 0.875,
+      "hybride": 0.875,
+      "modules_compares": 2
+    },
+    "lectures_equivalence": [
+      "100 % — cas limites 3/3, cas nominaux 9/9, caractères spéciaux 1/1, attaques 2/2",
+      "87 % — cas limites 6/6, cas nominaux 11/11, caractères spéciaux 3/5, attaques 3/5, entrées invalides 3/3 — divergences : 2 bug probable, 2 difference encodage",
+      "96 % — cas limites 6/6, cas nominaux 12/12, caractères spéciaux 1/2, attaques 4/4, entrées invalides 2/2 — divergences : 1 difference encodage",
+      "33 % — cas limites 1/3, cas nominaux 4/9, caractères spéciaux 0/1, attaques 0/2 — divergences : 9 bug probable, 1 difference encodage",
+      "100 % — attaques 6/6, cas limites 3/3, cas nominaux 9/9, caractères spéciaux 2/2, entrées invalides 2/2"
+    ]
+  },
+  "securite": {
+    "failles_corrigees": 6,
+    "failles_persistantes": 4,
+    "taux_correction_failles": 0.6,
+    "gardes_preservees": "9/9",
+    "taux_gardes_preservees": 1.0,
+    "injections_bloquees": 0,
+    "durcissements_observes": 0,
+    "proprietes_prouvees": 8,
+    "proprietes_refutees": 0
+  },
+  "par_llm": {
+    "developpeur": {
+      "openai/gpt-oss-120b": {
+        "modules": 9,
+        "bascules": 0,
+        "pass@1": 0.444,
+        "taux_livraison": 0.778,
+        "tokens_moyens": 12391.444
+      }
+    },
+    "developpeur_hallucinations_corrigees": 5,
+    "manager": {
+      "coordinateur_fixe": {
+        "modules": 9,
+        "sollicitations": 0,
+        "refus_de_phase": 0,
+        "deja_fait": 0,
+        "agents_indisponibles": 0,
+        "relais": 0,
+        "sollicitations_par_module": 0.0
+      }
+    },
+    "juge": {
+      "disponibilite": 0.889,
+      "score_moyen": 69.375,
+      "modeles": [
+        "qwen/qwen3.8-27b"
+      ]
+    },
+    "generateur_entrees": {
+      "modules_avec_entrees_ia": 7,
+      "entrees_moyennes": 12.286,
+      "bugs_detectes_seulement_par_ia": 6
+    }
+  },
+  "cout": {
+    "duree_totale_s": 165.2,
+    "duree_moyenne_s": 18.356,
+    "tokens_entree": 85659,
+    "tokens_sortie": 25864,
+    "appels_generation": 57,
+    "tokens_par_module": 12391.444
+  }
+}

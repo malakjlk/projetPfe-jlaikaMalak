@@ -1,0 +1,242 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+============================================================
+SMAML — projet p6_application-af999221-20261007231807-20644
+  stockage : sqlite | mode : direct
+  [ATTENTION]  REDIS INJOIGNABLE — stockage de SECOURS (SQLite) utilisé
+      cause : TimeoutError : Timeout connecting to server
+      vérifie que Docker Desktop est lancé, puis : docker start smaml-redis
+============================================================
+
+PHASE 1 — Réception : 3 fichier(s) PHP
+
+PHASE 2 — Analyse du code
+  Ordre de migration : includes/db.php → utils.php → login.php (coordonné par coordinateur_fixe)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : includes/db.php
+████████████████████████████████████████████████████████████
+
+> PHASES 3-4 — module get_user_by_email
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10042.43it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+
+  Recherche RAG pour : getUserByEmail
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.998)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user_by_email
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : get_user_by_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : greenlet, importlib-metadata, sqlalchemy, typing-extensions, zipp
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : get_user_by_email
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 39%)  — Testeur
+  securite         100.0%  (poids 26%)  — Auditeur
+  comportemental   100.0%  (poids 13%)  — Comparateur
+  proprietes       100.0%  (poids 9%)  — Vérificateur de propriétés
+  qualite_jugee     40.0%  (poids 13%)  — LLM juge
+Score de confiance : 92.2% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 92.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+[ITERATION] DÉCISION : ITÉRER — Désaccord entre évaluations (outils 100.0 %, juge 40.0 %) : le module est renvoyé au Développeur avec les 5 remarque(s) du juge.
+
+  Recherche RAG pour : getUserByEmail
+  3 exemple(s) de migration trouvé(s) :
+    - [base_de_donnees] Récupérer un utilisateur par ID (score: 0.999)
+    - [gestion_erreurs] Supprimer utilisateur avec gestion erreur (score: 0.998)
+    - [authentification] Authentification utilisateur (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user_by_email
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : get_user_by_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : greenlet, importlib-metadata, sqlalchemy, typing-extensions, zipp
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : get_user_by_email
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite         100.0%  (poids 30%)  — Auditeur
+  comportemental    94.7%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+  qualite_jugee       —     non mesuré : juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute
+Score de confiance : 99.2% (confiance elevee)
+
+[OK] DÉCISION : LIVRER
+   Score composé 99.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (99.2 %, coordonné par coordinateur_fixe)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : utils.php
+████████████████████████████████████████████████████████████
+
+> PHASES 3-4 — module hash_password
+
+  Recherche RAG pour : hashPassword
+  3 exemple(s) de migration trouvé(s) :
+    - [chiffrement] Hachage du mot de passe avec bcrypt (score: 0.998)
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.997)
+    - [authentification] Vérifier l'expiration d'un token (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : hash_password
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      test dynamique : aucun contre-exemple sur 60 entrées (la f
+       vérifié   Mot de passe haché, jamais en clair    appel attendu présent : bcrypt
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : hash_password
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 11 : len(password) < 8
+       préservé  Mot de passe haché, jamais en clair        appel attendu présent : bcrypt
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : bcrypt
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : hash_password
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite         100.0%  (poids 30%)  — Auditeur
+  comportemental    33.3%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+  qualite_jugee       —     non mesuré : juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute
+Score de confiance : 90.0% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 90.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (90.0 %, coordonné par coordinateur_fixe)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : login.php
+████████████████████████████████████████████████████████████
+
+> PHASES 3-4 — module login
+
+  Recherche RAG pour : login
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation mot de passe (score: 0.997)
+    - [validation] Validation format email (score: 0.997)
+    - [validation] Vérifier unicité de l'email (score: 0.996)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : login
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de format ou pattern      garde ligne 24 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s
+       vérifié   Comparaison d'identifiant ou de secr   appel attendu présent : comparaison de secret :     if not
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : login
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de format ou pattern          garde ligne 24 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+
+       préservé  Comparaison d'identifiant ou de secret     appel attendu présent : comparaison de secret :     if not u
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : login
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 39%)  — Testeur
+  securite          94.0%  (poids 26%)  — Auditeur
+  comportemental   100.0%  (poids 13%)  — Comparateur
+  proprietes       100.0%  (poids 9%)  — Vérificateur de propriétés
+  qualite_jugee     65.0%  (poids 13%)  — LLM juge
+Score de confiance : 93.9% (confiance elevee)
+
+[OK] DÉCISION : LIVRER
+   Score composé 93.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (93.9 %, coordonné par coordinateur_fixe)
+
+PHASE 4 — Cohérence du projet : imports cohérents, typage conforme
+
+============================================================
+MIGRATION TERMINÉE — 3/3 module(s) livré(s), 3/3 fichier(s)
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats : C:\Users\poste\projetPfe-jlaikaMalak\agents\passage1\p6_application-af999221/

@@ -19,6 +19,7 @@ Si PHP est absent, le test est sauté proprement (statut "php_absent").
 """
 
 import re
+import sys
 import subprocess
 
 import doublures_bdd
@@ -149,7 +150,8 @@ try {{
 
 def executer_fonction_python(code_python: str, nom_fonction: str,
                              arguments: list,
-                             chemin_bdd: str = None) -> dict:
+                             chemin_bdd: str = None,
+                             dossier_python: str = None) -> dict:
     """
     Exécute UNE fonction Python générée avec les arguments donnés.
     Toute exception (HTTPException, ValueError...) = comportement
@@ -163,22 +165,83 @@ def executer_fonction_python(code_python: str, nom_fonction: str,
     if chemin_bdd:
         restaurer = doublures_bdd.installer_doublures_python(
             chemin_bdd, requetes)
+    # Le dossier du projet Python en cours d'écriture : un module qui
+    # importe un autre fichier du projet (from db import …) le trouve, au
+    # lieu d'être déclaré « non exécutable en isolation ». Les fichiers
+    # dont il dépend ont déjà été migrés : l'ordre suit les dépendances.
+    internes = set()
+    if dossier_python and os.path.isdir(dossier_python):
+        internes = {os.path.splitext(f)[0] for f in os.listdir(dossier_python)
+                    if f.endswith(".py")}
+        for nom in internes:
+            sys.modules.pop(nom, None)          # pas de version périmée d'un autre projet
+        sys.path.insert(0, dossier_python)
     try:
         return _executer_python(code_python, nom_fonction, arguments,
                                 requetes)
     finally:
+        for objet in _DEPENDANCES_OUVERTES:
+            try:
+                objet.close()
+            except Exception:
+                pass
+        _DEPENDANCES_OUVERTES.clear()
         if restaurer:
             restaurer()
+        if internes:
+            sys.path.remove(dossier_python)
+            for nom in internes:
+                sys.modules.pop(nom, None)
+
+
+# Sessions et connexions fournies aux fonctions testées : fermées après
+# chaque appel (sous Windows, une connexion ouverte verrouille le fichier).
+_DEPENDANCES_OUVERTES: list = []
+
+NOMS_DEPENDANCE_BDD = {"db", "session", "sess", "bdd", "database", "conn", "connexion",
+                      "connection", "cnx", "cursor", "curseur", "engine", "moteur"}
+
+
+def _est_dependance_bdd(parametre) -> bool:
+    annotation = str(parametre.annotation)
+    return parametre.name.lower() in NOMS_DEPENDANCE_BDD or any(
+        t in annotation for t in ("Session", "Connection", "Engine", "Cursor"))
+
+
+def _dependance_bdd(parametre, ouvertes: list):
+    """Une vraie session, connexion ou curseur, sur la base de test."""
+    annotation, nom = str(parametre.annotation), parametre.name.lower()
+    try:
+        import sqlalchemy
+        from sqlalchemy.orm import Session
+        moteur = sqlalchemy.create_engine("sqlite://")   # redirigé vers la base de test
+        if "Engine" in annotation or nom in ("engine", "moteur"):
+            return moteur
+        if "Connection" in annotation:
+            objet = moteur.connect()
+        elif "Session" in annotation or nom in ("db", "session", "sess", "bdd", "database"):
+            objet = Session(moteur)
+        else:
+            raise ImportError                      # style DB-API : sqlite3, plus bas
+        ouvertes.append(objet)
+        return objet
+    except ImportError:
+        import sqlite3
+        cnx = sqlite3.connect(":memory:")          # redirigé vers la base de test
+        ouvertes.append(cnx)
+        return cnx.cursor() if nom in ("cursor", "curseur") or "Cursor" in annotation else cnx
 
 
 def _executer_python(code_python: str, nom_fonction: str,
                      arguments: list, requetes: list) -> dict:
-    espace = {}
+    espace = {"__name__": "module_migre", "__builtins__": __builtins__,
+              "__file__": os.path.join(os.getcwd(), "module_migre.py")}
     # Les bibliothèques absentes sont remplacées par des modules
     # permissifs, une par une, jusqu'à ce que le code se charge.
     modules_simules = []
     for _tentative in range(10):
-        espace = {}
+        espace = {"__name__": "module_migre", "__builtins__": __builtins__,
+              "__file__": os.path.join(os.getcwd(), "module_migre.py")}
         try:
             exec(code_python, espace)
             break
@@ -188,9 +251,12 @@ def _executer_python(code_python: str, nom_fonction: str,
                         "requetes": requetes}
             doublures_bdd.installer_module_absent(e.name)
             modules_simules.append(e.name)
-        except Exception as e:
-            return {"ok": False, "exception": f"erreur d'import : {e}",
-                    "requetes": requetes}
+        except (Exception, SystemExit) as e:
+            # SystemExit aussi : un fichier du projet qui appelle sys.exit()
+            # dès son import (la traduction d'un die() PHP hors fonction)
+            # ne doit pas interrompre le Comparateur lui-même.
+            return {"ok": False, "exception": f"erreur d'import : "
+                    f"{type(e).__name__} {e}".strip(), "requetes": requetes}
     else:
         return {"ok": False,
                 "exception": "erreur d'import : trop de dépendances absentes",
@@ -217,10 +283,14 @@ def _executer_python(code_python: str, nom_fonction: str,
             if len(arguments) > nb_requis:
                 arguments = arguments[:nb_requis]     # trop → on tronque
             elif len(arguments) < nb_requis:
-                # pas assez → compléter avec la 1re valeur (test uniforme)
+                # Pas assez d'arguments. Un paramètre de DÉPENDANCE de base de
+                # données (db: Session, conn…), l'injection de dépendances de
+                # FastAPI, reçoit une vraie session sur la base de test ; les
+                # autres, la 1re valeur de test (test uniforme).
                 remplissage = arguments[0] if arguments else ""
-                arguments = arguments + [remplissage] * (
-                    nb_requis - len(arguments))
+                arguments = list(arguments) + [
+                    _dependance_bdd(p, _DEPENDANCES_OUVERTES) if _est_dependance_bdd(p) else remplissage
+                    for p in params[len(arguments):]]
     except (ValueError, TypeError):
         pass  # signature illisible → on garde les arguments d'origine
 
@@ -265,6 +335,24 @@ def normaliser(valeur):
     """
     if isinstance(valeur, str):
         return html.unescape(valeur)
+    # Une ligne SQLAlchemy (Row, RowMapping) est une LIGNE de données, pas
+    # une ressource opaque : elle se compare comme un dictionnaire.
+    from collections.abc import Mapping
+    if hasattr(valeur, "_mapping"):
+        valeur = dict(valeur._mapping)
+    elif isinstance(valeur, Mapping) and not isinstance(valeur, dict):
+        valeur = dict(valeur)
+    if isinstance(valeur, dict):
+        # mysql_fetch_array renvoie chaque valeur DEUX fois, par son numéro
+        # et par son nom : {0: 1, "id": 1}. Le contenu est celui de {"id": 1}.
+        numeros = sorted((k for k in valeur if str(k).isdigit()), key=lambda k: int(k))
+        noms = [k for k in valeur if not str(k).isdigit()]
+        if numeros and noms and len(numeros) == len(noms) and \
+                [valeur[k] for k in numeros] == [valeur[k] for k in noms]:
+            valeur = {k: valeur[k] for k in noms}
+        return {str(k): normaliser(v) for k, v in valeur.items()}
+    if isinstance(valeur, (list, tuple)):
+        return [normaliser(v) for v in valeur]
     # Objet opaque (connexion, curseur) : réduit à une sentinelle, pour
     # que les deux langages soient comparables sur la même base.
     if valeur is not None and not isinstance(
@@ -368,6 +456,76 @@ def comparer(res_php: dict, res_py: dict, argument=None) -> dict:
 #   - fichiers, sessions, cookies : état hors du processus
 # La base de données, elle, N'EST PLUS dans cette liste : elle est
 # simulée à l'identique des deux côtés (voir doublures_bdd).
+# ═════════════════════════════════════════════════════
+# LIRE LE POURCENTAGE : CATÉGORIES ET CLASSEMENT DES DIVERGENCES
+# ═════════════════════════════════════════════════════
+# Un pourcentage seul mélange des écarts de nature différente. Chaque
+# cas porte sa catégorie et son origine, et chaque divergence est
+# classée avec son explication. Le chiffre brut, lui, ne change JAMAIS :
+# l'explication s'y ajoute, elle ne le corrige pas.
+
+LIBELLES_CATEGORIE = {"nominal": "cas nominaux", "limite": "cas limites",
+                      "caracteres_speciaux": "caractères spéciaux",
+                      "attaque": "attaques", "invalide": "entrées invalides"}
+
+
+def categoriser_entree(arguments: list) -> str:
+    """Catégorie d'une entrée fixe, d'après sa forme."""
+    valeur = arguments[0] if arguments else ""
+    texte = str(valeur)
+    if _est_injection(valeur) or "<script" in texte.lower():
+        return "attaque"
+    if any(ord(c) > 127 for c in texte):
+        return "caracteres_speciaux"
+    if texte == "" or len(texte) >= 100:
+        return "limite"
+    return "nominal"
+
+
+def classer_divergence(arguments: list, categorie: str, verdict: dict) -> tuple:
+    """
+    (classement, explication) d'une divergence :
+      difference_encodage   le PHP compte les octets, Python les caractères
+      durcissement_securite le Python bloque une entrée malveillante
+      entree_hors_domaine   une entrée que la fonction n'a pas à traiter
+      bug_probable          un écart sur une entrée du domaine : à corriger
+    """
+    texte = " ".join(str(a) for a in arguments)
+    php, python = str(verdict.get("php", "")), str(verdict.get("python", ""))
+    if any(ord(c) > 127 for c in texte) and verdict.get("type") == "divergence_acceptation":
+        return ("difference_encodage",
+                "entrée avec caractères accentués : le PHP mesure les longueurs en "
+                "octets (strlen), le Python en caractères (len). Le Python est le "
+                "plus fidèle à l'intention ; à confirmer avec le métier.")
+    if categorie == "attaque" and (python.startswith("rejette") and php == "accepte"
+                                   or "&lt;" in python or "&#" in python):
+        return ("durcissement_securite",
+                "entrée malveillante : le Python la bloque ou l'échappe, le PHP la "
+                "laissait passer. Différence voulue : le code migré est plus sûr.")
+    if categorie == "invalide":
+        return ("entree_hors_domaine",
+                "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, "
+                "mais le comportement d'erreur diffère — à confirmer.")
+    return ("bug_probable",
+            "écart sur une entrée du domaine de la fonction : à corriger.")
+
+
+def lecture(rapport: dict) -> str:
+    """Le pourcentage, décomposé et expliqué, en une phrase."""
+    if not rapport.get("cas_testes"):
+        return ""
+    parties = []
+    for categorie, c in rapport.get("par_categorie", {}).items():
+        parties.append(f"{LIBELLES_CATEGORIE.get(categorie, categorie)} "
+                       f"{c['equivalents']}/{c['testes']}")
+    classements = {}
+    for d in rapport.get("divergences", []):
+        classements[d.get("classement")] = classements.get(d.get("classement"), 0) + 1
+    explication = ", ".join(f"{n} {k.replace('_', ' ')}" for k, n in sorted(classements.items()))
+    return (f"{rapport['score_equivalence'] * 100:.0f} % — " + ", ".join(parties)
+            + (f" — divergences : {explication}" if explication else ""))
+
+
 FONCTIONS_NON_TESTABLES = [
     "curl_", "header(", "file_get_contents", "fopen",
     "$_SESSION", "$_COOKIE"
@@ -393,13 +551,27 @@ def _avec_contexte(code_module: str, contexte: str,
     return contexte + "\n" + code_module
 
 
+def construire_cas(nb_parametres: int, avec_bdd: bool, entrees_ia: list = None) -> list:
+    """Les entrées fixes, GARDÉES, puis celles de l'IA, chacune avec sa catégorie."""
+    cas = [{"arguments": a, "categorie": categoriser_entree(a), "origine": "fixe",
+            "intention": ""} for a in generer_cas_de_test(nb_parametres, avec_bdd)]
+    fixes = {json.dumps(c["arguments"], ensure_ascii=False, default=str) for c in cas}
+    for e in entrees_ia or []:
+        if json.dumps(e["arguments"], ensure_ascii=False, default=str) not in fixes:
+            cas.append(dict(e))
+    return cas
+
+
 def tester_equivalence(code_php: str, code_python: str,
                        nom_php: str, nom_python: str,
                        nb_parametres: int = 1,
                        contexte_php: str = "",
-                       contexte_python: str = "") -> dict:
+                       contexte_python: str = "",
+                       entrees_ia: list = None,
+                       dossier_python: str = None) -> dict:
     """
     Point d'entrée du differential testing pour UN module.
+    entrees_ia : entrées proposées par l'IA, ajoutées aux entrées fixes.
 
     Retourne :
     {
@@ -482,8 +654,9 @@ def tester_equivalence(code_php: str, code_python: str,
 
     # Boucle de test différentiel
     cas_non_executables = 0
-    for numero, arguments in enumerate(
-            generer_cas_de_test(nb_parametres, utilise_bdd)):
+    rapport["par_categorie"], rapport["par_origine"] = {}, {}
+    for numero, cas in enumerate(construire_cas(nb_parametres, utilise_bdd, entrees_ia)):
+        arguments = cas["arguments"]
         if utilise_bdd:
             # Données initiales identiques avant CHAQUE cas, dans des
             # fichiers distincts : une connexion laissée ouverte par le
@@ -496,7 +669,8 @@ def tester_equivalence(code_php: str, code_python: str,
         res_php = executer_fonction_php(code_php, nom_php, arguments,
                                         chemin_bdd=bdd_php)
         res_py = executer_fonction_python(code_py, nom_python, arguments,
-                                          chemin_bdd=bdd_py)
+                                          chemin_bdd=bdd_py,
+                                          dossier_python=dossier_python)
 
         # Cas NON EXÉCUTABLE ≠ rejet comportemental !
         # Si la fonction dépend d'autres modules (undefined function
@@ -504,12 +678,19 @@ def tester_equivalence(code_php: str, code_python: str,
         # impossible : on ne peut rien conclure sur l'équivalence.
         exc_php = str(res_php.get("exception", "")).lower()
         exc_py = str(res_py.get("exception", "")).lower()
-        if (("undefined function" in exc_php)
-                or ("call to undefined" in exc_php)
+        cote_php = ("undefined function" in exc_php) or ("call to undefined" in exc_php)
+        if (cote_php
                 or ("erreur d'import" in exc_py)
                 or ("introuvable" in exc_py)
                 or ("no module named" in exc_py)):
             cas_non_executables += 1
+            # La CAUSE exacte, et son côté : sans elle, « non exécutable »
+            # ne dit pas quoi corriger.
+            exemples = rapport.setdefault("causes_non_executables", [])
+            cause = {"cote": "php" if cote_php else "python",
+                     "erreur": (res_php if cote_php else res_py).get("exception", "")[:160]}
+            if cause not in exemples and len(exemples) < 3:
+                exemples.append(cause)
             continue
 
         # ORM : quand le Python passe par SQLAlchemy ORM
@@ -520,9 +701,12 @@ def tester_equivalence(code_php: str, code_python: str,
         if (utilise_bdd and python_utilise_orm and res_php.get("requetes")
                 and not res_py.get("requetes")):
             cas_non_executables += 1
+            # Si le code ORM a échoué AVANT d'interroger la base, on dit pourquoi.
+            erreur_py = "" if res_py.get("ok") else res_py.get("exception", "")[:110]
             rapport["raison_non_comparable"] = (
                 "le code Python interroge la base via un ORM : aucune "
-                "requête observable, comparaison impossible")
+                "requête observable, comparaison impossible"
+                + (f" (PYTHON : {erreur_py})" if erreur_py else ""))
             continue
 
         verdict = comparer(res_php, res_py, arguments[0] if arguments else None)
@@ -554,6 +738,10 @@ def tester_equivalence(code_php: str, code_python: str,
                                "detail": effets["differences"]}
 
         rapport["cas_testes"] += 1
+        for cle, groupe in (("par_categorie", cas["categorie"]), ("par_origine", cas["origine"])):
+            compte = rapport[cle].setdefault(groupe, {"testes": 0, "equivalents": 0})
+            compte["testes"] += 1
+            compte["equivalents"] += int(verdict["equivalent"])
         if verdict["equivalent"]:
             rapport["cas_equivalents"] += 1
             # Une faille bloquée est un résultat à part entière : le
@@ -563,10 +751,14 @@ def tester_equivalence(code_php: str, code_python: str,
                     str(arguments[0])[:60])
         else:
             entree = arguments[0] if arguments else "(sans paramètre)"
+            classement, explication = classer_divergence(arguments, cas["categorie"], verdict)
             rapport["divergences"].append({
                 "entree": (str(entree)[:60] + "..."
                            if len(str(entree)) > 60 else entree),
-                **{k: v for k, v in verdict.items() if k != "equivalent"}
+                **{k: v for k, v in verdict.items() if k != "equivalent"},
+                "categorie": cas["categorie"], "origine": cas["origine"],
+                "intention": cas.get("intention", ""),
+                "classement": classement, "explication": explication,
             })
 
     if utilise_bdd and dossier_bdd:
@@ -576,14 +768,18 @@ def tester_equivalence(code_php: str, code_python: str,
         rapport["score_equivalence"] = (
             rapport["cas_equivalents"] / rapport["cas_testes"]
         )
+        rapport["lecture"] = lecture(rapport)
     elif cas_non_executables > 0:
         # Aucun cas n'a pu s'exécuter → fonction non testable
         # en isolation (dépendances inter-fichiers)
         rapport["statut"] = "non_testable"
         rapport["score_equivalence"] = None
+        causes = rapport.get("causes_non_executables") or []
+        detail = (f" ({causes[0]['cote'].upper()} : {causes[0]['erreur'][:110]})"
+                  if causes else "")
         rapport["raison"] = rapport.get("raison_non_comparable") or (
             "La fonction dépend d'autres modules du projet — non "
-            "exécutable en isolation")
+            "exécutable en isolation" + detail)
 
     return rapport
 
@@ -634,4 +830,4 @@ def validate_password(password: str) -> bool:
             for d in rapport["divergences"]:
                 print(f"  - Entrée {repr(d['entree'])[:50]} : "
                       f"PHP={d.get('php')} / Python={d.get('python')}")
-    print("\n✅ Agent Testeur Différentiel opérationnel !")
+    print("\n[OK] Agent Testeur Différentiel opérationnel !")

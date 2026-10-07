@@ -2,30 +2,25 @@
 Migré automatiquement par SMAML depuis utils.php
 """
 
-# ── validate_password (score 97.2%, 1 itération(s)) ──
+# ── hash_password (score 88.2%, 1 itération(s)) ──
+import bcrypt
 from fastapi import HTTPException, status
 
-
-def validate_password(password: str) -> bool:
+def hash_password(password: str) -> str:
     """
-    Vérifie que le mot de passe fourni respecte la contrainte de longueur minimale.
-    Lève une HTTPException 400 si la validation échoue.
+    Hache le mot de passe en respectant les règles de validation.
+
+    - validation_longueur : le mot de passe doit contenir au moins 8 caractères.
+    - hachage_mot_de_passe : le mot de passe n'est jamais retourné en clair.
     """
     if len(password) < 8:
+        # Utilisation d'une exception HTTP pour être cohérente avec le reste du projet
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Mot de passe trop court"
+            detail="Trop court"
         )
-    return True
-
-
-# ── sanitize_input (score 100.0%, 1 itération(s)) ──
-from markupsafe import escape
-from typing import AnyStr
-
-def sanitize_input(data: AnyStr) -> str:
-    """
-    Assainit la donnée d'entrée en échappant les caractères spéciaux HTML.
-    Equivalent de PHP `htmlspecialchars`.
-    """
-    return escape(data)
+    # Génération d'un sel bcrypt sécurisé
+    salt = bcrypt.gensalt()
+    # Hachage du mot de passe et décodage en chaîne UTF‑8
+    hashed = bcrypt.hashpw(password.encode("utf-8"), salt).decode("utf-8")
+    return hashed

@@ -1,0 +1,957 @@
+{
+  "projet": "p5_heritage-7b8669bc-20261007234055-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p5_heritage",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p5_heritage",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 1
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "utilisateurs.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "utilisateurs.php",
+      "cible": "utilisateurs.py",
+      "statut": "partiel",
+      "modules": [
+        {
+          "nom_python": "User",
+          "nom_original": "User",
+          "decision_finale": "LIVRER",
+          "score_final": 97.5,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "from typing import Optional\n\n\nclass User:\n    \"\"\"Classe représentant un utilisateur.\"\"\"\n\n    def __init__(self) -> None:\n        self.__nom: Optional[str] = None\n        self.__email: Optional[str] = None\n\n    def obtenir_nom(self) -> Optional[str]:\n        \"\"\"Retourne le nom de l'utilisateur.\"\"\"\n        return self.__nom",
+          "code_php": "class User {\n    private $nom;\n    private $email;\n\n    public function obtenirNom() {\n        return $this->nom;\n    }\n}",
+          "equivalence": {
+            "statut": "non_testable",
+            "score_equivalence": null,
+            "cas_testes": 0,
+            "cas_equivalents": 0,
+            "divergences": [],
+            "raison": "Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 11
+            },
+            "mutation": {
+              "statut": "non_observable",
+              "raison": "la fonction échoue sur toutes les entrées (TypeError) : son comportement n'est pas observable hors de son environnement"
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 85.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 5,
+                "justification": "Le code Python reproduit fidèlement la structure et le comportement du PHP, y compris l'absence de paramètres dans le constructeur et la gestion des valeurs nulles via Optional."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est idiomatique avec l'utilisation de la double underscore pour la privation, des annotations de types et un nommage clair, bien que la méthode 'obtenir_nom' soit légèrement moins idiomatique qu'un simple attribut ou property."
+              },
+              "architecture": {
+                "note": 4,
+                "justification": "La structure est correcte et propre, mais l'absence de typage strict sur les paramètres (bien qu'il n'y en ait pas) et la simplicité du design limitent la note à 4 car il n'y a pas de dépendances injectées ni de séparation complexe à évaluer."
+              },
+              "gestion_erreurs": {
+                "note": 4,
+                "justification": "Il n'y a pas de gestion d'erreurs explicite car le code d'origine n'en contenait pas non plus, mais l'utilisation de Optional[str] permet de gérer les cas limites de valeurs nulles de manière propre."
+              },
+              "documentation": {
+                "note": 5,
+                "justification": "Les docstrings sont présentes et précises pour la classe et la méthode, décrivant clairement le rôle et le retour, ce qui est conforme aux standards Python."
+              }
+            },
+            "synthese": "Migration de haute qualité qui préserve l'intention du code PHP tout en adoptant des pratiques Python idiomatiques et bien documentées.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 97.5,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3333333333333333
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 85.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.16666666666666666
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental",
+              "proprietes"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 62.4,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "sans_etat_global": 1.0,
+              "documentation": 0.6666666666666666,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "erreurs_typees",
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 3098,
+            "sortie": 451,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:43:06.715",
+                "module": "utilisateurs.php__User",
+                "projet": "p5_heritage-7b8669bc-20261007234055-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 97.5,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3333333333333333
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "équivalence non testée (non_testable)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 85.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.16666666666666666
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "comportemental",
+                  "proprietes"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "La méthode obtenir_nom renvoie None tant que l'attribut n'a pas été affecté.",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller",
+              "équivalence non testée : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique."
+            ]
+          },
+          "portee_verification": {
+            "module": "User",
+            "decision": "LIVRER",
+            "verifie": [],
+            "non_verifie": [
+              "l'équivalence comportementale : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 0 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 128.6
+        },
+        {
+          "nom_python": "Admin",
+          "nom_original": "Admin",
+          "decision_finale": "LIVRER",
+          "score_final": 97.0,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "class Admin(User):\n    \"\"\"Classe représentant un administrateur du système.\"\"\"\n\n    def __init__(self, *args, **kwargs) -> None:\n        \"\"\"Initialise une nouvelle instance d'administrateur.\"\"\"\n        super().__init__(*args, **kwargs)\n\n    def bannir_utilisateur(self, id: str) -> bool:\n        \"\"\"Bannit un utilisateur à partir de son identifiant.\n\n        Args:\n            id: L'identifiant de l'utilisateur à bannir.\n\n        Returns:\n            bool: True si l'opération a réussi.\n\n        Raises:\n            ValueError: Si la longueur de l'identifiant est inférieure à 1.\n        \"\"\"\n        if len(str(id)) < 1:\n            raise ValueError(\"ID invalide\")\n        return True",
+          "code_php": "class Admin extends User {\n    public function bannirUtilisateur($id) {\n        if (strlen($id) < 1) {\n            throw new Exception(\"ID invalide\");\n        }\n        return true;\n    }\n}",
+          "equivalence": {
+            "statut": "non_testable",
+            "score_equivalence": null,
+            "cas_testes": 0,
+            "cas_equivalents": 0,
+            "divergences": [],
+            "raison": "Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "non_observable",
+              "raison": "la fonction échoue sur toutes les entrées (TypeError) : son comportement n'est pas observable hors de son environnement"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "bannir_utilisateur : acceptation ⇒ longueur ≥ 1",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 80.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 4,
+                "justification": "La logique de validation est préservée, mais l'utilisation de `str(id)` introduit une conversion implicite qui n'existe pas dans le PHP d'origine (où `strlen` sur un entier le convertirait aussi, mais le type n'était pas forcé), et le nommage `id` masque le builtin Python, ce qui est une légère déviation stylistique mais fonctionnellement équivalente pour les cas limites de chaîne vide."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est clair et idiomatique, à l'exception de l'utilisation du nom de variable `id` qui masque la fonction builtin Python, ce qui est une mauvaise pratique courante mais dérangeante pour la lisibilité et la maintenance."
+              },
+              "architecture": {
+                "note": 3,
+                "justification": "L'ajout d'un `__init__` explicite est inutile car il ne fait que déléguer à la classe parente sans ajouter de valeur, ce qui constitue un couplage évitable et du code mort."
+              },
+              "gestion_erreurs": {
+                "note": 5,
+                "justification": "L'exception `ValueError` est plus appropriée que `Exception` générique, et le message est conservé, offrant une gestion d'erreurs plus précise et typée que l'original."
+              },
+              "documentation": {
+                "note": 5,
+                "justification": "Les docstrings sont complètes, suivant le style Google, et documentent précisément les paramètres, les retours et les exceptions levées."
+              }
+            },
+            "synthese": "Migration de haute qualité avec une gestion d'erreurs améliorée et une documentation exemplaire, pénalisée uniquement par l'usage du nom `id` et un constructeur redondant.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 97.0,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 80.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 73.9,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0,
+              "style_declaratif": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 3605,
+            "sortie": 381,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "fonction": "bannirUtilisateur",
+                  "code": "if (strlen($id) < 1) {\n            throw new Exception(\"ID invalide\");\n        }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 20 : len(str(id)) < 1"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:45:06.416",
+                "module": "utilisateurs.php__Admin",
+                "projet": "p5_heritage-7b8669bc-20261007234055-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 97.0,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "équivalence non testée (non_testable)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 80.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "comportemental"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "L'exception générique Exception en PHP a été traduite en ValueError pour respecter les conventions Python.",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller",
+              "équivalence non testée : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique."
+            ]
+          },
+          "portee_verification": {
+            "module": "Admin",
+            "decision": "LIVRER",
+            "verifie": [
+              "propriété « bannir_utilisateur : acceptation ⇒ longueur ≥ 1 » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "l'équivalence comportementale : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 3 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 119.7
+        },
+        {
+          "nom_python": "SuperAdmin",
+          "nom_original": "SuperAdmin",
+          "decision_finale": "VALIDATION_HUMAINE",
+          "score_final": 92.5,
+          "iterations": 3,
+          "categorie_echec": "desaccord_juge",
+          "code_python": "from typing import Any\n\n\nclass SuperAdmin(Admin):\n    def __init__(self, *args: Any, **kwargs: Any) -> None:\n        super().__init__(*args, **kwargs)\n\n    def supprimer_compte(self, id: Any) -> bool:\n        if isinstance(id, str):\n            try:\n                id = float(id) if ('.' in id or 'e' in id.lower()) else int(id)\n            except ValueError:\n                raise ValueError(\"ID non numerique\")\n        elif not isinstance(id, (int, float)) or isinstance(id, bool):\n            raise ValueError(\"ID non numerique\")\n        return True",
+          "code_php": "class SuperAdmin extends Admin {\n    public function supprimerCompte($id) {\n        if (!is_numeric($id)) {\n            throw new Exception(\"ID non numerique\");\n        }\n        return true;\n    }\n}",
+          "equivalence": {
+            "statut": "non_testable",
+            "score_equivalence": null,
+            "cas_testes": 0,
+            "cas_equivalents": 0,
+            "divergences": [],
+            "raison": "Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 15
+            },
+            "mutation": {
+              "statut": "non_observable",
+              "raison": "la fonction échoue sur toutes les entrées (TypeError) : son comportement n'est pas observable hors de son environnement"
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 55.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 4,
+                "justification": "La logique de validation est plus stricte que l'original (rejet des booléens, gestion des chaînes), ce qui peut casser des cas limites où PHP acceptait des types numériques implicites, mais l'intention de sécurité est préservée."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est lisible et utilise des types, mais la logique de conversion conditionnelle dans le bloc try est un peu dense et moins idiomatique qu'un simple cast ou une expression régulière."
+              },
+              "architecture": {
+                "note": 3,
+                "justification": "L'ajout d'un constructeur explicite est inutile car Python gère l'héritage par défaut, ce qui ajoute du bruit sans bénéfice architectural."
+              },
+              "gestion_erreurs": {
+                "note": 4,
+                "justification": "L'utilisation de ValueError est appropriée et le message est conservé, mais l'exception n'est pas typée spécifiquement pour le domaine (ex: InvalidIdError)."
+              },
+              "documentation": {
+                "note": 1,
+                "justification": "Aucune docstring n'est présente pour expliquer le rôle de la méthode ou les types attendus, contrairement à l'exigence d'une documentation précise."
+              }
+            },
+            "synthese": "Migration fonctionnelle et robuste mais manquant de documentation et contenant un constructeur superflu.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 92.5,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3333333333333333
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 55.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.16666666666666666
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental",
+              "proprietes"
+            ],
+            "criteres_critiques": [
+              "qualite_jugee"
+            ]
+          },
+          "modernisation": {
+            "score": 65.2,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 0.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0,
+              "style_declaratif": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 6364,
+            "sortie": 839,
+            "appels": 3
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "VALIDATION_HUMAINE",
+                "iterations": 3
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "fonction": "supprimerCompte",
+                  "code": "if (!is_numeric($id)) {\n            throw new Exception(\"ID non numerique\");\n        }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 14 : not isinstance(id, (int, float)) or isinstance(id, bool)"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:48:15.297",
+                "module": "utilisateurs.php__SuperAdmin",
+                "projet": "p5_heritage-7b8669bc-20261007234055-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 3,
+              "rapport_testeur": 3,
+              "rapport_differentiel": 3,
+              "rapport_formel": 3,
+              "rapport_auditeur": 3,
+              "rapport_juge": 3,
+              "decision": 3
+            },
+            "derniere_decision": {
+              "verdict": "VALIDATION_HUMAINE",
+              "confiance": {
+                "score": 92.5,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3333333333333333
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "équivalence non testée (non_testable)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 55.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.16666666666666666
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "comportemental",
+                  "proprietes"
+                ],
+                "criteres_critiques": [
+                  "qualite_jugee"
+                ]
+              }
+            },
+            "points_attention": [
+              "Désaccord persistant après 2 correction(s) : outils 100.0 %, juge 55.0 %. Validation humaine demandée, avec les remarques du juge.",
+              "Les booléens héritant de int en Python, une vérification explicite est ajoutée pour éviter de traiter True/False comme un identifiant numérique valide.",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller",
+              "équivalence non testée : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique."
+            ]
+          },
+          "portee_verification": {
+            "module": "SuperAdmin",
+            "decision": "VALIDATION_HUMAINE",
+            "verifie": [
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "l'équivalence comportementale : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (1 point(s) vérifié(s), 3 hors de portée)."
+          },
+          "duree_s": 188.9
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 0,
+    "modules": 3,
+    "modules_livres": 2,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_admin",
+        "modules": [
+          "Admin"
+        ],
+        "tables": [],
+        "fichiers": [
+          "utilisateurs.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_superadmin",
+        "modules": [
+          "SuperAdmin"
+        ],
+        "tables": [],
+        "fichiers": [
+          "utilisateurs.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_user",
+        "modules": [
+          "User"
+        ],
+        "tables": [],
+        "fichiers": [
+          "utilisateurs.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 3,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 0,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": []
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

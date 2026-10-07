@@ -1,0 +1,1821 @@
+{
+  "projet": "p3_securite-99c83a3c-20261007231807-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p3_securite",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p3_securite",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 1
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "securite.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "securite.php",
+      "cible": "securite.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "get_user",
+          "nom_original": "getUser",
+          "decision_finale": "LIVRER",
+          "score_final": 84.10326086956522,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "import os\nfrom typing import Optional, Dict, Any\n\nfrom sqlalchemy import text\nfrom sqlalchemy.engine import Engine, ResultProxy\n\n# On suppose qu'un module du projet fournit une fonction permettant d'obtenir\n# une instance d'Engine SQLAlchemy déjà configurée (ex. get_engine()).\n# Cette fonction doit être importée depuis le module approprié du projet.\n# Si le nom ou le module diffèrent, il faut ajuster l'import ci‑dessous.\nfrom db_connection import get_engine  # type: ignore\n\ndef get_user(user_id: int) -> Optional[Dict[str, Any]]:\n    \"\"\"\n    Récupère un utilisateur depuis la table ``users`` en fonction de son identifiant.\n\n    Retourne un dictionnaire contenant les colonnes de la ligne trouvée,\n    ou ``None`` si aucun enregistrement ne correspond.\n\n    Lève ``ConnectionError`` si la connexion à la base échoue.\n    \"\"\"\n    # Construction sécurisée de la requête grâce à des paramètres nommés.\n    sql = text(\"SELECT * FROM users WHERE id = :uid\")\n\n    try:\n        engine: Engine = get_engine()\n    except Exception as exc:\n        # Erreur de connexion ou de configuration du moteur.\n        raise ConnectionError(\"Impossible d'établir la connexion à la base de données\") from exc\n\n    with engine.connect() as connection:\n        result: ResultProxy = connection.execute(sql, {\"uid\": user_id})\n        row = result.fetchone()\n        if row is None:\n            return None\n        # Convertit le RowProxy en dictionnaire standard.\n        return dict(row)",
+          "code_php": "function getUser($id) {\n    $sql = \"SELECT * FROM users WHERE id=\" . $id;\n    $result = mysql_query($sql);\n    return mysql_fetch_array($result);\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.03125,
+            "cas_testes": 32,
+            "cas_equivalents": 1,
+            "divergences": [
+              {
+                "entree": "test@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "inconnu@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR '1'='1",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "'; DROP TABLE users; --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "a",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "abc",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "Password123",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "motdepasse",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": 1,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "ia",
+                "intention": "Identifiant utilisateur standard valide",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": 100,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "nominal",
+                "origine": "ia",
+                "intention": "Identifiant utilisateur à trois chiffres",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": 0,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "ia",
+                "intention": "Borne basse : identifiant zéro (souvent invalide ou premier enregistrement)",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": -1,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "ia",
+                "intention": "Juste avant la borne positive : identifiant négatif",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": 2147483647,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "ia",
+                "intention": "Valeur maximale d'un entier signé 32 bits (INT_MAX)",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": 2147483648,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "limite",
+                "origine": "ia",
+                "intention": "Juste après la borne maximale : dépassement d'entier 32 bits",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "1; DROP TABLE users;",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Injection SQL avec exécution de commande destructive",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "1'--",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Injection SQL avec commentaire pour ignorer le reste de la requête",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "<script>alert('xss')</script>",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Injection de balise HTML/JavaScript (XSS) si l'ID est affiché sans échappement",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "../../etc/passwd",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Tentative de traversal de chemin (moins pertinent pour un ID SQL, mais test de robustesse)",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "123456789012345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Nombre trop long pour être un entier standard, risque de conversion en float ou erreur",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              },
+              {
+                "entree": null,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette ('connect' object does not support the context manager protocol)",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Valeur nulle, non attendue pour un identifiant",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              }
+            ],
+            "base_simulee": {
+              "tables": [
+                "db_connection",
+                "exc",
+                "produits",
+                "sqlalchemy",
+                "typing",
+                "users"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "nom",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [
+              "SELECT * FROM users WHERE id=test@example.com",
+              "SELECT * FROM users WHERE id=inconnu@example.com",
+              "SELECT * FROM users WHERE id=' OR '1'='1",
+              "SELECT * FROM users WHERE id='; DROP TABLE users; --",
+              "SELECT * FROM users WHERE id=",
+              "SELECT * FROM users WHERE id=a",
+              "SELECT * FROM users WHERE id=abc",
+              "SELECT * FROM users WHERE id=1234567",
+              "SELECT * FROM users WHERE id=12345678",
+              "SELECT * FROM users WHERE id=Password123",
+              "SELECT * FROM users WHERE id=motdepasse",
+              "SELECT * FROM users WHERE id=éàçùè",
+              "SELECT * FROM users WHERE id=mot de passe avec espaces",
+              "SELECT * FROM users WHERE id=<script>alert(1)</script>",
+              "SELECT * FROM users WHERE id=' OR 1=1 --",
+              "SELECT * FROM users WHERE id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "SELECT * FROM users WHERE id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+              "SELECT * FROM users WHERE id=0",
+              "SELECT * FROM users WHERE id=12345678901234567890",
+              "SELECT * FROM users WHERE id=1",
+              "SELECT * FROM users WHERE id=100",
+              "SELECT * FROM users WHERE id=0",
+              "SELECT * FROM users WHERE id=-1",
+              "SELECT * FROM users WHERE id=2147483647",
+              "SELECT * FROM users WHERE id=2147483648",
+              "SELECT * FROM users WHERE id=1 OR 1=1",
+              "SELECT * FROM users WHERE id=1; DROP TABLE users;",
+              "SELECT * FROM users WHERE id=1'--",
+              "SELECT * FROM users WHERE id=<script>alert('xss')</script>",
+              "SELECT * FROM users WHERE id=../../etc/passwd",
+              "SELECT * FROM users WHERE id=123456789012345678901234567890",
+              "SELECT * FROM users WHERE id="
+            ],
+            "requetes_python": [],
+            "effets_compares": 32,
+            "par_categorie": {
+              "nominal": {
+                "testes": 13,
+                "equivalents": 0
+              },
+              "attaque": {
+                "testes": 9,
+                "equivalents": 1
+              },
+              "limite": {
+                "testes": 7,
+                "equivalents": 0
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 0
+              },
+              "invalide": {
+                "testes": 2,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 19,
+                "equivalents": 0
+              },
+              "ia": {
+                "testes": 13,
+                "equivalents": 1
+              }
+            },
+            "injections_bloquees": [
+              "1 OR 1=1"
+            ],
+            "lecture": "3 % — cas nominaux 0/13, attaques 1/9, cas limites 0/7, caractères spéciaux 0/1, entrées invalides 0/2 — divergences : 20 bug probable, 1 difference encodage, 8 durcissement securite, 2 entree hors domaine",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 14
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 75.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 5,
+                "justification": "La migration corrige la vulnérabilité SQL injection du code source et adapte le retour à un format Python idiomatique (dict/None), préservant ainsi l'intention fonctionnelle de récupérer un utilisateur par ID."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est clair, utilise des types explicites et des noms de variables descriptifs, bien que l'import conditionnel commenté et la variable `sql` soient légèrement redondants."
+              },
+              "architecture": {
+                "note": 3,
+                "justification": "L'architecture est correcte avec une séparation des responsabilités, mais l'import direct de `get_engine` au niveau du module crée un couplage fort et une dépendance cachée qui devrait idéalement être injectée."
+              },
+              "gestion_erreurs": {
+                "note": 3,
+                "justification": "La gestion des erreurs de connexion est présente et utilise `raise ... from exc`, mais elle ne couvre pas les erreurs d'exécution de la requête (comme les erreurs de syntaxe ou de permissions) qui se propageraient brutes."
+              },
+              "documentation": {
+                "note": 5,
+                "justification": "La docstring est complète, précisant le rôle, les paramètres, les valeurs de retour et les exceptions levées, ce qui est excellent pour la maintenabilité."
+              }
+            },
+            "synthese": "Migration de haute qualité qui sécurise le code et améliore la lisibilité, avec une architecture correcte mais perfectible sur l'injection de dépendances.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 84.10326086956522,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.391304347826087
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.2608695652173913
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 3.125,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.13043478260869565
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.08695652173913045
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 75.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.13043478260869565
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 71.4,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "acces_donnees_parametre": 1.0,
+              "documentation": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "fonctions_pures",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 4595,
+            "sortie": 1443,
+            "appels": 3
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [
+                {
+                  "type": "sql_injection",
+                  "cwe": "CWE-89",
+                  "severity": "critical",
+                  "code": "mysql_query($sql)",
+                  "description": "Requête SQL potentiellement vulnérable",
+                  "fonction": "getUser"
+                }
+              ],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:18:51.108",
+                "module": "securite.php__get_user",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              },
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:23:52.752",
+                "module": "securite.php__get_user",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              },
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:27:16.443",
+                "module": "securite.php__get_user",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 3,
+              "rapport_testeur": 3,
+              "rapport_differentiel": 3,
+              "rapport_formel": 3,
+              "rapport_auditeur": 3,
+              "rapport_juge": 3,
+              "decision": 3
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 84.10326086956522,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.391304347826087
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.2608695652173913
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 3.125,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.13043478260869565
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.08695652173913045
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 75.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.13043478260869565
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": [
+              "la fonction ne lève jamais d'HTTPException ; les erreurs de connexion sont signalées par ``ConnectionError`` et l'absence d'utilisateur par ``None``.",
+              "utilise l'extension mysql_* obsolète : aucun équivalent direct, passage obligatoire par l'ORM"
+            ]
+          },
+          "portee_verification": {
+            "module": "get_user",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 32 entrée(s) testée(s) (3% de concordance), exécution réelle des deux codes",
+              "1 entrée(s) d'injection acceptée(s) par le PHP et rejetée(s) par le Python : écart volontaire, faille corrigée",
+              "propriété « get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 faille(s) du PHP d'origine corrigée(s) dans le code migré"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 4 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 48.1
+        },
+        {
+          "nom_python": "generer_rapport",
+          "nom_original": "genererRapport",
+          "decision_finale": "LIVRER",
+          "score_final": 82.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "import os\nimport shlex\nimport subprocess\nfrom typing import Optional\n\ndef generer_rapport(commande: str) -> Optional[str]:\n    \"\"\"\n    Exécute l'outil ``report_tool`` avec la commande fournie de façon sécurisée\n    et renvoie la sortie texte du processus.\n\n    Parameters\n    ----------\n    commande: str\n        Arguments à passer à ``report_tool``. Doit être composé uniquement de\n        caractères alphanumériques, tirets, underscores, points et espaces.\n        Tout autre caractère déclenchera une ``ValueError`` afin d'éviter\n        toute injection de commande.\n\n    Returns\n    -------\n    Optional[str]\n        Le texte produit par ``report_tool``. Retourne ``None`` si le processus\n        ne produit aucune sortie.\n\n    Raises\n    ------\n    ValueError\n        Si la chaîne ``commande`` contient des caractères interdits.\n    subprocess.CalledProcessError\n        Si l'exécution du processus échoue (code de retour non‑zéro).\n    \"\"\"\n    # Validation très stricte pour prévenir les injections (CWE‑78)\n    allowed_chars = set(\"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_. \")\n    if not set(commande).issubset(allowed_chars):\n        raise ValueError(\"Commande contenant des caractères non autorisés\")\n\n    # Découpage sûr des arguments (équivalent à shell‑splitting sans le shell)\n    args = shlex.split(commande)\n\n    # Construction de la liste d'arguments complète\n    cmd = [\"report_tool\", *args]\n\n    # Exécution du processus sans passer par le shell\n    result = subprocess.run(\n        cmd,\n        capture_output=True,\n        text=True,\n        timeout=30,\n        check=False,               # on gère le code retour manuellement\n    )\n\n    # Si le processus a échoué, on lève une exception explicite\n    if result.returncode != 0:\n        raise subprocess.CalledProcessError(\n            result.returncode, cmd, output=result.stdout, stderr=result.stderr\n        )\n\n    return result.stdout if result.stdout else None\n\n# hypothèse raisonnable du format attendu pour les arguments de ``report_tool``.\n# processus ; le code appelant doit gérer cette exception selon la logique métier.",
+          "code_php": "function genererRapport($commande) {\n    $sortie = shell_exec(\"report_tool \" . $commande);\n    return $sortie;\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.0,
+            "cas_testes": 7,
+            "cas_equivalents": 0,
+            "divergences": [
+              {
+                "entree": "test@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "inconnu@example.com",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR '1'='1",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "'; DROP TABLE users; --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Commande contenant des caractères non autorisés)",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "durcissement_securite",
+                "explication": "entrée malveillante : le Python la bloque ou l'échappe, le PHP la laissait passer. Différence voulue : le code migré est plus sûr."
+              }
+            ],
+            "base_simulee": {
+              "tables": [
+                "db",
+                "exc",
+                "produits",
+                "sqlalchemy",
+                "typing",
+                "users"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "nom",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [],
+            "requetes_python": [],
+            "effets_compares": 7,
+            "par_categorie": {
+              "nominal": {
+                "testes": 2,
+                "equivalents": 0
+              },
+              "attaque": {
+                "testes": 4,
+                "equivalents": 0
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 7,
+                "equivalents": 0
+              }
+            },
+            "causes_non_executables": [
+              {
+                "cote": "python",
+                "erreur": "[WinError 2] Le fichier spécifié est introuvable"
+              }
+            ],
+            "lecture": "0 % — cas nominaux 0/2, attaques 0/4, caractères spéciaux 0/1 — divergences : 2 bug probable, 1 difference encodage, 4 durcissement securite",
+            "entrees_ia": {
+              "statut": "indisponible",
+              "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 82.0,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 96.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3333333333333333
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.16666666666666666
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes",
+              "qualite_jugee"
+            ],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 5126,
+            "sortie": 1767,
+            "appels": 3
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [
+                {
+                  "type": "command_injection",
+                  "cwe": "CWE-78",
+                  "severity": "critical",
+                  "code": "shell_exec(\"report_tool \" . $commande)",
+                  "description": "Exécution de commande système dangereuse",
+                  "fonction": "genererRapport"
+                }
+              ],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:20:03.146",
+                "module": "securite.php__generer_rapport",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              },
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:25:04.439",
+                "module": "securite.php__generer_rapport",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              },
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:29:15.809",
+                "module": "securite.php__generer_rapport",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 3,
+              "rapport_testeur": 3,
+              "rapport_differentiel": 3,
+              "rapport_formel": 3,
+              "rapport_auditeur": 3,
+              "rapport_juge": 3,
+              "decision": 3
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 82.0,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 96.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3333333333333333
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.16666666666666666
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "proprietes",
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": [
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "la fonction lève ``CalledProcessError`` en cas d'échec du"
+            ]
+          },
+          "portee_verification": {
+            "module": "generer_rapport",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 7 entrée(s) testée(s) (0% de concordance), exécution réelle des deux codes",
+              "1 faille(s) du PHP d'origine corrigée(s) dans le code migré"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 119.4
+        },
+        {
+          "nom_python": "chercher_produit",
+          "nom_original": "chercherProduit",
+          "decision_finale": "LIVRER",
+          "score_final": 73.07894736842105,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "import os\nfrom typing import List, Dict, Optional\nfrom sqlalchemy import create_engine, text\nfrom sqlalchemy.engine import Engine, Result\n\ndef _get_engine() -> Engine:\n    \"\"\"\n    Crée un moteur SQLAlchemy à partir des variables d'environnement.\n    Les noms d'environnement sont inspirés des paramètres du code PHP d'origine.\n    \"\"\"\n    db_user = os.getenv(\"DB_USER\", \"root\")\n    db_password = os.getenv(\"DB_PASSWORD\", \"\")\n    db_host = os.getenv(\"DB_HOST\", \"localhost\")\n    db_name = os.getenv(\"DB_NAME\", \"ma_base\")\n    db_port = os.getenv(\"DB_PORT\", \"3306\")\n    # Exemple d'URL MySQL compatible SQLAlchemy\n    url = f\"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}\"\n    return create_engine(url, future=True)\n\n\ndef chercher_produit(nom: str) -> Optional[List[Dict[str, any]]]:\n    \"\"\"\n    Recherche les produits dont le nom contient la chaîne fournie.\n    Retourne une liste de dictionnaires représentant les lignes trouvées,\n    ou ``None`` si aucune correspondance n'est trouvée ou en cas d'erreur de connexion.\n    \"\"\"\n    if not isinstance(nom, str):\n        raise ValueError(\"Le paramètre 'nom' doit être une chaîne de caractères\")\n\n    engine = _get_engine()\n    try:\n        with engine.connect() as connexion:\n            # Utilisation d'une requête paramétrée pour éviter l'injection SQL\n            stmt = text(\n                \"SELECT * FROM produits WHERE nom LIKE :pattern\"\n            )\n            # Le pattern ajoute les jokers % autour du terme recherché\n            result: Result = connexion.execute(stmt, {\"pattern\": f\"%{nom}%\"})\n            rows = result.mappings().all()\n            if not rows:\n                return None\n            # Convertir chaque Mapping en dict standard\n            return [dict(row) for row in rows]\n    except Exception as exc:\n        # En cas d'échec de connexion ou d'exécution, on renvoie None\n        # (comportement similaire à mysql_query qui retourne false)\n        return None\n\n\n#                  donc on crée un moteur local avec les variables d'environnement.\n#                  erreur survient, reproduisant le comportement de ``mysql_query`` qui renvoie false.",
+          "code_php": "function chercherProduit($nom) {\n    $sql = \"SELECT * FROM produits WHERE nom LIKE \\\"%\" . $nom . \"%\\\"\";\n    return mysql_query($sql);\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.10526315789473684,
+            "cas_testes": 19,
+            "cas_equivalents": 2,
+            "divergences": [
+              {
+                "entree": "test@example.com",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "inconnu@example.com",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR '1'='1",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "'; DROP TABLE users; --",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "abc",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "1234567",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "0",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": [],
+                "python": null,
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              }
+            ],
+            "base_simulee": {
+              "tables": [
+                "db",
+                "exc",
+                "produits",
+                "sqlalchemy",
+                "typing",
+                "users"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "nom",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [
+              "SELECT * FROM produits WHERE nom LIKE \"%test@example.com%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%inconnu@example.com%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%' OR '1'='1%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%'; DROP TABLE users; --%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%a%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%abc%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%1234567%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%12345678%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%Password123%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%motdepasse%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%éàçùè%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%mot de passe avec espaces%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%<script>alert(1)</script>%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%' OR 1=1 --%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%0%\"",
+              "SELECT * FROM produits WHERE nom LIKE \"%12345678901234567890%\""
+            ],
+            "requetes_python": [
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?",
+              "SELECT * FROM produits WHERE nom LIKE ?"
+            ],
+            "effets_compares": 19,
+            "par_categorie": {
+              "nominal": {
+                "testes": 11,
+                "equivalents": 1
+              },
+              "attaque": {
+                "testes": 4,
+                "equivalents": 0
+              },
+              "limite": {
+                "testes": 3,
+                "equivalents": 1
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 19,
+                "equivalents": 2
+              }
+            },
+            "lecture": "11 % — cas nominaux 1/11, attaques 0/4, cas limites 1/3, caractères spéciaux 0/1 — divergences : 17 bug probable",
+            "entrees_ia": {
+              "statut": "invalide",
+              "raison": "réponse inexploitable",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 73.07894736842105,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 70.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 10.526315789473683,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "qualite_jugee"
+            ],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 71.0,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "acces_donnees_parametre": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 0.5,
+              "arguments_preserves": 1.0,
+              "style_declaratif": 1.0
+            },
+            "non_applicables": [],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 6879,
+            "sortie": 2876,
+            "appels": 4
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [
+                {
+                  "type": "sql_injection",
+                  "cwe": "CWE-89",
+                  "severity": "critical",
+                  "code": "mysql_query($sql)",
+                  "description": "Requête SQL potentiellement vulnérable",
+                  "fonction": "chercherProduit"
+                }
+              ],
+              "score": 0.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:22:17.129",
+                "module": "securite.php__chercher_produit",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              },
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:26:27.194",
+                "module": "securite.php__chercher_produit",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              },
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:31:31.056",
+                "module": "securite.php__chercher_produit",
+                "projet": "p3_securite-99c83a3c-20261007231807-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 4,
+              "rapport_testeur": 4,
+              "rapport_differentiel": 4,
+              "rapport_formel": 4,
+              "rapport_auditeur": 4,
+              "rapport_juge": 4,
+              "decision": 4
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 73.07894736842105,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 70.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 10.526315789473683,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": [
+              "La fonction renvoie ``None`` lorsqu'aucun résultat n'est trouvé ou lorsqu'une",
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "utilise l'extension mysql_* obsolète : aucun équivalent direct, passage obligatoire par l'ORM"
+            ]
+          },
+          "portee_verification": {
+            "module": "chercher_produit",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 19 entrée(s) testée(s) (11% de concordance), exécution réelle des deux codes",
+              "propriété « chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "1 faille(s) encore présente(s)",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 6 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 135.2
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "modules": 3,
+    "modules_livres": 3,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [
+    {
+      "fichier": "securite.php",
+      "defauts": [
+        "Le module 'db' n'existe pas dans le projet : c'est un module local supposé par le LLM (aucun fichier db.py n'a été produit)"
+      ]
+    },
+    {
+      "fichier": "securite.php",
+      "defauts": [
+        "Le module 'db' n'existe pas dans le projet : c'est un module local supposé par le LLM (aucun fichier db.py n'a été produit)"
+      ]
+    }
+  ],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_produits",
+        "modules": [
+          "chercherProduit"
+        ],
+        "tables": [
+          "produits"
+        ],
+        "fichiers": [
+          "securite.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_genererrapport",
+        "modules": [
+          "genererRapport"
+        ],
+        "tables": [],
+        "fichiers": [
+          "securite.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_users",
+        "modules": [
+          "getUser"
+        ],
+        "tables": [
+          "users"
+        ],
+        "fichiers": [
+          "securite.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 3,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 0,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": []
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

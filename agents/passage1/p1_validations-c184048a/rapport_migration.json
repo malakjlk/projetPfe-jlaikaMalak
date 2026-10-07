@@ -1,0 +1,1125 @@
+{
+  "projet": "p1_validations-c184048a-20261007233134-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p1_validations",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p1_validations",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 1
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "validation.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "validation.php",
+      "cible": "validation.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "validate_password",
+          "nom_original": "validatePassword",
+          "decision_finale": "LIVRER",
+          "score_final": 100.0,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "import re\nfrom typing import Any\n\ndef validate_password(password: str) -> bool:\n    \"\"\"\n    Valide un mot de passe selon les règles métier héritées du code PHP d'origine.\n\n    Règles appliquées :\n    - La longueur doit être d'au moins 8 caractères. (validation_longueur)\n    - Le mot de passe doit contenir au moins une majuscule. (validation_format)\n\n    Exceptions levées :\n    - ValueError: si la longueur est insuffisante.\n    - ValueError: si aucune majuscule n'est présente.\n\n    Args:\n        password: Le mot de passe à valider.\n\n    Returns:\n        True si le mot de passe satisfait toutes les règles.\n\n    \"\"\"\n    # validation_longueur\n    if len(password) < 8:\n        raise ValueError(\"Mot de passe trop court\")\n\n    # validation_format (majuscule)\n    if not re.search(r\"[A-Z]\", password):\n        raise ValueError(\"Majuscule requise\")\n\n    return True\n\n# aucune autre contrainte (chiffre, caractères spéciaux) n'est ajoutée ici.",
+          "code_php": "function validatePassword($password) {\n    if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }\n    if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }\n    return true;\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 27,
+            "cas_equivalents": 27,
+            "divergences": [],
+            "par_categorie": {
+              "limite": {
+                "testes": 7,
+                "equivalents": 7
+              },
+              "nominal": {
+                "testes": 10,
+                "equivalents": 10
+              },
+              "caracteres_speciaux": {
+                "testes": 3,
+                "equivalents": 3
+              },
+              "attaque": {
+                "testes": 5,
+                "equivalents": 5
+              },
+              "invalide": {
+                "testes": 2,
+                "equivalents": 2
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 15
+              },
+              "ia": {
+                "testes": 12,
+                "equivalents": 12
+              }
+            },
+            "lecture": "100 % — cas limites 7/7, cas nominaux 10/10, caractères spéciaux 3/3, attaques 5/5, entrées invalides 2/2",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 6,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 3,
+                  "score": 0.5
+                },
+                "ia": {
+                  "entrees": 12,
+                  "tues": 6,
+                  "score": 1.0
+                },
+                "hybride": {
+                  "entrees": 27,
+                  "tues": 6,
+                  "score": 1.0
+                }
+              },
+              "detectes_seulement_par_ia": [
+                "ligne 24 : Lt → LtE",
+                "ligne 25 : garde (raise) supprimée",
+                "ligne 24 : 8 → 9"
+              ],
+              "survivants": []
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "validate_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              },
+              {
+                "libelle": "validate_password : acceptation ⇒ au moins une majuscule",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 100.0,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 3395,
+            "sortie": 635,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "fonction": "validatePassword",
+                  "code": "if (strlen($password) < 8) {\n        throw new Exception(\"Mot de passe trop court\");\n    }",
+                  "obligatoire": true
+                },
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "fonction": "validatePassword",
+                  "code": "if (!preg_match(\"/[A-Z]/\", $password)) {\n        throw new Exception(\"Majuscule requise\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:35:06.006",
+                "module": "validation.php__validate_password",
+                "projet": "p1_validations-c184048a-20261007233134-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 100.0,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+            ]
+          },
+          "portee_verification": {
+            "module": "validate_password",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 27 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « validate_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "propriété « validate_password : acceptation ⇒ au moins une majuscule » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 4 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 208.5
+        },
+        {
+          "nom_python": "valider_email",
+          "nom_original": "validerEmail",
+          "decision_finale": "LIVRER",
+          "score_final": 96.4285714285714,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "import re\n\n\ndef valider_email(email: str) -> bool:\n    \"\"\"\n    Valide le format d'une adresse email.\n\n    Args:\n        email (str): L'adresse email à vérifier.\n\n    Returns:\n        bool: True si l'adresse email est valide.\n\n    Raises:\n        ValueError: Si le format de l'email est invalide.\n    \"\"\"\n    pattern = r\"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$\"\n    if not isinstance(email, str) or not re.match(pattern, email):\n        raise ValueError(\"Email invalide\")\n    return True",
+          "code_php": "function validerEmail($email) {\n    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }\n    return true;\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 29,
+            "cas_equivalents": 29,
+            "divergences": [],
+            "par_categorie": {
+              "limite": {
+                "testes": 6,
+                "equivalents": 6
+              },
+              "nominal": {
+                "testes": 12,
+                "equivalents": 12
+              },
+              "caracteres_speciaux": {
+                "testes": 3,
+                "equivalents": 3
+              },
+              "attaque": {
+                "testes": 5,
+                "equivalents": 5
+              },
+              "invalide": {
+                "testes": 3,
+                "equivalents": 3
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 15
+              },
+              "ia": {
+                "testes": 14,
+                "equivalents": 14
+              }
+            },
+            "lecture": "100 % — cas limites 6/6, cas nominaux 12/12, caractères spéciaux 3/3, attaques 5/5, entrées invalides 3/3",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 14
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 5,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 3,
+                  "score": 0.6
+                },
+                "ia": {
+                  "entrees": 14,
+                  "tues": 5,
+                  "score": 1.0
+                },
+                "hybride": {
+                  "entrees": 29,
+                  "tues": 5,
+                  "score": 1.0
+                }
+              },
+              "detectes_seulement_par_ia": [
+                "ligne 20 : True → False",
+                "ligne 18 : not supprimé"
+              ],
+              "survivants": []
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 75.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 3,
+                "justification": "L'utilisation d'une expression régulière manuelle au lieu de la fonction native `filter_var` (ou `email-validator` en Python) introduit des écarts de comportement sur les cas limites (ex: adresses avec des caractères spéciaux autorisés par le standard mais rejetés par le regex, ou vice-versa), ce qui ne préserve pas toute l'intention du code d'origine."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est clair et idiomatique, avec un nommage explicite et une structure simple, bien que l'importation de `re` pour une tâche standard soit légèrement moins idiomatique que l'utilisation d'une bibliothèque dédiée."
+              },
+              "architecture": {
+                "note": 4,
+                "justification": "La fonction est autonome, bien typée et sans état global, ce qui constitue une architecture correcte pour une fonction utilitaire simple."
+              },
+              "gestion_erreurs": {
+                "note": 4,
+                "justification": "L'exception `ValueError` est plus appropriée que `Exception` en Python, et le message est utile, mais la vérification `isinstance` ajoute une couche de sécurité non présente dans l'original sans pour autant exposer d'informations sensibles."
+              },
+              "documentation": {
+                "note": 5,
+                "justification": "La docstring est complète, précisant le rôle, les paramètres, les valeurs de retour et les exceptions levées, ce qui est excellent."
+              }
+            },
+            "synthese": "Migration de bonne qualité avec une documentation exemplaire, mais la substitution de la validation native par une regex manuelle compromet la fidélité aux cas limites du code d'origine.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 96.4285714285714,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.42857142857142855
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.2857142857142857
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.14285714285714285
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 75.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.14285714285714285
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 3875,
+            "sortie": 408,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "fonction": "validerEmail",
+                  "code": "if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 18 : not isinstance(email, str) or not re.match(pattern, email)"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:38:01.041",
+                "module": "validation.php__valider_email",
+                "projet": "p1_validations-c184048a-20261007233134-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 96.4285714285714,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.42857142857142855
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.2857142857142857
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.14285714285714285
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 75.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.14285714285714285
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "proprietes"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "L'expression régulière assure une validation de base conforme aux standards courants sans introduire de dépendance externe lourde (telle que email-validator).",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller"
+            ]
+          },
+          "portee_verification": {
+            "module": "valider_email",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 29 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 175.0
+        },
+        {
+          "nom_python": "valider_age",
+          "nom_original": "validerAge",
+          "decision_finale": "LIVRER",
+          "score_final": 98.2,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "from typing import Any, Union\nfrom fastapi import HTTPException\n\n\ndef valider_age(age: Any) -> bool:\n    \"\"\"\n    Valide que l'âge fourni est numérique et supérieur ou égal à 18 ans.\n\n    Args:\n        age (Any): Valeur représentant l'âge (entier, flottant ou chaîne numérique).\n\n    Returns:\n        bool: True si la validation réussit.\n\n    Raises:\n        HTTPException: \n            - 400 avec le détail \"Age non numerique\" si la valeur n'est pas un nombre.\n            - 400 avec le détail \"Doit etre majeur\" si l'âge est inférieur à 18.\n    \"\"\"\n    if isinstance(age, bool):\n        raise HTTPException(status_code=400, detail=\"Age non numerique\")\n\n    if isinstance(age, str):\n        try:\n            age = float(age) if ('.' in age or 'e' in age.lower()) else int(age)\n        except ValueError:\n            raise HTTPException(status_code=400, detail=\"Age non numerique\")\n    elif not isinstance(age, (int, float)):\n        raise HTTPException(status_code=400, detail=\"Age non numerique\")\n\n    if age < 18:\n        raise HTTPException(status_code=400, detail=\"Doit etre majeur\")\n\n    return True",
+          "code_php": "function validerAge($age) {\n    if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }\n    if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }\n    return true;\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 28,
+            "cas_equivalents": 28,
+            "divergences": [],
+            "par_categorie": {
+              "limite": {
+                "testes": 7,
+                "equivalents": 7
+              },
+              "nominal": {
+                "testes": 11,
+                "equivalents": 11
+              },
+              "caracteres_speciaux": {
+                "testes": 3,
+                "equivalents": 3
+              },
+              "attaque": {
+                "testes": 5,
+                "equivalents": 5
+              },
+              "invalide": {
+                "testes": 2,
+                "equivalents": 2
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 15
+              },
+              "ia": {
+                "testes": 13,
+                "equivalents": 13
+              }
+            },
+            "lecture": "100 % — cas limites 7/7, cas nominaux 11/11, caractères spéciaux 3/3, attaques 5/5, entrées invalides 2/2",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 14
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 13,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 3,
+                  "score": 0.231
+                },
+                "ia": {
+                  "entrees": 14,
+                  "tues": 8,
+                  "score": 0.615
+                },
+                "hybride": {
+                  "entrees": 28,
+                  "tues": 8,
+                  "score": 0.615
+                }
+              },
+              "detectes_seulement_par_ia": [
+                "ligne 31 : Lt → LtE",
+                "ligne 28 : not supprimé",
+                "ligne 29 : garde (raise) supprimée",
+                "ligne 31 : 18 → 19",
+                "ligne 25 : and ↔ or"
+              ],
+              "survivants": [
+                "ligne 21 : garde (raise) supprimée",
+                "ligne 21 : 400 → 401",
+                "ligne 32 : 400 → 401",
+                "ligne 29 : 400 → 401",
+                "ligne 27 : 400 → 401"
+              ]
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "valider_age : acceptation ⇒ valeur >= 18",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 98.2,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 4326,
+            "sortie": 662,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "fonction": "validerAge",
+                  "code": "if (!is_numeric($age)) {\n        throw new Exception(\"Age non numerique\");\n    }",
+                  "obligatoire": true
+                },
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 18)",
+                  "fonction": "validerAge",
+                  "code": "if ($age < 18) {\n        throw new Exception(\"Doit etre majeur\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 20 : isinstance(age, bool)"
+                },
+                {
+                  "invariant": "Borne sur une valeur (< 18)",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:40:47.211",
+                "module": "validation.php__valider_age",
+                "projet": "p1_validations-c184048a-20261007233134-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 98.2,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "En Python, bool hérite de int ; il doit être explicitement rejeté pour reproduire fidèlement le comportement de is_numeric() en PHP.",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller",
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+            ]
+          },
+          "portee_verification": {
+            "module": "valider_age",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 28 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « valider_age : acceptation ⇒ valeur >= 18 » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 166.2
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "modules": 3,
+    "modules_livres": 3,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_validatepassword",
+        "modules": [
+          "validatePassword"
+        ],
+        "tables": [],
+        "fichiers": [
+          "validation.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_validerage",
+        "modules": [
+          "validerAge"
+        ],
+        "tables": [],
+        "fichiers": [
+          "validation.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_valideremail",
+        "modules": [
+          "validerEmail"
+        ],
+        "tables": [],
+        "fichiers": [
+          "validation.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 3,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 0,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": []
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

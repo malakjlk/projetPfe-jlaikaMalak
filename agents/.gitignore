@@ -1,0 +1,6 @@
+venv_codebleu/
+__pycache__/
+*.db
+.env
+campagne/
+sortie_*/

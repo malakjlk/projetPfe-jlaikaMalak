@@ -1,0 +1,353 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+============================================================
+SMAML — projet p1_validations-c184048a-20261007233134-20644
+  stockage : sqlite | mode : direct
+  [ATTENTION]  REDIS INJOIGNABLE — stockage de SECOURS (SQLite) utilisé
+      cause : TimeoutError : Timeout connecting to server
+      vérifie que Docker Desktop est lancé, puis : docker start smaml-redis
+============================================================
+
+PHASE 1 — Réception : 1 fichier(s) PHP
+
+PHASE 2 — Analyse du code
+  Ordre de migration : validation.php (coordonné par coordinateur_fixe)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : validation.php
+████████████████████████████████████████████████████████████
+
+> PHASES 3-4 — module validate_password
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<?, ?it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+
+  Recherche RAG pour : validatePassword
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation mot de passe (score: 0.998)
+    - [validation] Validation format email (score: 0.997)
+    - [validation] Validation numéro de téléphone (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : validate_password
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     2/2 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      test dynamique : aucun contre-exemple sur 60 entrées (la f
+       vérifié   Vérification de format ou pattern      test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : validate_password
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 12 : len(password) < 8
+       préservé  Vérification de format ou pattern          garde ligne 19 : not re.search('[A-Z]', password)
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : validate_password
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 39%)  — Testeur
+  securite          94.0%  (poids 26%)  — Auditeur
+  comportemental   100.0%  (poids 13%)  — Comparateur
+  proprietes       100.0%  (poids 9%)  — Vérificateur de propriétés
+  qualite_jugee     50.0%  (poids 13%)  — LLM juge
+Score de confiance : 91.9% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 91.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+[ITERATION] DÉCISION : ITÉRER — Désaccord entre évaluations (outils 98.2 %, juge 50.0 %) : le module est renvoyé au Développeur avec les 4 remarque(s) du juge.
+
+  Recherche RAG pour : validatePassword
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation mot de passe (score: 0.998)
+    - [validation] Validation format email (score: 0.997)
+    - [validation] Validation numéro de téléphone (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : validate_password
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     2/2 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      test dynamique : aucun contre-exemple sur 60 entrées (la f
+       vérifié   Vérification de format ou pattern      test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : validate_password
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 24 : len(password) < 8
+       préservé  Vérification de format ou pattern          garde ligne 28 : not re.search('[A-Z]', password)
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : validate_password
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite         100.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+  qualite_jugee       —     non mesuré : juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute
+Score de confiance : 100.0% (confiance elevee)
+
+[OK] DÉCISION : LIVRER
+   Score composé 100.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (100.0 %, coordonné par coordinateur_fixe)
+
+> PHASES 3-4 — module valider_email
+
+  Recherche RAG pour : validerEmail
+  3 exemple(s) de migration trouvé(s) :
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.997)
+    - [authentification] Vérifier l'expiration d'un token (score: 0.996)
+    - [gestion_erreurs] Valider et sauvegarder des données (score: 0.996)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+  -> openai/gpt-oss-120b indisponible (quota_journalier) : modèle suivant
+  -> Généré par le modèle de secours gemini-3.8-flash (gemini)
+
+Vérification du module : valider_email
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de format ou pattern      garde ligne 6 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s]
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : valider_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de format ou pattern          garde ligne 6 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : valider_email
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 43%)  — Testeur
+  securite          94.0%  (poids 29%)  — Auditeur
+  comportemental    86.2%  (poids 14%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+  qualite_jugee     30.0%  (poids 14%)  — LLM juge
+Score de confiance : 86.3% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 86.3% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+[ITERATION] DÉCISION : ITÉRER — Désaccord entre évaluations (outils 95.7 %, juge 30.0 %) : le module est renvoyé au Développeur avec les 5 remarque(s) du juge.
+
+  Recherche RAG pour : validerEmail
+  3 exemple(s) de migration trouvé(s) :
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.997)
+    - [authentification] Vérifier l'expiration d'un token (score: 0.996)
+    - [gestion_erreurs] Valider et sauvegarder des données (score: 0.996)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+  -> Généré par le modèle de secours gemini-3.8-flash (gemini)
+
+Vérification du module : valider_email
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de format ou pattern      garde ligne 18 : not isinstance(email, str) or not re.matc
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : valider_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de format ou pattern          garde ligne 18 : not isinstance(email, str) or not re.match(
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : valider_email
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 43%)  — Testeur
+  securite         100.0%  (poids 29%)  — Auditeur
+  comportemental   100.0%  (poids 14%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+  qualite_jugee     75.0%  (poids 14%)  — LLM juge
+Score de confiance : 96.4% (confiance moyenne)
+
+[OK] DÉCISION : LIVRER
+   Score composé 96.4% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (96.4 %, coordonné par coordinateur_fixe)
+
+> PHASES 3-4 — module valider_age
+
+  Recherche RAG pour : validerAge
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation de l'âge (score: 0.999)
+    - [validation] Validation format email (score: 0.998)
+    - [validation] Validation mot de passe (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+  [ATTENTE] gemini-3.8-flash : surcharge, nouvel essai dans 15 s (1/3)
+  -> gemini-3.8-flash indisponible (surcharge) : modèle suivant
+  -> Généré par le modèle de secours gemini-3.5-flash (gemini)
+
+Vérification du module : valider_age
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     2/2 propriété(s) sans contre-exemple
+     [ATTENTION]  valeur numérique : la fonction rejette toutes les entrées testées
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de type numérique         garde ligne 11 : not isinstance(age, (int, float)) or isin
+       vérifié   Borne sur une valeur (< 18)            test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : valider_age
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de type numérique             garde ligne 11 : not isinstance(age, (int, float)) or isinst
+       préservé  Borne sur une valeur (< 18)                garde ligne 14 : age < 18
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : valider_age
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 39%)  — Testeur
+  securite          94.0%  (poids 26%)  — Auditeur
+  comportemental   100.0%  (poids 13%)  — Comparateur
+  proprietes       100.0%  (poids 9%)  — Vérificateur de propriétés
+  qualite_jugee     35.0%  (poids 13%)  — LLM juge
+Score de confiance : 90.0% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 90.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+[ITERATION] DÉCISION : ITÉRER — Désaccord entre évaluations (outils 98.2 %, juge 35.0 %) : le module est renvoyé au Développeur avec les 5 remarque(s) du juge.
+
+  Recherche RAG pour : validerAge
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation de l'âge (score: 0.999)
+    - [validation] Validation format email (score: 0.998)
+    - [validation] Validation mot de passe (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+  -> Généré par le modèle de secours gemini-3.8-flash (gemini)
+
+Vérification du module : valider_age
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     2/2 propriété(s) sans contre-exemple
+     [ATTENTION]  valeur numérique : la fonction rejette toutes les entrées testées
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de type numérique         garde ligne 20 : isinstance(age, bool)
+       vérifié   Borne sur une valeur (< 18)            test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : valider_age
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de type numérique             garde ligne 20 : isinstance(age, bool)
+       préservé  Borne sur une valeur (< 18)                garde ligne 31 : age < 18
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : valider_age
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+  qualite_jugee       —     non mesuré : juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute
+Score de confiance : 98.2% (confiance elevee)
+
+[OK] DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (98.2 %, coordonné par coordinateur_fixe)
+
+PHASE 4 — Cohérence du projet : imports cohérents, typage conforme
+
+============================================================
+MIGRATION TERMINÉE — 3/3 module(s) livré(s), 1/1 fichier(s)
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats : C:\Users\poste\projetPfe-jlaikaMalak\agents\passage1\p1_validations-c184048a/

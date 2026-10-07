@@ -104,7 +104,7 @@ def llm_pour(nom: str):
 llm = llm_pour(MODELE_ACTIF) or llm_pour(
     "groq" if MODELE_ACTIF == "gemini" else "gemini")
 if llm_pour(MODELE_ACTIF) is None:
-    print(f"⚠️  Clé absente pour l'orchestrateur demandé ({MODELE_ACTIF}).")
+    print(f"  Clé absente pour l'orchestrateur demandé ({MODELE_ACTIF}).")
 
 # Fournisseurs en panne pendant cette exécution (coupe-circuit) : un
 # fournisseur qui a échoué n'est plus retenté, ce qui évite de repayer
@@ -405,7 +405,7 @@ def _installer_ecoute_manager() -> bool:
                                                  ToolUsageStartedEvent,
                                                  LLMCallFailedEvent)
         except ImportError:
-            print("⚠️  Bus d'événements CrewAI introuvable : les "
+            print("  Bus d'événements CrewAI introuvable : les "
                   "justifications du Manager ne seront pas capturées.")
             return False
 
@@ -1589,7 +1589,7 @@ def _basculer(erreur: Exception) -> bool:
         "vers": DESCRIPTIONS_MODELES[cible],
         "raison": f"{type(erreur).__name__} : {str(erreur)[:160]}",
     })
-    print(f"\n  ↪  Basculement de l'orchestrateur : "
+    print(f"\n  ->  Basculement de l'orchestrateur : "
           f"{DESCRIPTIONS_MODELES[depart]} → {DESCRIPTIONS_MODELES[cible]}")
     return True
 
@@ -1678,7 +1678,7 @@ def migrer_module_orchestre(code_php_module: str, module: dict,
     if not orchestrateur_pret:
         ETAT["agents_en_echec"] = list(
             set((ETAT.get("agents_en_echec") or []) + ["Manager"]))
-        print(f"\n  ⚠️  Aucun orchestrateur utilisable pour ce module "
+        print(f"\n    Aucun orchestrateur utilisable pour ce module "
               f"(demandé : {MODELE_ACTIF}, en panne : "
               f"{sorted(FOURNISSEURS_EN_PANNE) or 'aucun'}).")
 
@@ -1718,7 +1718,7 @@ def migrer_module_orchestre(code_php_module: str, module: dict,
         if not reprise_reussie:
             ETAT["agents_en_echec"] = list(
                 set((ETAT.get("agents_en_echec") or []) + ["Manager"]))
-            print(f"\n  ⚠️  Orchestration interrompue : "
+            print(f"\n    Orchestration interrompue : "
                   f"{type(e).__name__} — {str(e)[:200]}")
 
     # Reconstitution du rapport attendu par la couche projet :

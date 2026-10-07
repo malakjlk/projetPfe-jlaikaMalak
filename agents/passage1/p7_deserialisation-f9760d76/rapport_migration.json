@@ -1,0 +1,1659 @@
+{
+  "projet": "p7_deserialisation-f9760d76-20261007232515-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p7_deserialisation",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p7_deserialisation",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 1
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "session.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "session.php",
+      "cible": "session.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "charger_session",
+          "nom_original": "chargerSession",
+          "decision_finale": "LIVRER",
+          "score_final": 67.85714285714286,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "import os\nfrom typing import Any, Optional\n\nimport phpserialize  # pip install phpserialize\n\n\ndef charger_session(data: str) -> Optional[Any]:\n    \"\"\"\n    Désérialise une chaîne au format PHP `serialize` et renvoie l'objet Python\n    correspondant.\n\n    Paramètres\n    ----------\n    data: str\n        Chaîne contenant les données sérialisées au format PHP.\n\n    Retour\n    ------\n    Optional[Any]\n        - L'objet désérialisé (généralement un dict, list, int, str, etc.).\n        - ``None`` si la désérialisation échoue ou si ``data`` est vide.\n\n    Exceptions\n    ----------\n    ValueError\n        Levée lorsqu'une erreur de désérialisation survient (format invalide,\n        données corrompues, etc.). Le message d'erreur décrit le problème.\n    \"\"\"\n    if not data:\n        # Aucun contenu à désérialiser → comportement équivalent à PHP qui\n        # retournerait null/false.\n        return None\n\n    try:\n        # phpserialize.loads attend des bytes ; on encode la chaîne en UTF‑8.\n        # ``decode_strings=True`` convertit les chaînes PHP en str Python.\n        result = phpserialize.loads(\n            data.encode(\"utf-8\"),\n            decode_strings=True,\n            object_hook=phpserialize.phpobject,\n        )\n        return result\n    except phpserialize.UnserializationError as exc:\n        # Erreur de format PHP – on la remonte comme ValueError pour que le\n        # code appelant puisse gérer le problème sans lever d'exception HTTP.\n        raise ValueError(f\"Erreur de désérialisation PHP : {exc}\") from exc\n    except Exception as exc:  # pragma: no cover\n        # Toute autre exception inattendue est également transformée.\n        raise ValueError(f\"Erreur inattendue lors de la désérialisation : {exc}\") from exc\n\n\n# `unserialize`, qui peut être de n'importe quel type (dict, list, int, etc.).\n# J'ai donc typé le retour comme ``Optional[Any]`` pour conserver cette\n# flexibilité.\n# l'environnement du projet (``pip install phpserialize``). Sans elle,\n# la désérialisation sécurisée du format PHP n'est pas possible.",
+          "code_php": "function chargerSession($data) {\n    $session = unserialize($data);\n    return $session;\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.0,
+            "cas_testes": 15,
+            "cas_equivalents": 0,
+            "divergences": [
+              {
+                "entree": "",
+                "type": "valeurs_differentes",
+                "php": false,
+                "python": null,
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "a",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 1 bytes in C:\\Us)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "abc",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 3 bytes in C:\\Us)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 7 bytes in C:\\Us)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 8 bytes in C:\\Us)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "Password123",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 11 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "motdepasse",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 10 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 10 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 25 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 25 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 11 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 500 bytes in C:\\)",
+                "python": "accepte",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 1500 bytes in C:)",
+                "python": "accepte",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 1 bytes in C:\\Us)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: unserialize(): Error at offset 0 of 20 bytes in C:\\U)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              }
+            ],
+            "par_categorie": {
+              "limite": {
+                "testes": 3,
+                "equivalents": 0
+              },
+              "nominal": {
+                "testes": 9,
+                "equivalents": 0
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 0
+              },
+              "attaque": {
+                "testes": 2,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 0
+              }
+            },
+            "lecture": "0 % — cas limites 0/3, cas nominaux 0/9, caractères spéciaux 0/1, attaques 0/2 — divergences : 14 bug probable, 1 difference encodage",
+            "entrees_ia": {
+              "statut": "indisponible",
+              "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 65.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 3,
+                "justification": "Le code Python change le comportement d'origine : le PHP lève une exception ou retourne false en cas d'échec, tandis que le code migré retourne None pour les données vides et lève une ValueError pour les erreurs, ce qui n'est pas strictement équivalent sans contexte supplémentaire. De plus, l'utilisation de `object_hook` peut modifier la structure des objets PHP de manière non transparente."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est clair, utilise des types explicites et des commentaires utiles, mais la présence de commentaires orphelins en bas du fichier (hors fonction) et l'import d'une bibliothèque tierce spécifique sans justification dans le code principal nuisent légèrement à la propreté."
+              },
+              "architecture": {
+                "note": 3,
+                "justification": "La fonction est isolée et bien typée, mais elle dépend directement d'une bibliothèque tierce spécifique (`phpserialize`) sans abstraction, ce qui réduit la flexibilité architecturale. L'absence de classe ou de service dédié limite la réutilisabilité."
+              },
+              "gestion_erreurs": {
+                "note": 4,
+                "justification": "La gestion des erreurs est robuste avec des exceptions typées (`ValueError`) et des messages descriptifs, mais la transformation de toute exception en `ValueError` peut masquer des erreurs système critiques. Le retour de `None` pour les données vides est un choix de conception qui doit être documenté clairement."
+              },
+              "documentation": {
+                "note": 4,
+                "justification": "La docstring est détaillée et précise les paramètres, retours et exceptions, mais les commentaires orphelins en bas du fichier sont inutiles et confusants. La documentation pourrait être plus concise et intégrée directement dans le code."
+              }
+            },
+            "synthese": "La migration est globalement de bonne qualité avec une gestion des erreurs et une documentation solides, mais elle souffre d'un changement de comportement non justifié et d'une architecture trop couplée à une bibliothèque tierce.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 67.85714285714286,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 70.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.42857142857142855
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.2857142857142857
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.14285714285714285
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 65.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.14285714285714285
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes"
+            ],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 2836,
+            "sortie": 819,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [
+                {
+                  "type": "insecure_deserialization",
+                  "cwe": "CWE-502",
+                  "severity": "critical",
+                  "code": "unserialize($data)",
+                  "description": "Désérialisation non sécurisée",
+                  "fonction": "chargerSession"
+                }
+              ],
+              "score": 0.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:27:39.591",
+                "module": "session.php__charger_session",
+                "projet": "p7_deserialisation-f9760d76-20261007232515-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 67.85714285714286,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 70.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.42857142857142855
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.2857142857142857
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.14285714285714285
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 65.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.14285714285714285
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "proprietes"
+                ],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": [
+              "la bibliothèque ``phpserialize`` doit être installée dans"
+            ]
+          },
+          "portee_verification": {
+            "module": "charger_session",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (0% de concordance), exécution réelle des deux codes"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "1 faille(s) encore présente(s)",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 1 point(s) établi(s), 6 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 140.8
+        },
+        {
+          "nom_python": "afficher_page",
+          "nom_original": "afficherPage",
+          "decision_finale": "LIVRER",
+          "score_final": 79.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "import os\nfrom fastapi import HTTPException\nfrom markupsafe import escape\n\n# Liste blanche des pages autorisées – à adapter selon les besoins du projet\nALLOWED_PAGES = {\n    \"home\",\n    \"about\",\n    \"contact\",\n    \"products\",\n    # ajouter d'autres noms de pages autorisées ici\n}\n\ndef afficher_page(page: str) -> str | None:\n    \"\"\"\n    Charge et renvoie le contenu d'une page HTML statique.\n\n    Le nom de la page est validé contre une whitelist afin d'éviter les\n    inclusions de fichiers arbitraires (vulnérabilité LFI). Le chemin de base\n    est récupéré depuis la variable d'environnement ``PAGE_ROOT`` ; si elle\n    n'est pas définie, on utilise le répertoire ``pages`` du projet comme\n    valeur par défaut, reproduisant le comportement du code PHP d'origine.\n\n    Retourne ``None`` si la page n'est pas autorisée ou si le fichier est\n    introuvable. Aucun ``HTTPException`` n'est levé ici ; la fonction se\n    contente de renvoyer ``None`` pour que la couche appelante décide du\n    traitement (ex. : renvoyer une 404 HTTP).\n    \"\"\"\n    # Validation du nom de page\n    if page not in ALLOWED_PAGES:\n        # Page non autorisée → on ne lève pas d'exception HTTP ici\n        return None\n\n    # Construction du chemin du fichier de façon sécurisée\n    base_dir = os.getenv(\"PAGE_ROOT\", os.path.join(os.path.dirname(__file__), \"pages\"))\n    file_path = os.path.abspath(os.path.join(base_dir, f\"{page}.html\"))\n\n    # Vérification que le fichier réside bien dans le répertoire autorisé\n    if not file_path.startswith(os.path.abspath(base_dir)):\n        # Tentative d'accès hors du répertoire autorisé\n        return None\n\n    try:\n        with open(file_path, \"r\", encoding=\"utf-8\") as f:\n            content = f.read()\n    except FileNotFoundError:\n        # Le fichier demandé n'existe pas\n        return None\n\n    # On échappe le contenu au cas où il contiendrait des caractères dangereux\n    # (même si les pages sont statiques, cela renforce la sécurité).\n    return escape(content)",
+          "code_php": "function afficherPage($page) {\n    include($page . \".php\");\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.0,
+            "cas_testes": 25,
+            "cas_equivalents": 0,
+            "divergences": [
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(.php): Failed to open stream: No such file o)",
+                "python": "accepte",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "a",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(a.php): Failed to open stream: No such file )",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "abc",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(abc.php): Failed to open stream: No such fil)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "1234567",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(1234567.php): Failed to open stream: No such)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(12345678.php): Failed to open stream: No suc)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "Password123",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(Password123.php): Failed to open stream: No )",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "motdepasse",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(motdepasse.php): Failed to open stream: No s)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(éàçùè.php): Failed to open stream: No such f)",
+                "python": "accepte",
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(mot de passe avec espaces.php): Failed to op)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(<script>alert(1)</script>.php): Failed to op)",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(' OR 1=1 --.php): Failed to open stream: No )",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)",
+                "python": "accepte",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)",
+                "python": "accepte",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(0.php): Failed to open stream: No such file )",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(12345678901234567890.php): Failed to open st)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "accueil",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(accueil.php): Failed to open stream: No such)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "ia",
+                "intention": "Chemin de fichier standard sans extension",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "page_profil",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(page_profil.php): Failed to open stream: No )",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "ia",
+                "intention": "Nom de fichier avec underscore",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "page_à_é_è",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(page_à_é_è.php): Failed to open stream: No s)",
+                "python": "accepte",
+                "categorie": "caracteres_speciaux",
+                "origine": "ia",
+                "intention": "Accents français dans le nom de fichier",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "page_🚀",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(page_🚀.php): Failed to open stream: No such )",
+                "python": "accepte",
+                "categorie": "caracteres_speciaux",
+                "origine": "ia",
+                "intention": "Emoji dans le nom de fichier",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "page avec espace",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(page avec espace.php): Failed to open stream)",
+                "python": "accepte",
+                "categorie": "caracteres_speciaux",
+                "origine": "ia",
+                "intention": "Espaces dans le nom de fichier",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "../../etc/passwd",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(../../etc/passwd.php): Failed to open stream)",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Injection de chemin relatif (Path Traversal)",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "page'; DROP TABLE users; --",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(page'; DROP TABLE users; --.php): Failed to )",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Injection SQL (bien que peu probable ici, test de robustesse)",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert('xss')</script>",
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(<script>alert('xss')</script>.php): Failed t)",
+                "python": "accepte",
+                "categorie": "attaque",
+                "origine": "ia",
+                "intention": "Injection de balise HTML/JS",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": 12345,
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(12345.php): Failed to open stream: No such f)",
+                "python": "accepte",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Type entier au lieu d'une chaîne",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              },
+              {
+                "entree": null,
+                "type": "divergence_acceptation",
+                "php": "rejette (sortie illisible : Warning: include(.php): Failed to open stream: No such file o)",
+                "python": "accepte",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Valeur nulle",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              }
+            ],
+            "par_categorie": {
+              "limite": {
+                "testes": 3,
+                "equivalents": 0
+              },
+              "nominal": {
+                "testes": 11,
+                "equivalents": 0
+              },
+              "caracteres_speciaux": {
+                "testes": 4,
+                "equivalents": 0
+              },
+              "attaque": {
+                "testes": 5,
+                "equivalents": 0
+              },
+              "invalide": {
+                "testes": 2,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 0
+              },
+              "ia": {
+                "testes": 10,
+                "equivalents": 0
+              }
+            },
+            "lecture": "0 % — cas limites 0/3, cas nominaux 0/11, caractères spéciaux 0/4, attaques 0/5, entrées invalides 0/2 — divergences : 20 bug probable, 3 difference encodage, 2 entree hors domaine",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 65.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 1,
+                "justification": "Le code d'origine exécute du PHP dynamique via `include`, tandis que la migration lit des fichiers HTML statiques et les échappe, ce qui change fondamentalement le comportement (pas d'exécution de code serveur) et ne reproduit pas la logique d'inclusion dynamique."
+              },
+              "lisibilite": {
+                "note": 5,
+                "justification": "Le code est très lisible, utilise des types modernes, des constantes claires et des commentaires explicatifs, bien que l'import de FastAPI soit inutile pour une fonction pure."
+              },
+              "architecture": {
+                "note": 4,
+                "justification": "La séparation des responsabilités est bonne (validation, lecture, échappement), mais l'import de `HTTPException` est superflu et la dépendance à l'environnement est gérée proprement, ce qui reste solide malgré ce défaut mineur."
+              },
+              "gestion_erreurs": {
+                "note": 3,
+                "justification": "Les erreurs sont gérées de manière silencieuse en retournant `None`, ce qui masque les causes (fichier manquant vs non autorisé) et force l'appelant à deviner, contrairement à une gestion par exceptions typées plus explicite."
+              },
+              "documentation": {
+                "note": 5,
+                "justification": "La docstring est excellente, détaillant le rôle, les paramètres, les valeurs de retour et les considérations de sécurité, dépassant largement les exigences minimales."
+              }
+            },
+            "synthese": "La migration est techniquement propre et sécurisée mais trahit l'intention fonctionnelle du code PHP d'origine en remplaçant l'exécution dynamique par la lecture de fichiers statiques.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 79.0,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.42857142857142855
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.2857142857142857
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.14285714285714285
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 65.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.14285714285714285
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes"
+            ],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 52.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 0.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "erreurs_typees",
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 1448,
+            "sortie": 601,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:28:44.720",
+                "module": "session.php__afficher_page",
+                "projet": "p7_deserialisation-f9760d76-20261007232515-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 79.0,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.42857142857142855
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.2857142857142857
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.14285714285714285
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 65.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.14285714285714285
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "proprietes"
+                ],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": [
+              "inclut un fichier dont le chemin est dynamique",
+              "la fonction renvoie None pour les erreurs afin de respecter le contrat PHP (pas d'exception HTTP ici)."
+            ]
+          },
+          "portee_verification": {
+            "module": "afficher_page",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 25 entrée(s) testée(s) (0% de concordance), exécution réelle des deux codes"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 1 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 65.1
+        },
+        {
+          "nom_python": "sauvegarder_preferences",
+          "nom_original": "sauvegarderPreferences",
+          "decision_finale": "LIVRER",
+          "score_final": 85.14492753623189,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "import json\nfrom typing import Any, Dict\n\ndef sauvegarder_preferences(prefs: Dict[str, Any]) -> str:\n    \"\"\"\n    Sérialise les préférences utilisateur.\n\n    - Vérifie que le dictionnaire ``prefs`` n'est pas vide.\n    - Lève une ``ValueError`` si aucune préférence n'est fournie,\n      afin de respecter l'invariant de validation d'existence.\n    - Retourne la représentation JSON du dictionnaire, équivalente\n      à la chaîne sérialisée produite par ``serialize`` en PHP.\n    \"\"\"\n    # validation_existence : le paramètre doit exister et contenir au moins une entrée\n    if not prefs:\n        raise ValueError(\"Preferences vides\")\n\n    # Utilisation de JSON (plus sûr et interopérable que pickle) pour la sérialisation\n    return json.dumps(prefs, ensure_ascii=False)\n\n\n#                     En Python, on remplace cela par ``json.dumps`` qui fournit un format\n#                     texte lisible et compatible avec la plupart des usages modernes.",
+          "code_php": "function sauvegarderPreferences($prefs) {\n    if (empty($prefs)) {\n        throw new Exception(\"Preferences vides\");\n    }\n    return serialize($prefs);\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.1111111111111111,
+            "cas_testes": 18,
+            "cas_equivalents": 2,
+            "divergences": [
+              {
+                "entree": "a",
+                "type": "valeurs_differentes",
+                "php": "s:1:\"a\";",
+                "python": "\"a\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "abc",
+                "type": "valeurs_differentes",
+                "php": "s:3:\"abc\";",
+                "python": "\"abc\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "1234567",
+                "type": "valeurs_differentes",
+                "php": "s:7:\"1234567\";",
+                "python": "\"1234567\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": "s:8:\"12345678\";",
+                "python": "\"12345678\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": "s:11:\"Password123\";",
+                "python": "\"Password123\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": "s:10:\"motdepasse\";",
+                "python": "\"motdepasse\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "valeurs_differentes",
+                "php": "s:10:\"éàçùè\";",
+                "python": "\"éàçùè\"",
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": "s:25:\"mot de passe avec espaces\";",
+                "python": "\"mot de passe avec espaces\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": "s:25:\"<script>alert(1)</script>\";",
+                "python": "\"<script>alert(1)</script>\"",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": "s:11:\"' OR 1=1 --\";",
+                "python": "\"' OR 1=1 --\"",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "valeurs_differentes",
+                "php": "s:500:\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\";",
+                "python": "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "valeurs_differentes",
+                "php": "s:1500:\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\";",
+                "python": "\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "0",
+                "type": "divergence_acceptation",
+                "php": "rejette (Preferences vides)",
+                "python": "accepte",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": "s:20:\"12345678901234567890\";",
+                "python": "\"12345678901234567890\"",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "string_simple",
+                "type": "valeurs_differentes",
+                "php": "s:13:\"string_simple\";",
+                "python": "\"string_simple\"",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Chaîne de caractères au lieu d'un tableau/objet (type attendu implicite pour des préférences)",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              },
+              {
+                "entree": 12345,
+                "type": "valeurs_differentes",
+                "php": "i:12345;",
+                "python": "12345",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Entier au lieu d'un tableau/objet",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              }
+            ],
+            "par_categorie": {
+              "limite": {
+                "testes": 3,
+                "equivalents": 1
+              },
+              "nominal": {
+                "testes": 9,
+                "equivalents": 0
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 0
+              },
+              "attaque": {
+                "testes": 2,
+                "equivalents": 0
+              },
+              "invalide": {
+                "testes": 3,
+                "equivalents": 1
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 1
+              },
+              "ia": {
+                "testes": 3,
+                "equivalents": 1
+              }
+            },
+            "lecture": "11 % — cas limites 1/3, cas nominaux 0/9, caractères spéciaux 0/1, attaques 0/2, entrées invalides 1/3 — divergences : 14 bug probable, 2 entree hors domaine",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 3
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "sauvegarder_preferences : acceptation ⇒ argument non nul",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 75.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 2,
+                "justification": "Le code Python utilise `json.dumps` au lieu de l'équivalent de `serialize` (comme `pickle` ou `shelve`), ce qui change fondamentalement le format de sortie et la capacité à restaurer l'objet exact (types complexes, etc.), trahissant l'intention de sérialisation binaire/interne de PHP."
+              },
+              "lisibilite": {
+                "note": 4,
+                "justification": "Le code est clair, utilise des types (`typing`) et des noms explicites, mais le commentaire final en bas du fichier est orphelin et mal placé, ce qui nuit légèrement à la propreté."
+              },
+              "architecture": {
+                "note": 4,
+                "justification": "La fonction est pure, bien typée et sans état global, ce qui est excellent, mais le choix de dépendre de `json` pour une tâche de sérialisation générique est un couplage technique inapproprié par rapport à l'original."
+              },
+              "gestion_erreurs": {
+                "note": 5,
+                "justification": "L'exception `ValueError` est plus idiomatique que `Exception` en Python et le message est conservé, offrant une gestion d'erreur propre et spécifique."
+              },
+              "documentation": {
+                "note": 5,
+                "justification": "La docstring est détaillée, explique les paramètres, les erreurs et le comportement, ce qui est très complet, bien que la justification du choix JSON dans la docstring soit discutable techniquement."
+              }
+            },
+            "synthese": "Migration lisible et bien documentée, mais fausse par le remplacement de la sérialisation PHP par du JSON, ce qui altère la fonctionnalité fondamentale du code.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 85.14492753623189,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.391304347826087
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.2608695652173913
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 11.11111111111111,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.13043478260869565
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.08695652173913045
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 75.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.13043478260869565
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 1619,
+            "sortie": 323,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_existence",
+                  "description": "Vérification d'existence de variable",
+                  "fonction": "sauvegarderPreferences",
+                  "code": "if (empty($prefs)) {\n        throw new Exception(\"Preferences vides\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification d'existence de variable",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:29:48.033",
+                "module": "session.php__sauvegarder_preferences",
+                "projet": "p7_deserialisation-f9760d76-20261007232515-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 85.14492753623189,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.391304347826087
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.2608695652173913
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 11.11111111111111,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.13043478260869565
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.08695652173913045
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 75.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.13043478260869565
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": []
+          },
+          "portee_verification": {
+            "module": "sauvegarder_preferences",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 18 entrée(s) testée(s) (11% de concordance), exécution réelle des deux codes",
+              "propriété « sauvegarder_preferences : acceptation ⇒ argument non nul » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 63.3
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "modules": 3,
+    "modules_livres": 3,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_afficherpage",
+        "modules": [
+          "afficherPage"
+        ],
+        "tables": [],
+        "fichiers": [
+          "session.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_chargersession",
+        "modules": [
+          "chargerSession"
+        ],
+        "tables": [],
+        "fichiers": [
+          "session.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_sauvegarderpreferences",
+        "modules": [
+          "sauvegarderPreferences"
+        ],
+        "tables": [],
+        "fichiers": [
+          "session.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 3,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 0,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": []
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

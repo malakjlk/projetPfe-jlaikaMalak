@@ -50,7 +50,7 @@ for j in etat["journal"]:
 
 vides = sum(1 for j in etat["journal"] if not j.get("justification_manager"))
 if etat["journal"] and vides == len(etat["journal"]):
-    print("\n⚠️  Aucune justification capturée : envoie ta version de "
+    print("\n[ATTENTION]  Aucune justification capturée : envoie ta version de "
           "CrewAI (py -m pip show crewai).")
 
 depots = (res.get("historique") or {}).get("code_python") or []

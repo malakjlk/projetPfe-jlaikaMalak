@@ -1,0 +1,1260 @@
+{
+  "projet": "p6_application-af999221-20261007231807-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p6_application",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p6_application",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 3
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "includes/db.php",
+      "login.php",
+      "utils.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "includes/db.php",
+      "cible": "db.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "get_user_by_email",
+          "nom_original": "getUserByEmail",
+          "decision_finale": "LIVRER",
+          "score_final": 99.21052631578948,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "import os\nfrom typing import Optional, Dict, Any\n\nfrom sqlalchemy import create_engine, text\nfrom sqlalchemy.engine import Engine, ResultProxy\n\n# Connexion à la base de données (créée une fois, réutilisée par les appels suivants)\n_DB_URL = os.getenv(\"DB_URL\", \"mysql+pymysql://user:password@localhost/dbname\")\n_engine: Optional[Engine] = None\n\n\ndef _get_engine() -> Engine:\n    \"\"\"Retourne l'engine SQLAlchemy partagé.\"\"\"\n    global _engine\n    if _engine is None:\n        _engine = create_engine(_DB_URL, future=True)\n    return _engine\n\n\ndef get_user_by_email(email: str) -> Optional[Dict[str, Any]]:\n    \"\"\"\n    Récupère un utilisateur à partir de son adresse e‑mail.\n\n    Args:\n        email: Adresse e‑mail recherchée.\n\n    Returns:\n        Un dictionnaire contenant les colonnes de l'utilisateur (au moins\n        ``id`` et ``password``) si l'utilisateur existe, sinon ``None``.\n\n    Exceptions:\n        - ``ConnectionError`` : problème lors de la connexion ou de l'exécution\n          de la requête.\n        - ``ValueError`` : e‑mail fourni vide ou invalide.\n    \"\"\"\n    if not email:\n        raise ValueError(\"L'adresse e‑mail ne doit pas être vide\")\n\n    engine = _get_engine()\n    query = text(\"SELECT * FROM users WHERE email = :email LIMIT 1\")\n\n    try:\n        with engine.connect() as conn:\n            result = conn.execute(query, {\"email\": email})\n            row = result.fetchone()\n            if row is None:\n                return None\n            # Convertit le RowProxy en dict ordinaire\n            return dict(row._mapping)\n    except Exception as exc:\n        # On encapsule toute erreur d'accès DB dans une exception métier\n        raise ConnectionError(f\"Erreur lors de la récupération de l'utilisateur par e‑mail: {exc}\") from exc\n\n\n# on crée un engine partagé via une variable d'environnement.\n# mais ne lève jamais ``HTTPException`` afin de respecter la séparation des\n# couches (couche d'accès aux données vs couche API).",
+          "code_php": "function getUserByEmail($email) {\n    $sql = \"SELECT * FROM users WHERE email=\\\"\" . $email . \"\\\"\";\n    $result = mysql_query($sql);\n    return mysql_fetch_array($result);\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.9473684210526315,
+            "cas_testes": 19,
+            "cas_equivalents": 18,
+            "divergences": [
+              {
+                "entree": "",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (L'adresse e‑mail ne doit pas être vide)",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              }
+            ],
+            "base_simulee": {
+              "tables": [
+                "exc",
+                "sqlalchemy",
+                "typing",
+                "users"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [
+              "SELECT * FROM users WHERE email=\"test@example.com\"",
+              "SELECT * FROM users WHERE email=\"inconnu@example.com\"",
+              "SELECT * FROM users WHERE email=\"' OR '1'='1\"",
+              "SELECT * FROM users WHERE email=\"'; DROP TABLE users; --\"",
+              "SELECT * FROM users WHERE email=\"\"",
+              "SELECT * FROM users WHERE email=\"a\"",
+              "SELECT * FROM users WHERE email=\"abc\"",
+              "SELECT * FROM users WHERE email=\"1234567\"",
+              "SELECT * FROM users WHERE email=\"12345678\"",
+              "SELECT * FROM users WHERE email=\"Password123\"",
+              "SELECT * FROM users WHERE email=\"motdepasse\"",
+              "SELECT * FROM users WHERE email=\"éàçùè\"",
+              "SELECT * FROM users WHERE email=\"mot de passe avec espaces\"",
+              "SELECT * FROM users WHERE email=\"<script>alert(1)</script>\"",
+              "SELECT * FROM users WHERE email=\"' OR 1=1 --\"",
+              "SELECT * FROM users WHERE email=\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+              "SELECT * FROM users WHERE email=\"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+              "SELECT * FROM users WHERE email=\"0\"",
+              "SELECT * FROM users WHERE email=\"12345678901234567890\""
+            ],
+            "requetes_python": [
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1"
+            ],
+            "effets_compares": 19,
+            "par_categorie": {
+              "nominal": {
+                "testes": 11,
+                "equivalents": 11
+              },
+              "attaque": {
+                "testes": 4,
+                "equivalents": 4
+              },
+              "limite": {
+                "testes": 3,
+                "equivalents": 2
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 1
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 19,
+                "equivalents": 18
+              }
+            },
+            "lecture": "95 % — cas nominaux 11/11, attaques 4/4, cas limites 2/3, caractères spéciaux 1/1 — divergences : 1 bug probable",
+            "entrees_ia": {
+              "statut": "indisponible",
+              "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 3,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 2,
+                  "score": 0.667
+                },
+                "hybride": {
+                  "entrees": 15,
+                  "tues": 2,
+                  "score": 0.667
+                }
+              },
+              "detectes_seulement_par_ia": [],
+              "survivants": [
+                "ligne 52 : garde (raise) supprimée"
+              ]
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "injection_sql"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 99.21052631578948,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 94.73684210526315,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 61.9,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 0.0,
+              "acces_donnees_parametre": 1.0,
+              "documentation": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "fonctions_pures",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 3591,
+            "sortie": 1359,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [
+                {
+                  "type": "sql_injection",
+                  "cwe": "CWE-89",
+                  "severity": "critical",
+                  "code": "mysql_query($sql)",
+                  "description": "Requête SQL potentiellement vulnérable",
+                  "fonction": "getUserByEmail"
+                }
+              ],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:21:38.416",
+                "module": "includes_db.php__get_user_by_email",
+                "projet": "p6_application-af999221-20261007231807-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 99.21052631578948,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 94.73684210526315,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "la fonction lève ``ConnectionError`` ou ``ValueError``,",
+              "utilise l'extension mysql_* obsolète : aucun équivalent direct, passage obligatoire par l'ORM"
+            ]
+          },
+          "portee_verification": {
+            "module": "get_user_by_email",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 19 entrée(s) testée(s) (95% de concordance), exécution réelle des deux codes",
+              "propriété « get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 faille(s) du PHP d'origine corrigée(s) dans le code migré"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 207.4
+        }
+      ]
+    },
+    {
+      "source": "utils.php",
+      "cible": "utils.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "hash_password",
+          "nom_original": "hashPassword",
+          "decision_finale": "LIVRER",
+          "score_final": 90.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "import os\nimport bcrypt\n\ndef hash_password(password: str) -> str:\n    \"\"\"\n    Hache le mot de passe en respectant les contraintes de sécurité.\n\n    - validation_longueur : le mot de passe doit contenir au moins 8 caractères.\n    - hachage_mot_de_passe : le mot de passe n'est jamais retourné en clair.\n    \"\"\"\n    if len(password) < 8:\n        raise ValueError(\"Trop court\")\n    # bcrypt.gensalt() utilise un facteur de coût par défaut (12) qui correspond\n    # à la configuration sécurisée de PHP PASSWORD_DEFAULT.\n    salt = bcrypt.gensalt()\n    hashed = bcrypt.hashpw(password.encode(\"utf-8\"), salt)\n    return hashed.decode(\"utf-8\")\n\n# comme équivalent à PASSWORD_DEFAULT de PHP dans la plupart des environnements.\n# ce qui doit être capturé par la couche appelante (ex. route FastAPI) pour\n# transformer l'erreur en réponse HTTP appropriée.",
+          "code_php": "function hashPassword($password) {\n    if (strlen($password) < 8) {\n        throw new Exception(\"Trop court\");\n    }\n    return password_hash($password, PASSWORD_DEFAULT);\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.3333333333333333,
+            "cas_testes": 15,
+            "cas_equivalents": 5,
+            "divergences": [
+              {
+                "entree": "12345678",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$u1.8YPPjmQwKvyMCDjahte0LmN6g.ItYwyXeVsTNvOX/Z7dTcsHte",
+                "python": "$2b$12$arx1B/MUBGTVmeMY5sEShuA3iabMXfwuDXx6BWL35i/UUraUfm9F.",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "Password123",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$7irUqwztCQ0q.yegry/Fi.D5i95PPp5GsbOyVzvKy34rSY77keWu.",
+                "python": "$2b$12$mBNAsDIdleZGw4uXnOLpEu0M6JBwbENeULb5N4.f/OcqsPanT031u",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "motdepasse",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$FOYg7DG6nZOYhjaX3lvgV.guGy6SjYnqrsu1buibmmue4zsyTT.iO",
+                "python": "$2b$12$rYbTrhtf78ew4/QE7IGP9.UaJqhpPUFzkoIhOEixD/8sbz/Ecxmpa",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "éàçùè",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Trop court)",
+                "categorie": "caracteres_speciaux",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "difference_encodage",
+                "explication": "entrée avec caractères accentués : le PHP mesure les longueurs en octets (strlen), le Python en caractères (len). Le Python est le plus fidèle à l'intention ; à confirmer avec le métier."
+              },
+              {
+                "entree": "mot de passe avec espaces",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$31gF.2FTrY.SrZDyW81Q2.c41g8pFSElKzEXt/hzNQ9o2YN7p0wt6",
+                "python": "$2b$12$YLi.6KbY4aePorL0Aq7I4.HETBbj4D3xiJ2RWKFgw2AXim2X2aNM2",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "<script>alert(1)</script>",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$h8uOOfWFG0d9BFoiOXs0..RZ8a9DFS4baSXvlNdLKFtJTu5WoXIcS",
+                "python": "$2b$12$x.oXdtz0JBx6jLT9X6cB.OfvgwQf84.ZUPGPA9hyUHXWRgkmIoIo2",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "' OR 1=1 --",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$71kO/Go6uuR9Kc47nLssNeRUROzWkbW3poZcRa85/.7yUeTqOkjLC",
+                "python": "$2b$12$/cwcHPTkntKz0naLL3JlvuszF19.DbKuSWX.Xs64XoEpYX88x.7/i",
+                "categorie": "attaque",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)",
+                "categorie": "limite",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              },
+              {
+                "entree": "12345678901234567890",
+                "type": "valeurs_differentes",
+                "php": "$2y$10$iFxbiKVECCqTe1EmE13mCehZE0GP6Vo82OxBTZT.QUIOFJvopKi4C",
+                "python": "$2b$12$pdSy.w0x9HhfHq59m5YcWeslbMlCe4psAVn0PeCRvyoDxra6K/XOy",
+                "categorie": "nominal",
+                "origine": "fixe",
+                "intention": "",
+                "classement": "bug_probable",
+                "explication": "écart sur une entrée du domaine de la fonction : à corriger."
+              }
+            ],
+            "par_categorie": {
+              "limite": {
+                "testes": 3,
+                "equivalents": 1
+              },
+              "nominal": {
+                "testes": 9,
+                "equivalents": 4
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 0
+              },
+              "attaque": {
+                "testes": 2,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 5
+              }
+            },
+            "lecture": "33 % — cas limites 1/3, cas nominaux 4/9, caractères spéciaux 0/1, attaques 0/2 — divergences : 9 bug probable, 1 difference encodage",
+            "entrees_ia": {
+              "statut": "indisponible",
+              "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 3,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 3,
+                  "score": 1.0
+                },
+                "hybride": {
+                  "entrees": 15,
+                  "tues": 3,
+                  "score": 1.0
+                }
+              },
+              "detectes_seulement_par_ia": [],
+              "survivants": []
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "hash_password : acceptation ⇒ longueur ≥ 8",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 90.0,
+            "niveau": "faible",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 33.33333333333333,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "qualite_jugee"
+            ],
+            "criteres_critiques": [
+              "comportemental"
+            ]
+          },
+          "modernisation": {
+            "score": 72.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 1535,
+            "sortie": 327,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_longueur",
+                  "description": "Vérification de longueur de champ",
+                  "fonction": "hashPassword",
+                  "code": "if (strlen($password) < 8) {\n        throw new Exception(\"Trop court\");\n    }",
+                  "obligatoire": true
+                },
+                {
+                  "type": "hachage_mot_de_passe",
+                  "description": "Mot de passe haché, jamais en clair",
+                  "fonction": "hashPassword",
+                  "code": "password_hash($password, PASSWORD_DEFAULT)",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de longueur de champ",
+                  "verdict": "vérifié",
+                  "source": "test dynamique : aucun contre-exemple sur 60 entrées (la fonction en a accepté certaines)"
+                },
+                {
+                  "invariant": "Mot de passe haché, jamais en clair",
+                  "verdict": "vérifié",
+                  "source": "appel attendu présent : bcrypt"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:23:39.226",
+                "module": "utils.php__hash_password",
+                "projet": "p6_application-af999221-20261007231807-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 90.0,
+                "niveau": "faible",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 33.33333333333333,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": [
+                  "comportemental"
+                ]
+              }
+            },
+            "points_attention": [
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "la fonction lève ValueError pour les mots de passe trop courts,"
+            ]
+          },
+          "portee_verification": {
+            "module": "hash_password",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 15 entrée(s) testée(s) (33% de concordance), exécution réelle des deux codes",
+              "propriété « hash_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 120.8
+        }
+      ]
+    },
+    {
+      "source": "login.php",
+      "cible": "login.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "login",
+          "nom_original": "login",
+          "decision_finale": "LIVRER",
+          "score_final": 93.86956521739131,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "import os\nimport re\nfrom fastapi import HTTPException\n\n# Fonctions déjà présentes dans le projet\nfrom db import get_user_by_email          # get_user_by_email(email) -> dict | None\nfrom utils import hash_password           # hash_password(password) -> str\n\n\ndef login(email: str, password: str) -> int:\n    \"\"\"\n    Authentifie un utilisateur.\n\n    - Vérifie le format de l'email.\n    - Récupère l'utilisateur en base via ``get_user_by_email``.\n    - Compare le hash du mot de passe fourni avec celui stocké.\n    - Retourne l'ID de l'utilisateur en cas de succès.\n\n    Lève ``HTTPException`` avec le code 400 pour un email invalide\n    et 401 pour des identifiants incorrects, conformément aux\n    invariants de sécurité.\n    \"\"\"\n    # Validation du format d'email (invariant validation_format)\n    if not re.match(r'^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$', email):\n        raise HTTPException(status_code=400, detail='Email invalide')\n\n    # Accès aux données (pas de SQL inline, on utilise la fonction du projet)\n    user = get_user_by_email(email)  # type: ignore[assignment]  # renvoie dict ou None\n\n    # Si l'utilisateur n'existe pas ou le mot de passe ne correspond pas\n    if not user or user.get(\"password\") != hash_password(password):\n        # Comparaison d'authentification (invariant comparaison_authentification)\n        raise HTTPException(status_code=401, detail='Identifiants incorrects')\n\n    # Le PHP renvoie l'ID de l'utilisateur ; on renvoie le même type\n    return user[\"id\"]\n\n\n#                  au moins les clés ``id`` et ``password``.\n#                  utilisé dans la base de données (ex. bcrypt, argon2, etc.).",
+          "code_php": "function login($email, $password) {\n    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }\n    $user = getUserByEmail($email);\n    if ($user[\"password\"] != hashPassword($password)) {\n        throw new Exception(\"Identifiants incorrects\");\n    }\n    return $user[\"id\"];\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 19,
+            "cas_equivalents": 19,
+            "divergences": [],
+            "base_simulee": {
+              "tables": [
+                "db",
+                "fastapi",
+                "users",
+                "utils"
+              ],
+              "colonnes": [
+                "email",
+                "name",
+                "password",
+                "role",
+                "status"
+              ]
+            },
+            "requetes_php": [
+              "SELECT * FROM users WHERE email=\"test@example.com\""
+            ],
+            "requetes_python": [
+              "SELECT * FROM users WHERE email = ? LIMIT 1",
+              "SELECT * FROM users WHERE email = ? LIMIT 1"
+            ],
+            "effets_compares": 19,
+            "par_categorie": {
+              "nominal": {
+                "testes": 11,
+                "equivalents": 11
+              },
+              "attaque": {
+                "testes": 4,
+                "equivalents": 4
+              },
+              "limite": {
+                "testes": 3,
+                "equivalents": 3
+              },
+              "caracteres_speciaux": {
+                "testes": 1,
+                "equivalents": 1
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 19,
+                "equivalents": 19
+              }
+            },
+            "lecture": "100 % — cas nominaux 11/11, attaques 4/4, cas limites 3/3, caractères spéciaux 1/1",
+            "entrees_ia": {
+              "statut": "invalide",
+              "raison": "réponse inexploitable",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "non_observable",
+              "raison": "la fonction échoue sur toutes les entrées (HTTPException) : son comportement n'est pas observable hors de son environnement"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "login : aucun appel sans autorisation (password) n'aboutit",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "controle_acces"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "evalue",
+            "score": 65.0,
+            "criteres": {
+              "fidelite_intention": {
+                "note": 4,
+                "justification": "La logique métier est préservée, mais l'ajout d'une vérification explicite de l'existence de l'utilisateur (`if not user`) avant la comparaison du mot de passe introduit une différence de comportement par rapport au PHP qui compare directement (et échoue silencieusement si l'utilisateur est null), ce qui peut exposer l'existence d'un compte via des temps de réponse différents ou des logs, bien que"
+              },
+              "lisibilite": {
+                "note": 3,
+                "justification": "Le code est clair et utilise des types, mais l'import de `os` est inutile et la présence de commentaires orphelins en bas du fichier (lignes 28-30) qui semblent être des restes de docstring mal placés nuisent à la propreté du code."
+              },
+              "architecture": {
+                "note": 3,
+                "justification": "L'architecture est correcte avec des dépendances injectées via les imports, mais le couplage direct à `fastapi.HTTPException` dans une fonction de service rend le code difficile à tester unitairement sans mock et mélange les couches de présentation et de logique métier."
+              },
+              "gestion_erreurs": {
+                "note": 4,
+                "justification": "L'utilisation d'exceptions typées avec des codes HTTP appropriés (400/401) est une amélioration par rapport au PHP générique, et les messages d'erreur sont cohérents, bien que l'exception soit spécifique au framework FastAPI."
+              },
+              "documentation": {
+                "note": 4,
+                "justification": "La docstring est précise et documente bien le rôle, les paramètres implicites et les erreurs levées, mais les commentaires orphelins en fin de fichier sont confusants et ne font pas partie de la documentation officielle de la fonction."
+              }
+            },
+            "synthese": "Migration fonctionnelle et sécurisée avec une bonne gestion des erreurs, mais pénalisée par des artefacts de code (imports inutiles, commentaires orphelins) et un couplage fort au framework FastAPI.",
+            "modele": "qwen/qwen3.8-27b",
+            "fournisseur": "groq",
+            "version_grille": "1"
+          },
+          "confiance": {
+            "score": 93.86956521739131,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.391304347826087
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.2608695652173913
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.13043478260869565
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.08695652173913045
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 65.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.13043478260869565
+              }
+            ],
+            "criteres_non_mesures": [],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 60.5,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 0.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 1776,
+            "sortie": 579,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_format",
+                  "description": "Vérification de format ou pattern",
+                  "fonction": "login",
+                  "code": "if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {\n        throw new Exception(\"Email invalide\");\n    }",
+                  "obligatoire": true
+                },
+                {
+                  "type": "comparaison_authentification",
+                  "description": "Comparaison d'identifiant ou de secret",
+                  "fonction": "login",
+                  "code": "if ($user[\"password\"] != hashPassword($password)) {\n        throw new Exception(\"Identifiants incorrects\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de format ou pattern",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 24 : not re.match('^[^@\\\\s]+@[^@\\\\s]+\\\\.[^@\\\\s]+$', email)"
+                },
+                {
+                  "invariant": "Comparaison d'identifiant ou de secret",
+                  "verdict": "vérifié",
+                  "source": "appel attendu présent : comparaison de secret :     if not user or user.get(\"password\") != hash_password(pas"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:25:02.916",
+                "module": "login.php__login",
+                "projet": "p6_application-af999221-20261007231807-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 93.86956521739131,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.391304347826087
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.2608695652173913
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.13043478260869565
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.08695652173913045
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 65.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.13043478260869565
+                  }
+                ],
+                "criteres_non_mesures": [],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "``hash_password`` doit être compatible avec le mécanisme de hachage"
+            ]
+          },
+          "portee_verification": {
+            "module": "login",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 19 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "propriété « login : aucun appel sans autorisation (password) n'aboutit » : aucun contre-exemple trouvé par exploration symbolique",
+              "2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 83.7
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 3,
+    "fichiers_livres": 3,
+    "modules": 3,
+    "modules_livres": 3,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [
+      "login.py : from db import get_user_by_email",
+      "login.py : from utils import hash_password"
+    ],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_users",
+        "modules": [
+          "getUserByEmail",
+          "hashPassword",
+          "login"
+        ],
+        "tables": [
+          "users"
+        ],
+        "fichiers": [
+          "includes/db.php",
+          "login.php",
+          "utils.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 1,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 2,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": [
+      "un seul service se dégage : le projet est trop couplé ou trop petit pour être découpé, un monolithe modulaire est préférable"
+    ]
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

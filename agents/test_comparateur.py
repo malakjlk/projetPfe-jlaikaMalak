@@ -32,7 +32,7 @@ try:
                              text=True, timeout=10).stdout.lower()
     print(f"  pdo_sqlite  : {'pdo_sqlite' in modules}")
     if "pdo_sqlite" not in modules:
-        print("    ⚠️  Sans pdo_sqlite, la base simulée ne peut pas "
+        print("    [ATTENTION]  Sans pdo_sqlite, la base simulée ne peut pas "
               "fonctionner côté PHP.")
         print("    → active extension=pdo_sqlite dans php.ini")
 except Exception as e:

@@ -1,0 +1,228 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+============================================================
+SMAML — projet p7_deserialisation-f9760d76-20261007232515-20644
+  stockage : sqlite | mode : direct
+  [ATTENTION]  REDIS INJOIGNABLE — stockage de SECOURS (SQLite) utilisé
+      cause : TimeoutError : Timeout connecting to server
+      vérifie que Docker Desktop est lancé, puis : docker start smaml-redis
+============================================================
+
+PHASE 1 — Réception : 1 fichier(s) PHP
+
+PHASE 2 — Analyse du code
+  Ordre de migration : session.php (coordonné par coordinateur_fixe)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : session.php
+████████████████████████████████████████████████████████████
+
+> PHASES 3-4 — module charger_session
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 9668.10it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+
+  Recherche RAG pour : chargerSession
+  3 exemple(s) de migration trouvé(s) :
+    - [donnees] Charger des données utilisateur sérialisées (score: 0.997)
+    - [gestion_erreurs] Division avec gestion de l'erreur division par zér (score: 0.996)
+    - [affichage] Afficher une entrée utilisateur (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : charger_session
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : charger_session
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : charger_session
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 43%)  — Testeur
+  securite         100.0%  (poids 29%)  — Auditeur
+  comportemental     3.7%  (poids 14%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+  qualite_jugee     40.0%  (poids 14%)  — LLM juge
+Score de confiance : 77.7% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 77.7% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+
+[ITERATION] DÉCISION : ITÉRER — Désaccord entre évaluations (outils 84.0 %, juge 40.0 %) : le module est renvoyé au Développeur avec les 4 remarque(s) du juge.
+
+  Recherche RAG pour : chargerSession
+  3 exemple(s) de migration trouvé(s) :
+    - [donnees] Charger des données utilisateur sérialisées (score: 0.997)
+    - [gestion_erreurs] Division avec gestion de l'erreur division par zér (score: 0.996)
+    - [affichage] Afficher une entrée utilisateur (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : charger_session
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 0% (0/1)
+
+   Score fonctionnel global : 70.0%
+
+Audit de sécurité du module : charger_session
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : charger_session
+Itération actuelle : 2/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       70.0%  (poids 43%)  — Testeur
+  securite         100.0%  (poids 29%)  — Auditeur
+  comportemental     0.0%  (poids 14%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+  qualite_jugee     65.0%  (poids 14%)  — LLM juge
+Score de confiance : 67.9% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 67.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (67.9 %, coordonné par coordinateur_fixe)
+
+> PHASES 3-4 — module afficher_page
+
+  Recherche RAG pour : afficherPage
+  3 exemple(s) de migration trouvé(s) :
+    - [affichage] Afficher une entrée utilisateur (score: 0.995)
+    - [navigation] Charger une page dynamiquement (score: 0.994)
+    - [affichage] Afficher un message d'erreur depuis l'URL (score: 0.994)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : afficher_page
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : afficher_page
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, markupsafe, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : afficher_page
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 43%)  — Testeur
+  securite          94.0%  (poids 29%)  — Auditeur
+  comportemental     0.0%  (poids 14%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+  qualite_jugee     65.0%  (poids 14%)  — LLM juge
+Score de confiance : 79.0% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 79.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (79.0 %, coordonné par coordinateur_fixe)
+
+> PHASES 3-4 — module sauvegarder_preferences
+
+  Recherche RAG pour : sauvegarderPreferences
+  3 exemple(s) de migration trouvé(s) :
+    - [controle_acces] Vérification du rôle utilisateur (score: 0.998)
+    - [gestion_erreurs] Valider et sauvegarder des données (score: 0.997)
+    - [calcul_financier] Calcul du salaire net (score: 0.997)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : sauvegarder_preferences
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification d'existence de variable   test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : sauvegarder_preferences
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification d'existence de variable       garde ligne 15 : not prefs
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : aucune
+     Vulnérabilités trouvées : 0
+
+   Score sécurité global : 100.0%
+  Niveau d'alerte : OK
+
+Révision du module : sauvegarder_preferences
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 39%)  — Testeur
+  securite         100.0%  (poids 26%)  — Auditeur
+  comportemental    11.1%  (poids 13%)  — Comparateur
+  proprietes       100.0%  (poids 9%)  — Vérificateur de propriétés
+  qualite_jugee     75.0%  (poids 13%)  — LLM juge
+Score de confiance : 85.1% (confiance faible)
+
+[OK] DÉCISION : LIVRER
+   Score composé 85.1% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (85.1 %, coordonné par coordinateur_fixe)
+
+PHASE 4 — Cohérence du projet : imports cohérents, typage conforme
+
+============================================================
+MIGRATION TERMINÉE — 3/3 module(s) livré(s), 1/1 fichier(s)
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats : C:\Users\poste\projetPfe-jlaikaMalak\agents\passage1\p7_deserialisation-f9760d76/

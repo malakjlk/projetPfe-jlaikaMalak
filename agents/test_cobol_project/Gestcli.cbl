@@ -1,0 +1,23 @@
+IDENTIFICATION DIVISION.
+       PROGRAM-ID. GESTCLI.
+      * Gestion des clients : verification du mot de passe et du solde
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-MOTDEPASSE     PIC X(20).
+       01 WS-SOLDE          PIC 9(7)V99.
+       01 WS-REQUETE        PIC X(200).
+           COPY CLIENT.
+       PROCEDURE DIVISION.
+       MAIN-PARA.
+           PERFORM VERIFIER-MDP
+           CALL 'CALCTAX' USING WS-SOLDE
+           STOP RUN.
+       VERIFIER-MDP.
+           IF FUNCTION LENGTH(FUNCTION TRIM(WS-MOTDEPASSE)) < 8
+               DISPLAY 'MOT DE PASSE TROP COURT'
+               MOVE 1 TO RETURN-CODE
+           END-IF.
+       CHERCHER-CLIENT.
+           STRING 'SELECT * FROM CLIENTS WHERE NOM = ' CLI-NOM
+               DELIMITED BY SIZE INTO WS-REQUETE
+           EXEC SQL PREPARE STMT FROM :WS-REQUETE END-EXEC.

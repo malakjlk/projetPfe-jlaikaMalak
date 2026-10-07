@@ -1,4 +1,5 @@
 import json
+import os
 
 
 # ═══ NIVEAU DE CONFIANCE ══════════════════════════════
@@ -25,7 +26,71 @@ POIDS_CRITERES = {
     "securite": 0.30,
     "comportemental": 0.15,
     "proprietes": 0.10,
+    # Cinquième critère : la qualité jugée par le LLM juge. Son poids
+    # est limité, et il est renormalisé avec les autres : à 0,15, il
+    # pèse environ 13 % du score quand les cinq critères sont mesurés.
+    "qualite_jugee": float(os.getenv("SMAML_POIDS_JUGE", "0.15")),
 }
+
+# Écart entre le juge et les outils au-delà duquel un module que les
+# outils livreraient est confié à un humain.
+SEUIL_DESACCORD = float(os.getenv("SMAML_SEUIL_DESACCORD", "40"))
+
+# Nombre de corrections accordées au Développeur sur les remarques du juge,
+# avant de demander une validation humaine.
+CORRECTIONS_JUGE = int(os.getenv("SMAML_CORRECTIONS_JUGE", "2"))
+
+
+def remarques_du_juge(rapport_juge: dict) -> list:
+    """Les critères notés 3 ou moins deviennent des consignes de correction."""
+    try:
+        from agent_juge import GRILLE
+    except ImportError:
+        GRILLE = {}
+    remarques = []
+    for cle, critere in sorted((rapport_juge or {}).get("criteres", {}).items(),
+                               key=lambda kv: kv[1].get("note", 5)):
+        if critere.get("note", 5) <= 3 and critere.get("justification"):
+            titre = GRILLE.get(cle, (cle,))[0]
+            remarques.append(f"[{titre}] {critere['justification']}")
+    return remarques or ["Améliore la qualité globale du code : le juge l'estime "
+                         "nettement inférieure à ce qu'indiquent les tests."]
+
+
+def verrous_actifs(rapport_testeur: dict, rapport_auditeur: dict,
+                   rapport_formel: dict = None) -> list:
+    """
+    Échecs que RIEN ne peut compenser — et surtout pas le juge : un
+    code inexécutable, une propriété réfutée par l'exploration
+    symbolique, une faille critique.
+    """
+    verrous = []
+    if not (rapport_testeur.get("syntaxe") or {}).get("syntaxe_valide", True):
+        verrous.append("code inexécutable")
+    formel = rapport_formel or rapport_testeur.get("verification_formelle") or {}
+    if any(p.get("statut") == "refutee" for p in formel.get("proprietes", [])):
+        verrous.append("propriété réfutée par Z3")
+    if (rapport_auditeur or {}).get("niveau_alerte") == "CRITIQUE":
+        verrous.append("faille critique")
+    for invariant in invariants_manquants_prouves(rapport_testeur):
+        verrous.append(f"garde obligatoire manquante : {invariant['description'][:90]}")
+    return verrous
+
+
+def invariants_manquants_prouves(rapport_testeur: dict) -> list:
+    """Invariants obligatoires que le Testeur a prouvés absents par un contre-exemple."""
+    invariants = (rapport_testeur or {}).get("invariants") or {}
+    prouves_absents = {p.get("invariant") for p in invariants.get("preuves", [])
+                       if p.get("verdict") == "manquant"}
+    return [i for i in invariants.get("invariants_manquants", [])
+            if i.get("obligatoire", True) and i.get("description") in prouves_absents]
+
+
+# Verrous qui interdisent la LIVRAISON, quel que soit le score. La faille
+# critique n'en fait pas partie : l'alerte de l'Auditeur peut être levée
+# par la preuve formelle (réconciliation) ; elle ne fait qu'exclure le juge.
+def verrous_bloquants(verrous: list) -> list:
+    return [v for v in verrous if v != "faille critique"]
 
 
 def _score_fonctionnel_base(rapport_testeur: dict) -> float:
@@ -49,7 +114,9 @@ def _score_fonctionnel_base(rapport_testeur: dict) -> float:
 def calculer_niveau_confiance(rapport_testeur: dict,
                               rapport_auditeur: dict,
                               rapport_differentiel: dict = None,
-                              rapport_formel: dict = None) -> dict:
+                              rapport_formel: dict = None,
+                              rapport_juge: dict = None,
+                              verrous: list = None) -> dict:
     """
     Niveau de confiance du module, détaillé par critère.
     Retourne {"score", "niveau", "criteres", "criteres_non_mesures"}.
@@ -85,6 +152,21 @@ def calculer_niveau_confiance(rapport_testeur: dict,
                   f"aucune propriété vérifiée "
                   f"({formel.get('statut', 'absente')})"})
 
+    # Le juge ne compte que s'il a rendu un jugement exploitable, et
+    # JAMAIS en présence d'un verrou : il ne peut pas compenser un code
+    # inexécutable, une propriété réfutée ou une faille critique.
+    if rapport_juge is not None:
+        juge_mesure = rapport_juge.get("statut") == "evalue" and not verrous
+        if rapport_juge.get("statut") != "evalue":
+            raison = f"juge {rapport_juge.get('statut')} : {rapport_juge.get('raison', '')}"
+        elif verrous:
+            raison = f"verrou actif ({', '.join(verrous)}) : le juge ne peut pas le lever"
+        else:
+            raison = ""
+        criteres.append({"nom": "qualite_jugee", "agent": "LLM juge",
+                         "score": rapport_juge.get("score") or 0.0,
+                         "mesure": juge_mesure, "raison": raison})
+
     # Redistribution du poids des critères non mesurés.
     poids_mesures = sum(POIDS_CRITERES[c["nom"]]
                         for c in criteres if c["mesure"])
@@ -97,12 +179,13 @@ def calculer_niveau_confiance(rapport_testeur: dict,
             c["poids"] = 0.0
 
     non_mesures = [c["nom"] for c in criteres if not c["mesure"]]
+    verifications_manquantes = [n for n in non_mesures if n != "qualite_jugee"]
     # Un critère effondré ne doit pas être noyé par la moyenne : un
     # module dont le comportement diverge massivement du PHP n'est pas
     # « de confiance élevée », même si les trois autres sont bons.
     critique = [c["nom"] for c in criteres if c["mesure"] and c["score"] < 60]
 
-    if score >= 80 and not non_mesures and not critique:
+    if score >= 80 and not verifications_manquantes and not critique:
         niveau = "elevee"
     elif score >= 65 and not critique:
         niveau = "moyenne"
@@ -244,7 +327,7 @@ LIMITE_STRUCTURELLE = "limite_structurelle"
 
 ACTION_PAR_CATEGORIE = {
     BUG_SIMPLE: "iterer",                        # relancer le Développeur
-    AMBIGUITE: "escalade_humaine",               # la spec doit être tranchée
+    AMBIGUITE: "validation_humaine",               # la spec doit être tranchée
     LIMITE_STRUCTURELLE: "repasser_architecte",  # revoir la conception
 }
 
@@ -289,7 +372,7 @@ def categoriser_echec(
 
     if indices:
         return {"categorie": LIMITE_STRUCTURELLE,
-                "action_recommandee": ("escalade_humaine" if budget_epuise
+                "action_recommandee": ("validation_humaine" if budget_epuise
                                        else ACTION_PAR_CATEGORIE[LIMITE_STRUCTURELLE]),
                 "indices": indices,
                 "erreurs_persistantes": erreurs_persistantes}
@@ -330,6 +413,7 @@ def agent_reviseur(
     feedback_precedent: dict = None,
     rapport_differentiel: dict = None,
     rapport_formel: dict = None,
+    rapport_juge: dict = None,
 ) -> dict:
     """
     Agent Réviseur principal — SMAML
@@ -341,10 +425,16 @@ def agent_reviseur(
 
     # Niveau de confiance : quatre critères, poids redistribué sur
     # ceux qui ont réellement pu être mesurés.
+    verrous = verrous_actifs(rapport_testeur, rapport_auditeur, rapport_formel)
     confiance = calculer_niveau_confiance(
         rapport_testeur, rapport_auditeur,
-        rapport_differentiel, rapport_formel)
+        rapport_differentiel, rapport_formel,
+        rapport_juge=rapport_juge, verrous=verrous)
     score = confiance["score"]
+    # Le même score SANS le juge : il sert à mesurer le désaccord.
+    score_outils = calculer_niveau_confiance(
+        rapport_testeur, rapport_auditeur,
+        rapport_differentiel, rapport_formel)["score"]
 
     print("\nNiveau de confiance — détail par critère :")
     for c in confiance["criteres"]:
@@ -383,7 +473,7 @@ def agent_reviseur(
             f"Score composé {score:.1f}% >= seuil haut {seuil_haut}%. "
             f"Le module respecte les critères de qualité et sécurité."
         )
-        print(f"\n✅ DÉCISION : LIVRER")
+        print(f"\n[OK] DÉCISION : LIVRER")
         print(f"   {decision['raison']}")
 
     elif iteration_actuelle >= max_iterations:
@@ -395,7 +485,7 @@ def agent_reviseur(
                "livraison refusée quel que soit le score."
                if code_inexecutable else "")
         )
-        print(f"\n❌ DÉCISION : ARRÊT (ÉCHEC)")
+        print(f"\n[ECHEC] DÉCISION : ARRÊT (ÉCHEC)")
         print(f"   {decision['raison']}")
 
     elif score < seuil_bas:
@@ -408,7 +498,7 @@ def agent_reviseur(
             f"Score composé {score:.1f}% < seuil bas {seuil_bas}%. "
             f"Trop d'erreurs critiques, ré-analyse complète nécessaire."
         )
-        print(f"\n🔄 DÉCISION : RÉ-ANALYSE COMPLÈTE")
+        print(f"\n[BASCULE] DÉCISION : RÉ-ANALYSE COMPLÈTE")
         print(f"   {decision['raison']}")
         print(f"   {len(erreurs)} erreur(s) identifiée(s)")
 
@@ -426,7 +516,7 @@ def agent_reviseur(
              f"Score composé {score:.1f}% entre les seuils "
              f"({seuil_bas}%-{seuil_haut}%). Correction ciblée nécessaire.")
         )
-        print(f"\n🔁 DÉCISION : ITÉRER (feedback ciblé)")
+        print(f"\n[ITERATION] DÉCISION : ITÉRER (feedback ciblé)")
         print(f"   {decision['raison']}")
         print(f"   {len(erreurs)} erreur(s) à corriger, "
               f"par ordre de priorité :")
@@ -453,6 +543,68 @@ def agent_reviseur(
         for ind in cat["indices"]:
             print(f"     · {ind}")
 
+    # ── Verrous : aucun score ne compense ces échecs ──
+    bloquants = verrous_bloquants(verrous)
+    if decision["decision"] == "LIVRER" and bloquants:
+        instructions = [f"Rétablis la garde du code d'origine, qui a disparu : "
+                        f"{i['description']} (code d'origine : {i.get('code', '')})"
+                        for i in invariants_manquants_prouves(rapport_testeur)]
+        if iteration_actuelle < max_iterations:
+            decision["decision"] = "ITERER"
+            decision["action_recommandee"] = "iterer"
+            decision["feedback"] = {
+                "instructions": instructions or [f"Corrige : {v}" for v in bloquants],
+                "erreurs_par_priorite": [{"type": "verrou", "priorite": 1, "message": v,
+                                          "action": "corriger avant toute livraison"}
+                                         for v in bloquants]}
+        else:
+            decision["decision"] = "ARRET_ECHEC"
+        decision["categorie_echec"] = "verrou"
+        decision["raison"] = (f"Score {score:.1f} %, mais livraison impossible : "
+                              + " ; ".join(bloquants))
+        print(f"\n[VERROU] DÉCISION : {decision['decision']} — {decision['raison']}")
+
+    # ── Désaccord entre le juge et les outils ──
+    # Les outils livreraient, mais le juge estime la qualité très
+    # inférieure. Comme un relecteur qui trouve un défaut, le juge renvoie
+    # le travail à son auteur : ses remarques deviennent la consigne de
+    # correction du Développeur. Une validation humaine n'intervient que
+    # si le désaccord PERSISTE après plusieurs corrections.
+    juge = next((c for c in confiance["criteres"]
+                 if c["nom"] == "qualite_jugee" and c["mesure"]), None)
+    decision["score_outils"] = score_outils
+    if juge is not None:
+        ecart = score_outils - juge["score"]
+        decision["desaccord_juge"] = round(ecart, 1)
+        if decision["decision"] == "LIVRER" and ecart >= SEUIL_DESACCORD:
+            remarques = remarques_du_juge(rapport_juge)
+            if iteration_actuelle <= CORRECTIONS_JUGE and \
+                    iteration_actuelle < max_iterations:
+                decision["decision"] = "ITERER"
+                decision["categorie_echec"] = "desaccord_juge"
+                decision["action_recommandee"] = "iterer"
+                decision["feedback"] = {
+                    "instructions": remarques,
+                    "erreurs_par_priorite": [
+                        {"type": "qualite_jugee", "priorite": 2,
+                         "message": r, "action": "corriger selon la remarque"}
+                        for r in remarques]}
+                decision["raison"] = (
+                    f"Désaccord entre évaluations (outils {score_outils:.1f} %, "
+                    f"juge {juge['score']:.1f} %) : le module est renvoyé au "
+                    f"Développeur avec les {len(remarques)} remarque(s) du juge.")
+                print(f"\n[ITERATION] DÉCISION : ITÉRER — {decision['raison']}")
+            else:
+                decision["decision"] = "VALIDATION_HUMAINE"
+                decision["categorie_echec"] = "desaccord_juge"
+                decision["action_recommandee"] = "validation_humaine"
+                decision["remarques_juge"] = remarques
+                decision["raison"] = (
+                    f"Désaccord persistant après {iteration_actuelle - 1} "
+                    f"correction(s) : outils {score_outils:.1f} %, juge "
+                    f"{juge['score']:.1f} %. Validation humaine demandée, "
+                    f"avec les remarques du juge.")
+                print(f"\n[ARBITRAGE]  DÉCISION : VALIDATION HUMAINE — {decision['raison']}")
     return decision
 
 
@@ -520,4 +672,4 @@ if __name__ == "__main__":
     )
 
     print("\n\n" + "=" * 60)
-    print("✅ Agent Réviseur opérationnel !")
+    print("[OK] Agent Réviseur opérationnel !")

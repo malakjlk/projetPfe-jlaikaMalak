@@ -56,7 +56,7 @@ const TON_VERDICT = {
   ITERER: { fond: T.warnBg, encre: T.warn, texte: "Correction demandée" },
   REANALYSE_COMPLETE: { fond: T.warnBg, encre: T.warn, texte: "Ré-analyse" },
   REPLANIFIER: { fond: T.warnBg, encre: T.warn, texte: "Plan à réviser" },
-  ESCALADE_HUMAINE: { fond: T.errBg, encre: T.err, texte: "Reprise humaine" },
+  VALIDATION_HUMAINE: { fond: T.warnBg, encre: T.warn, texte: "Validation humaine" },
   ARRET_ECHEC: { fond: T.errBg, encre: T.err, texte: "Échec" },
 };
 const TON_ISSUE = {
@@ -812,7 +812,7 @@ function VueArchitecture() {
     ["Checklist du Réviseur", "Aucune décision tant que les quatre vérifications n'ont pas été faites."],
     ["Invalidation automatique", "Un code régénéré rend périmées les vérifications précédentes."],
     ["Détection de stagnation", "Si le score ne progresse plus sur deux cycles, la boucle s'arrête."],
-    ["Budget de tentatives", "Au-delà du maximum de corrections, le module part en reprise humaine."],
+    ["Budget de tentatives", "Au-delà du maximum de corrections, le module part en validation humaine."],
     ["Décision non déléguée", "Si l'orchestration s'interrompt, le module n'est jamais livré par défaut."],
     ["Repli d'orchestrateur", "En cas de panne d'un fournisseur, la mission reprend sur l'autre, et c'est tracé."],
   ];

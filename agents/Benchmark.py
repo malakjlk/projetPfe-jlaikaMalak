@@ -213,7 +213,7 @@ def main():
                 print("  configuration incomplète n'est pas comparable.")
                 print(f"{'!' * 60}")
                 sys.exit(2)
-            print(f"  ❌ ÉCHEC du projet {nom} : {e}")
+            print(f"  [ECHEC] ÉCHEC du projet {nom} : {e}")
             lignes_projets.append({"projet": nom, "erreur": str(e)[:200]})
             continue
         duree = time.time() - debut

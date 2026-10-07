@@ -1,0 +1,217 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<?, ?it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : llm_seul | RAG : False | boucle : False | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_oujr230r
+
+1 fichier(s) PHP trouvé(s) :
+  - p1_validations\validation.php
+
+Ordre de migration (dépendances d'abord) :
+  1. validation.php
+
+------------------------------------------------------------
+- FICHIER : validation.php
+------------------------------------------------------------
+  Analyste : 3 fonction(s), 0 classe(s), 0 faille(s)
+
+  [ablation] RAG désactivé pour : validatePassword
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : validate_password
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     2/2 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      test dynamique : aucun contre-exemple sur 60 entrées (la f
+       vérifié   Vérification de format ou pattern      test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (15/15 cas)
+  Vérification formelle :  PROUVÉE — validate_password : acceptation ⇒ longueur ≥ 8
+  Vérification formelle :  PROUVÉE — validate_password : acceptation ⇒ au moins une majuscule
+
+Audit de sécurité du module : validate_password
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 13 : len(password) < 8
+       préservé  Vérification de format ou pattern          garde ligne 19 : not re.match('.*[A-Z].*', password)
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : validate_password
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 98.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — validate_password
+   comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes
+   propriété « validate_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique
+   propriété « validate_password : acceptation ⇒ au moins une majuscule » : aucun contre-exemple trouvé par exploration symbolique
+   2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 4 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+  [ablation] RAG désactivé pour : validerEmail
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : valider_email
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de format ou pattern      garde ligne 11 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (15/15 cas)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : valider_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de format ou pattern          garde ligne 11 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : valider_email
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 50%)  — Testeur
+  securite          94.0%  (poids 33%)  — Auditeur
+  comportemental   100.0%  (poids 17%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 98.0% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — valider_email
+   comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes
+   1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+  [ablation] RAG désactivé pour : validerAge
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : valider_age
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     2/2 propriété(s) sans contre-exemple
+       valeur numérique : la fonction rejette toutes les entrées testées
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de type numérique         garde ligne 18 : not isinstance(age, (int, float))
+       vérifié   Borne sur une valeur (< 18)            test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (15/15 cas)
+  Vérification formelle :  PROUVÉE — valider_age : acceptation ⇒ valeur >= 18
+
+Audit de sécurité du module : valider_age
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de type numérique             garde ligne 18 : not isinstance(age, (int, float))
+       préservé  Borne sur une valeur (< 18)                garde ligne 22 : age < 18
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : valider_age
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 98.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 55% — à renforcer : annotations types, validation typee, injection dependances
+
+Portée de la vérification — valider_age
+   comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes
+   propriété « valider_age : acceptation ⇒ valeur >= 18 » : aucun contre-exemple trouvé par exploration symbolique
+   2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+   Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 1/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260930_2044\llm_seul\p1_validations_p1/
+
+============================================================
+PROPOSITION DE DÉCOUPAGE EN SERVICES
+============================================================
+3 service(s) candidat(s) — cohésion 100.0%, couplage 0.0%
+  • service_validatepassword : validatePassword
+  • service_validerage : validerAge
+  • service_valideremail : validerEmail

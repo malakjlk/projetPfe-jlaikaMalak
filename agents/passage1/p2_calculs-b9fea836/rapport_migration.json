@@ -1,0 +1,1072 @@
+{
+  "projet": "p2_calculs-b9fea836-20261007233320-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p2_calculs",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p2_calculs",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 1
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "calculs.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "calculs.php",
+      "cible": "calculs.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "diviser",
+          "nom_original": "diviser",
+          "decision_finale": "LIVRER",
+          "score_final": 99.38271604938271,
+          "iterations": 2,
+          "categorie_echec": null,
+          "code_python": "from typing import Union\n\nNumber = Union[int, float, str]\n\n\ndef _coerce_numeric(value: Number) -> Union[int, float]:\n    \"\"\"\n    Convertit une valeur numérique ou une chaîne représentant un nombre\n    en int ou float, en suivant le comportement de PHP qui accepte les\n    chaînes numériques. Lève une ``Exception`` si la conversion échoue.\n    \"\"\"\n    if isinstance(value, (int, float)):\n        return value\n    if isinstance(value, str):\n        try:\n            # PHP convertit en int si la chaîne ne contient pas de point ou d'exposant\n            return float(value) if ('.' in value or 'e' in value.lower()) else int(value)\n        except ValueError:\n            raise Exception('Valeur non numérique')\n    raise Exception('Type de valeur inattendu')\n\n\ndef diviser(a: Number, b: Number) -> Union[int, float]:\n    \"\"\"\n    Retourne le résultat de la division de ``a`` par ``b``.\n\n    - Les deux paramètres peuvent être des nombres ou des chaînes numériques,\n      comme en PHP où le cast implicite est autorisé.\n    - Lève ``Exception`` avec le même message que le code PHP d'origine\n      lorsqu'une division par zéro est tentée.\n    \"\"\"\n    a_num = _coerce_numeric(a)\n    b_num = _coerce_numeric(b)\n\n    if b_num == 0:\n        raise Exception(\"Division par zero\")\n    return a_num / b_num\n\n#                    donc on accepte les chaînes numériques en suivant le\n#                    pattern de conversion indiqué.\n#                 compatible avec le contrat d'origine, même si\n#                 ``ValueError`` serait plus idiomatique en Python.",
+          "code_php": "function diviser($a, $b) {\n    if ($b == 0) {\n        throw new Exception(\"Division par zero\");\n    }\n    return $a / $b;\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.9629629629629629,
+            "cas_testes": 27,
+            "cas_equivalents": 26,
+            "divergences": [
+              {
+                "entree": null,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Type de valeur inattendu)",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Premier paramètre null (type inattendu)",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              }
+            ],
+            "par_categorie": {
+              "limite": {
+                "testes": 6,
+                "equivalents": 6
+              },
+              "nominal": {
+                "testes": 12,
+                "equivalents": 12
+              },
+              "caracteres_speciaux": {
+                "testes": 4,
+                "equivalents": 4
+              },
+              "attaque": {
+                "testes": 4,
+                "equivalents": 4
+              },
+              "invalide": {
+                "testes": 1,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 15
+              },
+              "ia": {
+                "testes": 12,
+                "equivalents": 11
+              }
+            },
+            "lecture": "96 % — cas limites 6/6, cas nominaux 12/12, caractères spéciaux 4/4, attaques 4/4, entrées invalides 0/1 — divergences : 1 entree hors domaine",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 3,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 3,
+                  "score": 1.0
+                },
+                "ia": {
+                  "entrees": 12,
+                  "tues": 3,
+                  "score": 1.0
+                },
+                "hybride": {
+                  "entrees": 27,
+                  "tues": 3,
+                  "score": 1.0
+                }
+              },
+              "detectes_seulement_par_ia": [],
+              "survivants": []
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 99.38271604938271,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3333333333333333
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 96.29629629629629,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.16666666666666666
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes",
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 54.7,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 0.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 3640,
+            "sortie": 794,
+            "appels": 2
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 2
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:35:38.783",
+                "module": "calculs.php__diviser",
+                "projet": "p2_calculs-b9fea836-20261007233320-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 2,
+              "rapport_testeur": 2,
+              "rapport_differentiel": 2,
+              "rapport_formel": 2,
+              "rapport_auditeur": 2,
+              "rapport_juge": 2,
+              "decision": 2
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 99.38271604938271,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3333333333333333
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 96.29629629629629,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.16666666666666666
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "proprietes",
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "On lève ``Exception`` (classe générique) pour rester",
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+            ]
+          },
+          "portee_verification": {
+            "module": "diviser",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 27 entrée(s) testée(s) (96% de concordance), exécution réelle des deux codes"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 1 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 134.9
+        },
+        {
+          "nom_python": "formater_prix",
+          "nom_original": "formaterPrix",
+          "decision_finale": "LIVRER",
+          "score_final": 100.0,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "from typing import Union\n\ndef formater_prix(montant: Union[int, float, str]) -> str:\n    if isinstance(montant, bool):\n        raise ValueError(\"Montant invalide\")\n\n    if isinstance(montant, str):\n        try:\n            valeur = float(montant) if ('.' in montant or 'e' in montant.lower()) else int(montant)\n        except ValueError:\n            raise ValueError(\"Montant invalide\")\n    elif isinstance(montant, (int, float)):\n        valeur = montant\n    else:\n        raise ValueError(\"Montant invalide\")\n\n    return f\"{valeur:,.2f} EUR\"",
+          "code_php": "function formaterPrix($montant) {\n    if (!is_numeric($montant)) {\n        throw new Exception(\"Montant invalide\");\n    }\n    return number_format($montant, 2) . \" EUR\";\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 1.0,
+            "cas_testes": 26,
+            "cas_equivalents": 26,
+            "divergences": [],
+            "par_categorie": {
+              "limite": {
+                "testes": 7,
+                "equivalents": 7
+              },
+              "nominal": {
+                "testes": 10,
+                "equivalents": 10
+              },
+              "caracteres_speciaux": {
+                "testes": 4,
+                "equivalents": 4
+              },
+              "attaque": {
+                "testes": 5,
+                "equivalents": 5
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 15
+              },
+              "ia": {
+                "testes": 11,
+                "equivalents": 11
+              }
+            },
+            "lecture": "100 % — cas limites 7/7, cas nominaux 10/10, caractères spéciaux 4/4, attaques 5/5",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 4,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 1,
+                  "score": 0.25
+                },
+                "ia": {
+                  "entrees": 12,
+                  "tues": 1,
+                  "score": 0.25
+                },
+                "hybride": {
+                  "entrees": 26,
+                  "tues": 1,
+                  "score": 0.25
+                }
+              },
+              "detectes_seulement_par_ia": [],
+              "survivants": [
+                "ligne 5 : garde (raise) supprimée",
+                "ligne 15 : garde (raise) supprimée",
+                "ligne 9 : and ↔ or"
+              ]
+            }
+          },
+          "verification_formelle": {
+            "statut": "aucune_propriete",
+            "proprietes": [],
+            "score_formel": 0.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 100.0,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3333333333333333
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.16666666666666666
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "aucune propriété vérifiée (aucune_propriete)",
+                "poids": 0.0
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "proprietes",
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 62.8,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 0.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 1992,
+            "sortie": 230,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_type",
+                  "description": "Vérification de type numérique",
+                  "fonction": "formaterPrix",
+                  "code": "if (!is_numeric($montant)) {\n        throw new Exception(\"Montant invalide\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Vérification de type numérique",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 4 : isinstance(montant, bool)"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:37:19.489",
+                "module": "calculs.php__formater_prix",
+                "projet": "p2_calculs-b9fea836-20261007233320-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 100.0,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3333333333333333
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.16666666666666666
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "aucune propriété vérifiée (aucune_propriete)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "proprietes",
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "Le formatage f\"{valeur:,.2f}\" utilise la virgule standard comme séparateur de milliers conformément au patron de migration de number_format().",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller",
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+            ]
+          },
+          "portee_verification": {
+            "module": "formater_prix",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 26 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 100.7
+        },
+        {
+          "nom_python": "calculer_remise",
+          "nom_original": "calculerRemise",
+          "decision_finale": "LIVRER",
+          "score_final": 97.64444444444445,
+          "iterations": 3,
+          "categorie_echec": null,
+          "code_python": "from typing import Union\nfrom fastapi import HTTPException\n\n\ndef calculer_remise(prix: Union[float, int, str], pourcentage: Union[float, int, str]) -> float:\n    if isinstance(prix, str):\n        try:\n            prix = float(prix) if ('.' in prix or 'e' in prix.lower()) else int(prix)\n        except ValueError:\n            raise HTTPException(status_code=400, detail='Valeur non numérique')\n    elif not isinstance(prix, (int, float)):\n        raise ValueError(\"Prix invalide\")\n\n    if isinstance(pourcentage, str):\n        try:\n            pourcentage = float(pourcentage) if ('.' in pourcentage or 'e' in pourcentage.lower()) else int(pourcentage)\n        except ValueError:\n            raise HTTPException(status_code=400, detail='Valeur non numérique')\n    elif not isinstance(pourcentage, (int, float)):\n        raise ValueError(\"Pourcentage invalide\")\n\n    if pourcentage < 0 or pourcentage > 100:\n        raise ValueError(\"Pourcentage invalide\")\n\n    return prix - (prix * pourcentage / 100)",
+          "code_php": "function calculerRemise($prix, $pourcentage) {\n    if ($pourcentage < 0 || $pourcentage > 100) {\n        throw new Exception(\"Pourcentage invalide\");\n    }\n    return $prix - ($prix * $pourcentage / 100);\n}",
+          "equivalence": {
+            "statut": "teste",
+            "score_equivalence": 0.9629629629629629,
+            "cas_testes": 27,
+            "cas_equivalents": 26,
+            "divergences": [
+              {
+                "entree": null,
+                "type": "divergence_acceptation",
+                "php": "accepte",
+                "python": "rejette (Prix invalide)",
+                "categorie": "invalide",
+                "origine": "ia",
+                "intention": "Prix nul (null) : type incorrect, doit lever une erreur",
+                "classement": "entree_hors_domaine",
+                "explication": "entrée hors du domaine prévu : l'écart ne touche pas l'usage normal, mais le comportement d'erreur diffère — à confirmer."
+              }
+            ],
+            "par_categorie": {
+              "limite": {
+                "testes": 8,
+                "equivalents": 8
+              },
+              "nominal": {
+                "testes": 11,
+                "equivalents": 11
+              },
+              "caracteres_speciaux": {
+                "testes": 3,
+                "equivalents": 3
+              },
+              "attaque": {
+                "testes": 4,
+                "equivalents": 4
+              },
+              "invalide": {
+                "testes": 1,
+                "equivalents": 0
+              }
+            },
+            "par_origine": {
+              "fixe": {
+                "testes": 15,
+                "equivalents": 15
+              },
+              "ia": {
+                "testes": 12,
+                "equivalents": 11
+              }
+            },
+            "lecture": "96 % — cas limites 8/8, cas nominaux 11/11, caractères spéciaux 3/3, attaques 4/4, entrées invalides 0/1 — divergences : 1 entree hors domaine",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "mesure",
+              "mutants": 17,
+              "scores": {
+                "fixes": {
+                  "entrees": 15,
+                  "tues": 4,
+                  "score": 0.235
+                },
+                "ia": {
+                  "entrees": 12,
+                  "tues": 12,
+                  "score": 0.706
+                },
+                "hybride": {
+                  "entrees": 27,
+                  "tues": 12,
+                  "score": 0.706
+                }
+              },
+              "detectes_seulement_par_ia": [
+                "ligne 11 : not supprimé",
+                "ligne 12 : garde (raise) supprimée",
+                "ligne 19 : not supprimé",
+                "ligne 22 : Gt → GtE",
+                "ligne 10 : garde (raise) supprimée",
+                "ligne 18 : garde (raise) supprimée",
+                "ligne 22 : 100 → 101",
+                "ligne 25 : 100 → 101"
+              ],
+              "survivants": [
+                "ligne 20 : garde (raise) supprimée",
+                "ligne 8 : and ↔ or",
+                "ligne 16 : and ↔ or",
+                "ligne 10 : 400 → 401",
+                "ligne 18 : 400 → 401"
+              ]
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "calculer_remise : acceptation ⇒ valeur >= 0",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 97.64444444444445,
+            "niveau": "elevee",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.45
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.3
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 96.29629629629629,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.15
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.1
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 62.8,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 0.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "gemini",
+            "modele": "gemini-3.8-flash",
+            "bascule": true
+          },
+          "tokens_generation": {
+            "entree": 6089,
+            "sortie": 851,
+            "appels": 3
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 3
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 0)",
+                  "fonction": "calculerRemise",
+                  "code": "if ($pourcentage < 0 || $pourcentage > 100) {\n        throw new Exception(\"Pourcentage invalide\");\n    }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Borne sur une valeur (< 0)",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 22 : pourcentage < 0 or pourcentage > 100"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:42:20.479",
+                "module": "calculs.php__calculer_remise",
+                "projet": "p2_calculs-b9fea836-20261007233320-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 3,
+              "rapport_testeur": 3,
+              "rapport_differentiel": 3,
+              "rapport_formel": 3,
+              "rapport_auditeur": 3,
+              "rapport_juge": 3,
+              "decision": 3
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 97.64444444444445,
+                "niveau": "elevee",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.45
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.3
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 96.29629629629629,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.15
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.1
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "La validation de l'intervalle vérifie strictement que le pourcentage est compris entre 0 et 100 inclus.",
+              "code généré par le modèle de secours (gemini-3.8-flash, gemini) après indisponibilité de groq — qualité à surveiller",
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+            ]
+          },
+          "portee_verification": {
+            "module": "calculer_remise",
+            "decision": "LIVRER",
+            "verifie": [
+              "comportement identique au PHP sur 27 entrée(s) testée(s) (96% de concordance), exécution réelle des deux codes",
+              "propriété « calculer_remise : acceptation ⇒ valeur >= 0 » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée",
+              "les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 301.0
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "modules": 3,
+    "modules_livres": 3,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_calculerremise",
+        "modules": [
+          "calculerRemise"
+        ],
+        "tables": [],
+        "fichiers": [
+          "calculs.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_diviser",
+        "modules": [
+          "diviser"
+        ],
+        "tables": [],
+        "fichiers": [
+          "calculs.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_formaterprix",
+        "modules": [
+          "formaterPrix"
+        ],
+        "tables": [],
+        "fichiers": [
+          "calculs.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 3,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 0,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": []
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

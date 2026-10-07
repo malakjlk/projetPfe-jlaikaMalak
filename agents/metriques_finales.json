@@ -1,0 +1,114 @@
+{
+  "rapports": 4,
+  "fonctionnelles": {
+    "modules": 11,
+    "echantillons_par_module": 1,
+    "taux_syntaxe_valide": 1.0,
+    "taux_execution": 0.818,
+    "modules_executes": 9,
+    "modules_non_mesurables": 2,
+    "non_mesurables_par_raison": {
+      "Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.": 2
+    },
+    "computational_accuracy": 0.641,
+    "taux_equivalence_totale": 0.111,
+    "pass@1": 0.364,
+    "taux_livraison": 0.727,
+    "iterations_moyennes": 1.818,
+    "mutation": {
+      "fixes": 0.514,
+      "ia": 0.694,
+      "hybride": 0.806,
+      "modules_compares": 3
+    },
+    "lectures_equivalence": [
+      "100 % — cas limites 3/3, cas nominaux 9/9, caractères spéciaux 1/1, attaques 2/2",
+      "87 % — cas limites 6/6, cas nominaux 11/11, caractères spéciaux 3/5, attaques 3/5, entrées invalides 3/3 — divergences : 2 bug probable, 2 difference encodage",
+      "96 % — cas limites 6/6, cas nominaux 12/12, caractères spéciaux 1/2, attaques 4/4, entrées invalides 2/2 — divergences : 1 difference encodage",
+      "94 % — cas nominaux 12/13, attaques 7/8, cas limites 6/6, caractères spéciaux 3/3, entrées invalides 1/1 — divergences : 2 bug probable",
+      "0 % — attaques 0/3, cas limites 0/1, caractères spéciaux 0/1 — divergences : 2 bug probable, 3 durcissement securite",
+      "7 % — cas nominaux 1/13, attaques 0/7, cas limites 1/3, caractères spéciaux 0/4, entrées invalides 0/2 — divergences : 25 bug probable, 2 entree hors domaine",
+      "93 % — cas nominaux 11/12, attaques 6/6, cas limites 4/5, caractères spéciaux 3/3, entrées invalides 2/2 — divergences : 2 bug probable",
+      "33 % — cas limites 1/3, cas nominaux 4/9, caractères spéciaux 0/1, attaques 0/2 — divergences : 9 bug probable, 1 difference encodage",
+      "68 % — cas nominaux 10/12, attaques 5/7, cas limites 3/6, caractères spéciaux 1/4, entrées invalides 2/2 — divergences : 9 bug probable, 1 difference encodage"
+    ]
+  },
+  "securite": {
+    "failles_corrigees": 8,
+    "failles_persistantes": 2,
+    "taux_correction_failles": 0.8,
+    "gardes_preservees": "11/11",
+    "taux_gardes_preservees": 1.0,
+    "injections_bloquees": 1,
+    "durcissements_observes": 3,
+    "proprietes_prouvees": 9,
+    "proprietes_refutees": 1,
+    "failles_persistantes_detail": [
+      {
+        "fichier": "securite.php",
+        "module": "get_user",
+        "decision": "LIVRER",
+        "faille": "CWE-78"
+      },
+      {
+        "fichier": "securite.php",
+        "module": "chercher_produit",
+        "decision": "VALIDATION_HUMAINE",
+        "faille": "CWE-78"
+      }
+    ],
+    "failles_persistantes_dans_modules_livres": 1
+  },
+  "par_llm": {
+    "developpeur": {
+      "openai/gpt-oss-120b": {
+        "modules": 11,
+        "bascules": 0,
+        "pass@1": 0.364,
+        "taux_livraison": 0.727,
+        "tokens_moyens": 15882.273
+      }
+    },
+    "developpeur_hallucinations_corrigees": 3,
+    "manager": {
+      "coordinateur_fixe": {
+        "modules": 10,
+        "sollicitations": 0,
+        "refus_de_phase": 0,
+        "deja_fait": 0,
+        "agents_indisponibles": 0,
+        "relais": 0,
+        "sollicitations_par_module": 0.0
+      },
+      "aucun (validation humaine)": {
+        "modules": 1,
+        "sollicitations": 0,
+        "refus_de_phase": 0,
+        "deja_fait": 0,
+        "agents_indisponibles": 0,
+        "relais": 0,
+        "sollicitations_par_module": 0.0
+      }
+    },
+    "juge": {
+      "disponibilite": 0.818,
+      "score_moyen": 65.556,
+      "modeles": [
+        "qwen/qwen3.8-27b"
+      ]
+    },
+    "generateur_entrees": {
+      "modules_avec_entrees_ia": 8,
+      "entrees_moyennes": 12.25,
+      "bugs_detectes_seulement_par_ia": 6
+    }
+  },
+  "cout": {
+    "duree_totale_s": 388.8,
+    "duree_moyenne_s": 35.345,
+    "tokens_entree": 134195,
+    "tokens_sortie": 40510,
+    "appels_generation": 90,
+    "tokens_par_module": 15882.273
+  }
+}

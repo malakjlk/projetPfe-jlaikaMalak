@@ -1,0 +1,66 @@
+============================================================
+BENCHMARK SMAML
+============================================================
+  Projets       : p1_validations, p2_calculs, p3_securite, p4_classes, p5_heritage, p6_application, p7_deserialisation
+  Configurations: llm_seul, rag, rag_boucle
+  Répétitions   : 1
+  Résultats     : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260930_2044
+  Cache désactivé, mode strict, aucun basculement de modèle.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONFIGURATION : llm_seul — LLM seul
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ▶ p1_validations (passage 1/1)… 3 module(s), 100.0% livrés, score 98.1%, 64.1s
+  ▶ p2_calculs (passage 1/1)… 3 module(s), 100.0% livrés, score 90.7%, 28.6s
+  ▶ p3_securite (passage 1/1)… 3 module(s), 66.7% livrés, score 84.4%, 28.9s
+  ▶ p4_classes (passage 1/1)… 2 module(s), 100.0% livrés, score 97.9%, 18.9s
+  ▶ p5_heritage (passage 1/1)… 3 module(s), 100.0% livrés, score 98.5%, 19.1s
+  ▶ p6_application (passage 1/1)… 3 module(s), 66.7% livrés, score 89.5%, 81.3s
+  ▶ p7_deserialisation (passage 1/1)… 3 module(s), 100.0% livrés, score 82.0%, 41.4s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONFIGURATION : rag — LLM + RAG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ▶ p1_validations (passage 1/1)… 3 module(s), 100.0% livrés, score 98.1%, 58.5s
+  ▶ p2_calculs (passage 1/1)… 3 module(s), 100.0% livrés, score 90.7%, 26.5s
+  ▶ p3_securite (passage 1/1)… 3 module(s), 100.0% livrés, score 88.4%, 30.2s
+  ▶ p4_classes (passage 1/1)… 2 module(s), 100.0% livrés, score 97.9%, 25.0s
+  ▶ p5_heritage (passage 1/1)… 3 module(s), 100.0% livrés, score 98.5%, 33.8s
+  ▶ p6_application (passage 1/1)… 3 module(s), 100.0% livrés, score 94.8%, 72.4s
+  ▶ p7_deserialisation (passage 1/1)… 3 module(s), 100.0% livrés, score 84.2%, 25.5s
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONFIGURATION : rag_boucle — LLM + RAG + boucle de correction
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ▶ p1_validations (passage 1/1)… 3 module(s), 100.0% livrés, score 98.1%, 56.8s
+  ▶ p2_calculs (passage 1/1)… 3 module(s), 100.0% livrés, score 90.7%, 26.3s
+  ▶ p3_securite (passage 1/1)… 3 module(s), 100.0% livrés, score 85.1%, 39.8s
+  ▶ p4_classes (passage 1/1)… 2 module(s), 100.0% livrés, score 97.9%, 28.5s
+  ▶ p5_heritage (passage 1/1)… 3 module(s), 100.0% livrés, score 98.5%, 36.9s
+  ▶ p6_application (passage 1/1)… 3 module(s), 100.0% livrés, score 94.8%, 72.4s
+  ▶ p7_deserialisation (passage 1/1)… 3 module(s), 100.0% livrés, score 84.2%, 36.7s
+
+============================================================================================================
+COMPARAISON DES CONFIGURATIONS
+============================================================================================================
+Métrique                      llm_seul                  rag                       rag_boucle                
+------------------------------------------------------------------------------------------------------------
+Taux de livraison (%)         90.5                      100.0                     100.0                     
+Score de confiance (%)        91.6                      93.2                      92.8                      
+Modernisation (%)             69.7                      70.7                      70.9                      
+  dont fonctionnel            92.4                      96.2                      95.2                      
+  dont sécurité               92.2                      92.5                      92.5                      
+  dont comportemental         81.1                      66.7                      66.7                      
+  dont propriétés             85.7                      85.7                      85.7                      
+Corrections par module        0                         0                         0.0                       
+Équivalence (%)               81.1                      66.7                      66.7                      
+Cas non testables             1.3                       1.1                       1.1                       
+Injections neutralisées       0                         0                         0                         
+Propriétés prouvées           1.7                       1.7                       1.7                       
+Propriétés réfutées           0.1                       0.1                       0.1                       
+Escalades humaines            0                         0                         0                         
+Durée moyenne (s)             40.3                      38.8                      42.5                      
+
+Résultats détaillés : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260930_2044\benchmark.json
+Note : avec moins de 3 passages, les écarts entre configurations peuvent venir du hasard (le LLM n'est pas déterministe).

@@ -108,6 +108,23 @@ def executer(projet: dict, config: str, sortie: str,
             code_retour, interrompu = -1, True
     duree = time.time() - debut
 
+    # Un projet dont l'orchestrateur était injoignable n'a pas été
+    # MESURÉ : le compter comme 0 % de livraison ferait passer une
+    # panne de quota pour un échec de migration.
+    indices_indisponible = ("Orchestrateur indisponible",
+                            "Orchestration interrompue",
+                            "tokens per day", "Rate limit reached",
+                            "Aucun orchestrateur",
+                            "GÉNÉRATION IMPOSSIBLE")
+    orchestrateur_indisponible = False
+    try:
+        with open(journal, encoding="utf-8", errors="replace") as f:
+            texte_journal = f.read()
+        orchestrateur_indisponible = any(i in texte_journal
+                                         for i in indices_indisponible)
+    except OSError:
+        pass
+
     chemin_rapport = os.path.join(sortie, "rapport_migration.json")
     rapport = None
     if os.path.exists(chemin_rapport):
@@ -116,7 +133,8 @@ def executer(projet: dict, config: str, sortie: str,
 
     return {"duree_s": round(duree, 1), "code_retour": code_retour,
             "interrompu": interrompu, "rapport": rapport,
-            "journal": journal}
+            "journal": journal,
+            "orchestrateur_indisponible": orchestrateur_indisponible}
 
 
 # ─── Métriques ───────────────────────────────────────
@@ -186,9 +204,9 @@ def mesurer(rapport: dict) -> dict:
                                    if p.get("statut") == "prouvee"),
         "proprietes_refutees": sum(1 for p in proprietes
                                    if p.get("statut") == "refutee"),
-        "escalades_humaines": sum(
+        "validations_humaines": sum(
             1 for m in modules
-            if m.get("decision_finale") == "ESCALADE_HUMAINE"),
+            if m.get("decision_finale") == "VALIDATION_HUMAINE"),
         "categories_echec": {
             categorie: sum(1 for m in modules
                            if m.get("categorie_echec") == categorie)
@@ -199,11 +217,14 @@ def mesurer(rapport: dict) -> dict:
 
 def agreger(mesures: list) -> dict:
     """Moyenne des mesures d'une configuration, tous projets confondus."""
-    valides = [m for m in mesures if m.get("modules")]
+    valides = [m for m in mesures
+               if m.get("modules") and not m.get("non_mesure")]
     if not valides:
         return {"modules": 0, "migrations_reussies": 0}
     agrege = {"migrations_reussies": len(valides),
-              "migrations_totales": len(mesures)}
+              "migrations_totales": len(mesures),
+              "non_mesurees": sum(1 for m in mesures
+                                  if m.get("non_mesure"))}
     # Union des clés de TOUS les projets : se fier au premier ferait
     # disparaître une métrique absente de ce seul projet.
     numeriques = sorted({c for mesure in valides for c, v in mesure.items()
@@ -231,7 +252,7 @@ LIGNES_TABLEAU = [
     ("injections_neutralisees", "Injections neutralisées"),
     ("proprietes_prouvees", "Propriétés prouvées"),
     ("proprietes_refutees", "Propriétés réfutées"),
-    ("escalades_humaines", "Escalades humaines"),
+    ("validations_humaines", "Validations humaines"),
     ("duree_s", "Durée moyenne (s)"),
 ]
 
@@ -299,11 +320,12 @@ def main():
             print(f"\n{'━' * 60}\n  CONFIGURATION : {config} — "
                   f"{CONFIGURATIONS[config]['titre']}\n{'━' * 60}")
             mesures, details = [], []
+            invalides = 0
             for repetition in range(1, args.repetitions + 1):
                 for projet in projets:
                     etiquette = (f"{projet['nom']} "
                                  f"(passage {repetition}/{args.repetitions})")
-                    print(f"  ▶ {etiquette}…", end=" ", flush=True)
+                    print(f"  > {etiquette}…", end=" ", flush=True)
                     sortie = os.path.join(
                         dossier_serie, config,
                         f"{projet['nom']}_p{repetition}")
@@ -314,6 +336,10 @@ def main():
                                          args.duree_max)
                     mesure = mesurer(execution["rapport"])
                     mesure["duree_s"] = execution["duree_s"]
+                    if execution["orchestrateur_indisponible"]:
+                        # Mesure invalide : on la conserve dans le
+                        # détail, mais elle n'entre pas dans les moyennes.
+                        mesure["non_mesure"] = True
                     mesures.append(mesure)
                     details.append({"projet": projet["nom"],
                                     "passage": repetition,
@@ -322,7 +348,18 @@ def main():
                                     "code_retour": execution["code_retour"],
                                     "mesures": mesure})
 
-                    if execution["interrompu"]:
+                    if execution["orchestrateur_indisponible"]:
+                        print("NON MESURÉ — orchestrateur indisponible "
+                              "(quota épuisé ou service injoignable)")
+                        invalides += 1
+                        if invalides >= 2:
+                            print("\n  ⏹  Campagne interrompue : "
+                                  "l'orchestrateur ne répond plus. Les "
+                                  "projets restants seraient tous "
+                                  "invalides. Reprends la série quand le "
+                                  "quota sera rétabli.")
+                            break
+                    elif execution["interrompu"]:
                         print(f"interrompu après {args.duree_max}s")
                     elif not mesure.get("modules"):
                         print(f"échec (voir {execution['journal']})")
@@ -346,6 +383,12 @@ def main():
                    "resultats": resultats}, f, indent=2, ensure_ascii=False)
 
     afficher_tableau(resultats)
+    for nom, resultat in resultats.items():
+        non_mesurees = resultat["agrege"].get("non_mesurees") or 0
+        if non_mesurees:
+            print(f"[ATTENTION]  {nom} : {non_mesurees} projet(s) non mesuré(s) "
+                  f"(orchestrateur indisponible) — exclus des moyennes, "
+                  f"à relancer quand le quota sera rétabli.")
     print(f"Résultats détaillés : {chemin}")
     if args.repetitions < 3 and not args.estimer:
         print("Note : avec moins de 3 passages, les écarts entre "

@@ -1,0 +1,210 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 27546.75it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : llm_seul | RAG : False | boucle : False | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_h5kjwwpx
+
+1 fichier(s) PHP trouvé(s) :
+  - p3_securite\securite.php
+
+Ordre de migration (dépendances d'abord) :
+  1. securite.php
+
+------------------------------------------------------------
+- FICHIER : securite.php
+------------------------------------------------------------
+  Analyste : 3 fonction(s), 0 classe(s), 3 faille(s)
+
+  [ablation] RAG désactivé pour : getUser
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+   Score fonctionnel global : 90.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle :  PROUVÉE — get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : get_user
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       90.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 92.6% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 92.6% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 84% — à renforcer : validation typee
+
+Portée de la vérification — get_user
+   propriété « get_user : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique
+   2 faille(s) du PHP d'origine corrigée(s) dans le code migré
+    non vérifié : l'équivalence comportementale : non testée
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+    non vérifié : 1 faille(s) encore présente(s)
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+  [ablation] RAG désactivé pour : genererRapport
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : generer_rapport
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 33% (1/3)
+
+   Score fonctionnel global : 80.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : generer_rapport
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 2
+     Score Bandit : 90%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 90.0%
+  Niveau d'alerte : OK
+
+Révision du module : generer_rapport
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       80.0%  (poids 60%)  — Testeur
+  securite          90.0%  (poids 40%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 84.0% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 84.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — generer_rapport
+   1 faille(s) du PHP d'origine corrigée(s) dans le code migré
+    non vérifié : l'équivalence comportementale : non testée
+    non vérifié : aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables
+    non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+    non vérifié : 2 faille(s) encore présente(s)
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 1 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+  [ablation] RAG désactivé pour : chercherProduit
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : chercher_produit
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : False
+      Nom(s) non défini(s) ni importé(s) : Produit
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 67% (2/3)
+
+   Score fonctionnel global : 60.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle :  PROUVÉE — chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : chercher_produit
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : chercher_produit
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       60.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 76.7% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 76.7% : livraison bloquée, correction obligatoire.
+   2 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+     - [Priorité 3] faille_non_corrigee : Reformuler le code pour éliminer la faille
+   Catégorie d'échec : bug_simple → iterer
+     · 2 erreur(s) localisée(s) avec correction identifiée
+    Architecture : modernisation 82% — à renforcer : validation typee
+
+Portée de la vérification — chercher_produit
+   propriété « chercher_produit : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique
+   2 faille(s) du PHP d'origine corrigée(s) dans le code migré
+    non vérifié : l'équivalence comportementale : non testée
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+    non vérifié : 1 faille(s) encore présente(s)
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (2 point(s) vérifié(s), 5 hors de portée).
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+   Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 0/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260930_2044\llm_seul\p3_securite_p1/
+
+============================================================
+PROPOSITION DE DÉCOUPAGE EN SERVICES
+============================================================
+3 service(s) candidat(s) — cohésion 100.0%, couplage 0.0%
+  • service_produits : chercherProduit [tables : produits]
+  • service_genererrapport : genererRapport
+  • service_users : getUser [tables : users]

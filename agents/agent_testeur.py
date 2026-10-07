@@ -578,11 +578,11 @@ def agent_testeur(
     # Étape 1 — Validité statique (grammaire + résolution des noms)
     print("  1. Vérification syntaxique et résolution des noms...")
     rapport["syntaxe"] = verifier_syntaxe_python(code_python, noms_externes)
-    statut_syntaxe = "✅" if rapport["syntaxe"]["syntaxe_valide"] else "❌"
+    statut_syntaxe = "[OK]" if rapport["syntaxe"]["syntaxe_valide"] else "[ECHEC]"
     print(f"     {statut_syntaxe} Code statiquement valide : "
           f"{rapport['syntaxe']['syntaxe_valide']}")
     if rapport["syntaxe"].get("noms_non_resolus"):
-        print(f"     ⚠️  Nom(s) non défini(s) ni importé(s) : "
+        print(f"     [ATTENTION]  Nom(s) non défini(s) ni importé(s) : "
               f"{', '.join(rapport['syntaxe']['noms_non_resolus'][:5])}")
 
     # Étape 2 — Tests dynamiques : on EXÉCUTE la fonction générée sur
@@ -598,7 +598,7 @@ def agent_testeur(
               f"propriété(s) sans contre-exemple")
         for detail in tests["details"]:
             if detail["verdict"] != "respecte":
-                print(f"     ⚠️  {detail['propriete']} : {detail['detail'][:70]}")
+                print(f"     [ATTENTION]  {detail['propriete']} : {detail['detail'][:70]}")
     else:
         print(f"     non applicable ({tests['raison']})")
 
@@ -636,7 +636,7 @@ def agent_testeur(
         score_failles * 0.3
     )
 
-    print(f"\n  📊 Score fonctionnel global : "
+    print(f"\n   Score fonctionnel global : "
           f"{rapport['score_fonctionnel']*100:.1f}%")
 
     return rapport
@@ -710,4 +710,284 @@ async def get_user(user_id: int):
     print("=" * 60)
     print(json.dumps(rapport, indent=2, ensure_ascii=False))
 
-    print("\n✅ Agent Testeur opérationnel !")
+    print("\n[OK] Agent Testeur opérationnel !")
+
+
+# ═══ COHÉRENCE DU PROJET PRODUIT ════════════════════════
+
+# Noms qui désignent presque toujours un module LOCAL d'une application
+# (et non une bibliothèque) : importés alors qu'aucun fichier du projet ne
+# porte ce nom, ils trahissent un module supposé par le LLM.
+NOMS_LOCAUX_TYPIQUES = {
+    "models", "model", "schemas", "schema", "database", "crud", "entities",
+    "repositories", "repository", "services", "dependencies", "deps",
+    "settings", "config", "core", "domain", "db", "utils", "helpers",
+    "common", "session", "orm", "tables",
+}
+# Le Testeur CONTRÔLE le résultat assemblé : chaque import interne du
+# projet Python doit correspondre à un module et à un nom qui existent.
+# C'est ce contrôle qui détecte les imports inventés par le LLM.
+
+import os
+
+
+def verifier_coherence_projet(dossier_sortie: str) -> dict:
+    """
+    Vérifie que le projet Python généré est cohérent :
+    chaque `from module import nom` doit correspondre à un
+    nom réellement défini dans le module généré.
+
+    C'est la vérification d'INTÉGRATION : les fichiers ne sont
+    pas seulement corrects individuellement, ils fonctionnent
+    ENSEMBLE.
+    """
+    import ast
+
+    resultat = {
+        "imports_valides": [],
+        "imports_casses": [],
+        "coherent": True
+    }
+
+    # 1. Recenser ce que chaque module définit réellement
+    definitions = {}   # {"db": {"get_user", "User", ...}}
+    signatures = {}    # {"db": {"get_user": (min_args, max_args)}}
+    arbres = {}
+    for nom in os.listdir(dossier_sortie):
+        if not nom.endswith(".py"):
+            continue
+        module = nom[:-3]
+        chemin = os.path.join(dossier_sortie, nom)
+        with open(chemin, "r", encoding="utf-8") as f:
+            code = f.read()
+        try:
+            arbre = ast.parse(code)
+        except SyntaxError as e:
+            resultat["imports_casses"].append({
+                "module": module,
+                "erreur": f"Erreur de syntaxe : {e}"
+            })
+            resultat["coherent"] = False
+            continue
+        arbres[module] = arbre
+        noms = set()
+        doublons = set()
+        sigs = {}
+        for noeud in arbre.body:   # définitions au niveau module
+            if isinstance(noeud, (ast.FunctionDef,
+                                  ast.AsyncFunctionDef,
+                                  ast.ClassDef)):
+                if noeud.name in noms:
+                    doublons.add(noeud.name)   # ← définie 2 fois !
+                noms.add(noeud.name)
+                # Signature : nb d'arguments min et max
+                if isinstance(noeud, (ast.FunctionDef,
+                                      ast.AsyncFunctionDef)):
+                    args = noeud.args
+                    positionnels = (len(args.posonlyargs)
+                                    + len(args.args))
+                    minimum = positionnels - len(args.defaults)
+                    maximum = (None if args.vararg
+                               else positionnels)
+                    sigs[noeud.name] = (minimum, maximum)
+            elif isinstance(noeud, ast.Assign):
+                for cible in noeud.targets:
+                    if isinstance(cible, ast.Name):
+                        noms.add(cible.id)
+        definitions[module] = noms
+        signatures[module] = sigs
+
+        # Signaler les définitions dupliquées (la 2ème écrase
+        # la 1ère silencieusement en Python !)
+        for nom_double in doublons:
+            resultat["imports_casses"].append({
+                "module": f"{module}.py",
+                "import": f"définition dupliquée : {nom_double}",
+                "erreur": f"'{nom_double}' est défini plusieurs fois "
+                          f"dans {module}.py — garde UNE SEULE définition. "
+                          f"S'il est déjà défini plus haut dans ce même "
+                          f"fichier, utilise-le directement (sans "
+                          f"l'importer ni le redéfinir)"
+            })
+            resultat["coherent"] = False
+
+    # 2. Vérifier les imports internes au projet
+    for module, arbre in arbres.items():
+        imports_locaux = {}   # {nom_utilisé: (module_source, nom)}
+        for noeud in ast.walk(arbre):
+            if isinstance(noeud, ast.ImportFrom):
+                source = noeud.module
+
+                # AUTO-IMPORT : un fichier qui s'importe LUI-MÊME
+                # (from utilisateurs import User DANS utilisateurs.py).
+                # L'élément est défini dans ce même fichier : l'import
+                # est circulaire et inutile → défaut d'intégration.
+                if source == module:
+                    for alias in noeud.names:
+                        resultat["imports_casses"].append({
+                            "module": f"{module}.py",
+                            "import": f"from {source} import {alias.name}",
+                            "erreur": f"auto-import : '{alias.name}' est "
+                                      f"défini dans {module}.py lui-même — "
+                                      f"utilise-le directement, sans "
+                                      f"l'importer ni le redéfinir"
+                        })
+                    resultat["coherent"] = False
+                    continue
+
+                # Import RELATIF (from .models import ...) :
+                # le module doit exister dans le projet généré,
+                # sinon c'est une hallucination du LLM !
+                if noeud.level and noeud.level > 0:
+                    if source not in definitions:
+                        for alias in noeud.names:
+                            resultat["imports_casses"].append({
+                                "module": f"{module}.py",
+                                "import": f"from .{source} "
+                                          f"import {alias.name}",
+                                "erreur": f"Le module '.{source}' "
+                                          f"n'existe pas dans le projet "
+                                          f"(import halluciné par le LLM)"
+                            })
+                        resultat["coherent"] = False
+                        continue
+
+                if source not in definitions:
+                    # Import depuis un module au nom manifestement
+                    # inventé par le LLM (placeholder). Ces noms ne
+                    # correspondent ni au projet ni à une bibliothèque
+                    # réelle → import cassé à l'exécution.
+                    noms_fantomes = {
+                        "votre_module", "your_module", "module",
+                        "mon_module", "nom_du_module", "module_name",
+                        "the_module", "some_module"
+                    }
+                    racine = (source or "").split(".")[0]
+                    if racine in NOMS_LOCAUX_TYPIQUES:
+                        # Nom typique d'un module LOCAL (models, schemas,
+                        # crud…) absent du projet : le LLM l'a supposé, il
+                        # n'existe pas. Ce n'est pas une bibliothèque.
+                        for alias in noeud.names:
+                            resultat["imports_casses"].append({
+                                "module": f"{module}.py",
+                                "import": f"from {source} import {alias.name}",
+                                "erreur": f"Le module '{source}' n'existe pas "
+                                          f"dans le projet : c'est un module "
+                                          f"local supposé par le LLM (aucun "
+                                          f"fichier {racine}.py n'a été produit)"
+                            })
+                        resultat["coherent"] = False
+                        continue
+                    if source in noms_fantomes:
+                        for alias in noeud.names:
+                            resultat["imports_casses"].append({
+                                "module": f"{module}.py",
+                                "import": f"from {source} import {alias.name}",
+                                "erreur": f"Le module '{source}' est un nom "
+                                          f"placeholder inventé par le LLM — "
+                                          f"import invalide"
+                            })
+                        resultat["coherent"] = False
+                    continue   # sinon import externe (fastapi...) → ignoré
+                for alias in noeud.names:
+                    if alias.name in definitions[source]:
+                        resultat["imports_valides"].append(
+                            f"{module}.py : from {source} "
+                            f"import {alias.name}"
+                        )
+                        imports_locaux[alias.asname or alias.name] = (
+                            source, alias.name
+                        )
+                    else:
+                        resultat["imports_casses"].append({
+                            "module": f"{module}.py",
+                            "import": f"from {source} import {alias.name}",
+                            "erreur": f"'{alias.name}' n'est pas défini "
+                                      f"dans {source}.py",
+                            "definitions_disponibles":
+                                sorted(definitions[source])[:10]
+                        })
+                        resultat["coherent"] = False
+
+        # 3. Vérifier les SIGNATURES : chaque appel à une fonction
+        # importée doit fournir le bon nombre d'arguments
+        for noeud in ast.walk(arbre):
+            if (isinstance(noeud, ast.Call)
+                    and isinstance(noeud.func, ast.Name)
+                    and noeud.func.id in imports_locaux):
+                source, nom_fonction = imports_locaux[noeud.func.id]
+                sig = signatures.get(source, {}).get(nom_fonction)
+                if sig is None:
+                    continue
+                minimum, maximum = sig
+                fournis = (len(noeud.args)
+                           + len([k for k in noeud.keywords if k.arg]))
+                if fournis < minimum or (
+                        maximum is not None and fournis > maximum):
+                    attendu = (f"{minimum}" if minimum == maximum
+                               else f"{minimum} à "
+                                    f"{maximum if maximum else '∞'}")
+                    resultat["imports_casses"].append({
+                        "module": f"{module}.py",
+                        "import": f"appel {nom_fonction}(...) "
+                                  f"avec {fournis} argument(s)",
+                        "erreur": f"{nom_fonction}() défini dans "
+                                  f"{source}.py attend {attendu} "
+                                  f"argument(s), mais l'appel en "
+                                  f"fournit {fournis}"
+                    })
+                    resultat["coherent"] = False
+
+    return resultat
+
+
+# ═══ CONTRATS ENTRE MODULES : TYPAGE STATIQUE ═══════════
+# Le Comparateur ne peut pas exécuter le code qui interroge une base de
+# données. mypy, lui, vérifie SANS EXÉCUTER que chaque module respecte
+# les types qu'il déclare et qu'il reçoit des autres : un résultat lu
+# comme un dictionnaire alors que la fonction appelée renvoie un objet,
+# un nombre d'arguments erroné, un attribut inexistant…
+
+import re as _re
+import subprocess as _subprocess
+import sys as _sys
+
+# Familles d'erreurs mypy qui trahissent un contrat rompu. Les erreurs
+# liées aux bibliothèques non typées sont ignorées : elles ne disent rien
+# du code produit.
+CODES_CONTRAT = {"index", "call-arg", "arg-type", "attr-defined", "union-attr",
+                 "return-value", "name-defined", "call-overload", "operator",
+                 "func-returns-value", "has-type"}
+
+
+def verifier_typage_projet(dossier_sortie: str, delai_s: int = 180) -> dict:
+    """
+    Contrôle statique des types du projet produit, avec mypy.
+    Retourne {"statut", "coherent", "erreurs": [{"module", "ligne",
+    "code", "erreur"}]}.
+    """
+    commande = [_sys.executable, "-m", "mypy", "--ignore-missing-imports",
+                "--check-untyped-defs", "--show-error-codes", "--no-error-summary",
+                "--follow-imports=silent", "--no-color-output", "."]
+    try:
+        execution = _subprocess.run(commande, cwd=dossier_sortie, capture_output=True,
+                                    text=True, encoding="utf-8", errors="replace",
+                                    timeout=delai_s)
+    except _subprocess.TimeoutExpired:
+        return {"statut": "delai_depasse", "coherent": True, "erreurs": []}
+    sortie = (execution.stdout or "") + (execution.stderr or "")
+    if "No module named mypy" in sortie:
+        return {"statut": "mypy_absent", "coherent": True, "erreurs": [],
+                "raison": "mypy n'est pas installé (py -m pip install mypy)"}
+
+    erreurs = []
+    for ligne in sortie.splitlines():
+        trouve = _re.match(r"(?P<f>[^:]+\.py):(?P<l>\d+): error: (?P<m>.*?)\s+\[(?P<c>[\w-]+)\]$",
+                           ligne.strip())
+        if trouve and trouve.group("c") in CODES_CONTRAT:
+            erreurs.append({"module": os.path.basename(trouve.group("f")),
+                            "ligne": int(trouve.group("l")),
+                            "code": trouve.group("c"),
+                            "erreur": f"typage, ligne {trouve.group('l')} : "
+                                      f"{trouve.group('m')} [{trouve.group('c')}]"})
+    return {"statut": "teste", "coherent": not erreurs, "erreurs": erreurs}

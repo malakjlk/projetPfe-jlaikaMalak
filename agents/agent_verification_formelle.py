@@ -1,5 +1,5 @@
 """
-Agent Vérification Formelle — SMAML
+Agent Vérification Formelle — 
 ====================================
 Couche de vérification FORMELLE par EXÉCUTION SYMBOLIQUE
 (exigence explicite du sujet de PFE).
@@ -870,7 +870,7 @@ def validate_password(password: str) -> bool:
 """
 
     print("=" * 60)
-    print("Vérification formelle SMAML — exécution symbolique (Z3)")
+    print("Vérification formelle  — exécution symbolique (Z3)")
     print("=" * 60)
 
     print("\nCAS 1 — Code correct (invariant présent) :")
@@ -884,7 +884,7 @@ def validate_password(password: str) -> bool:
     assert r1["statut"] == "teste" and r1["score_formel"] == 1.0
     assert r2["statut"] == "teste" and r2["score_formel"] == 0.0
     assert r2["proprietes"][0]["contre_exemple"]
-    print("\n✅ Invariants métier : preuve ET réfutation démontrées.")
+    print("\n Invariants métier : preuve ET réfutation démontrées.")
 
     # ── Famille 2 : injection SQL (non-interférence) ──
     sql_sur = """
@@ -944,5 +944,5 @@ def supprimer_article(article_id, role):
     assert r5["proprietes"][0]["statut"] == "prouvee"
     assert r6["proprietes"][0]["statut"] == "refutee"
 
-    print("\n✅ Trois familles de propriétés opérationnelles : "
+    print("\n Trois familles de propriétés opérationnelles : "
           "invariants métier, injection SQL, contrôle d'accès.")

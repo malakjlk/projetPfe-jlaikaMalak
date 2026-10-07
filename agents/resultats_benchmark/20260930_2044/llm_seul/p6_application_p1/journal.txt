@@ -1,0 +1,322 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<?, ?it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : llm_seul | RAG : False | boucle : False | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_vyglpnao
+
+3 fichier(s) PHP trouvé(s) :
+  - p6_application\includes\db.php
+  - p6_application\login.php
+  - p6_application\utils.php
+
+Usages de champs détectés (analyse projet) :
+  - getUserByEmail → champs utilisés par les appelants : ['id', 'password']
+
+Ordre de migration (dépendances d'abord) :
+  1. db.php
+  2. utils.php
+  3. login.php (dépend de : db.php, utils.php)
+
+------------------------------------------------------------
+- FICHIER : db.php
+------------------------------------------------------------
+  Analyste : 1 fonction(s), 0 classe(s), 1 faille(s)
+  Champs requis par les appelants de getUserByEmail : ['id', 'password']
+
+  [ablation] RAG désactivé pour : getUserByEmail
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : get_user_by_email
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : False
+      Nom(s) non défini(s) ni importé(s) : BaseModel
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+   Score fonctionnel global : 70.0%
+  Équivalence comportementale : non testable (fonction avec effets de bord — BDD, fichiers...)
+  Vérification formelle :  PROUVÉE — get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée)
+
+Audit de sécurité du module : get_user_by_email
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, greenlet, idna, importlib-metadata, pydantic, pydantic-core, sqlalchemy, starlette, typing-extensions, typing-inspection, zipp
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : get_user_by_email
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       70.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+Score de confiance : 82.0% (confiance moyenne)
+
+🔁 DÉCISION : ITÉRER (feedback ciblé)
+   Code statiquement invalide (inexécutable) malgré un score composé de 82.0% : livraison bloquée, correction obligatoire.
+   1 erreur(s) à corriger, par ordre de priorité :
+     - [Priorité 0] syntaxe_invalide : Corriger l'erreur de syntaxe avant toute autre chose
+   Catégorie d'échec : bug_simple → iterer
+     · 1 erreur(s) localisée(s) avec correction identifiée
+    Architecture : modernisation 90%
+
+Portée de la vérification — get_user_by_email
+   propriété « get_user_by_email : le texte des requêtes SQL ne dépend pas de l'entrée (requête paramétrée) » : aucun contre-exemple trouvé par exploration symbolique
+   1 faille(s) du PHP d'origine corrigée(s) dans le code migré
+    non vérifié : l'équivalence comportementale : non testée
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Module non livré : les vérifications n'ont pas atteint le niveau de confiance requis (2 point(s) vérifié(s), 4 hors de portée).
+
+------------------------------------------------------------
+- FICHIER : utils.php
+------------------------------------------------------------
+  Analyste : 1 fonction(s), 0 classe(s), 0 faille(s)
+
+  [ablation] RAG désactivé pour : hashPassword
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : hash_password
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de longueur de champ      test dynamique : aucun contre-exemple sur 60 entrées (la f
+       vérifié   Mot de passe haché, jamais en clair    appel attendu présent : bcrypt
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 33% (5/15 cas)
+     Divergence sur '12345678' : PHP=$2y$10$cDeIFggyRkT8zdF8B863fuFV/qJvPkP5B55loVDX.AXAllWd.Pqou / Python=$2b$12$rFMGdkT7uJUGU1JYH7J07eetW/EcJRsHf40QRXk7qFORtH/PD9gCC
+     Divergence sur 'Password123' : PHP=$2y$10$ljALw5vPrnEV40jRyFZgouIQwR5P2AKfkIKEvTPzTNwLXNKzgjJNu / Python=$2b$12$48Kn9wHAtRrJLICAMlGRZudU0Phrcm5mHlSgz/P09L/f8KQgTKiRe
+     Divergence sur 'motdepasse' : PHP=$2y$10$mMtwp0Fn6TY4u/3ly94aJuHb24iOKrAQ3hN/uNE1l/SGwJ6tTWWxK / Python=$2b$12$iXNh9TdqGOwu8yAIRaqr1ejULDQvcA998J2ihqG5b8Sb.oSe7Gk9y
+     Divergence sur 'éàçùè' : PHP=accepte / Python=rejette (Trop court)
+     Divergence sur 'mot de passe avec espaces' : PHP=$2y$10$xRo2h/yZjOpqbyYVa7StCePVljkeJWAC9fcYZyMmWBEbTx9c.HqwK / Python=$2b$12$CP/7tySPw1.ResXE79YZROqzL8Mdx8YKbla7KWeYu7qdwd2oe7BAi
+     Divergence sur '<script>alert(1)</script>' : PHP=$2y$10$H3JousaScOXdRxbNwHFk/.bEVQ11oYCg6W98/4MV6KvatlDaMJ3RK / Python=$2b$12$VJlukH96wbxbz0Pu2lsp6eG8SAa9l1xG4DXrUGjrHOYTY/yBi61vG
+     Divergence sur "' OR 1=1 --" : PHP=$2y$10$3IgewsAc/W5TbRSqF1UtS.H969b4xB320z7JoEkBVl3HnLyZR9vjG / Python=$2b$12$kW9DAp.USOUt3JnGFLRAxeHZm6ILyWSC.dB2BGX6fInlBPFlpfGEC
+     Divergence sur 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : PHP=accepte / Python=rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)
+     Divergence sur 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : PHP=accepte / Python=rejette (password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my)
+     Divergence sur '12345678901234567890' : PHP=$2y$10$M4BFgrMZ.NsclrPPtg2NxuTnSl1CHhNuq1YAuYJcGYL0vhnolQSPO / Python=$2b$12$nBBDfDZkKXX1Z.Axdwi5QOCRiG2LI6DiGozua3QwJ73gT9HcavpNW
+  Vérification formelle :  PROUVÉE — hash_password : acceptation ⇒ longueur ≥ 8
+
+Audit de sécurité du module : hash_password
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de longueur de champ          garde ligne 13 : len(password) < 8
+       préservé  Mot de passe haché, jamais en clair        appel attendu présent : bcrypt
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, bcrypt, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : hash_password
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental    33.3%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 88.2% (confiance faible)
+
+✅ DÉCISION : LIVRER
+   Score composé 88.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — hash_password
+   comportement identique au PHP sur 15 entrée(s) testée(s) (33% de concordance), exécution réelle des deux codes
+   propriété « hash_password : acceptation ⇒ longueur ≥ 8 » : aucun contre-exemple trouvé par exploration symbolique
+   2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+------------------------------------------------------------
+- FICHIER : login.php
+------------------------------------------------------------
+  Analyste : 1 fonction(s), 0 classe(s), 0 faille(s)
+
+  [ablation] RAG désactivé pour : login
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : login
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de format ou pattern      garde ligne 14 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s
+       vérifié   Comparaison d'identifiant ou de secr   appel attendu présent : comparaison de secret :     if use
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (19/19 cas)
+  Vérification formelle :  PROUVÉE — login : aucun appel sans autorisation (password) n'aboutit
+
+Audit de sécurité du module : login
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de format ou pattern          garde ligne 14 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+
+       préservé  Comparaison d'identifiant ou de secret     appel attendu présent : comparaison de secret :     if user.
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : login
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 98.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 60% — à renforcer : validation typee, injection dependances, fonctions pures
+
+Portée de la vérification — login
+   comportement identique au PHP sur 19 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes
+   propriété « login : aucun appel sans autorisation (password) n'aboutit » : aucun contre-exemple trouvé par exploration symbolique
+   2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+   login.py : from db import get_user_by_email
+   login.py : from utils import hash_password
+   login.py : appel get_user_by_email(...) avec 1 argument(s)
+
+   BOUCLE CORRECTIVE PROJET — régénération des fichiers présentant des défauts d'intégration...
+
+  Régénération de login.py (depuis login.php) avec 1 défaut(s) à corriger :
+    - appel get_user_by_email(...) avec 1 argument(s) : get_user_by_email() défini dans db.py attend 2 argument(s), mais l'appel en fournit 1
+
+------------------------------------------------------------
+- FICHIER : login.php
+------------------------------------------------------------
+  Analyste : 1 fonction(s), 0 classe(s), 0 faille(s)
+
+  [ablation] RAG désactivé pour : login
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : login
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification de format ou pattern      garde ligne 13 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s
+       vérifié   Comparaison d'identifiant ou de secr   appel attendu présent : comparaison de secret :     if use
+     Score invariants : 100% (2/2)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 100% (15/15 cas)
+  Vérification formelle :  PROUVÉE — login : aucun appel sans autorisation (password) n'aboutit
+
+Audit de sécurité du module : login
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification de format ou pattern          garde ligne 13 : not re.match('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+
+       préservé  Comparaison d'identifiant ou de secret     appel attendu présent : comparaison de secret :     if user[
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : login
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental   100.0%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 98.2% (confiance elevee)
+
+✅ DÉCISION : LIVRER
+   Score composé 98.2% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — login
+   comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes
+   propriété « login : aucun appel sans autorisation (password) n'aboutit » : aucun contre-exemple trouvé par exploration symbolique
+   2 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 4 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET — après correction 1
+============================================================
+   login.py : from db import get_user_by_email
+   login.py : from utils import hash_password
+   Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 2/3
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260930_2044\llm_seul\p6_application_p1/
+
+============================================================
+PROPOSITION DE DÉCOUPAGE EN SERVICES
+============================================================
+1 service(s) candidat(s) — cohésion 100.0%, couplage 0.0%
+  • service_users : getUserByEmail, hashPassword, login [tables : users]
+    un seul service se dégage : le projet est trop couplé ou trop petit pour être découpé, un monolithe modulaire est préférable

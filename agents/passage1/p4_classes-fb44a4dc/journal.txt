@@ -1,0 +1,132 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+============================================================
+SMAML — projet p4_classes-fb44a4dc-20261007232955-20644
+  stockage : sqlite | mode : direct
+  [ATTENTION]  REDIS INJOIGNABLE — stockage de SECOURS (SQLite) utilisé
+      cause : TimeoutError : Timeout connecting to server
+      vérifie que Docker Desktop est lancé, puis : docker start smaml-redis
+============================================================
+
+PHASE 1 — Réception : 1 fichier(s) PHP
+
+PHASE 2 — Analyse du code
+  Ordre de migration : classes.php (coordonné par coordinateur_fixe)
+
+████████████████████████████████████████████████████████████
+█  FICHIER : classes.php
+████████████████████████████████████████████████████████████
+
+> PHASES 3-4 — module PanierAchat
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 32228.99it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+
+  Recherche RAG pour : PanierAchat
+  3 exemple(s) de migration trouvé(s) :
+    - [architecture_moderne] Migration traitement synchrone vers async/await (score: 0.995)
+    - [validation] Vérifier unicité de l'email (score: 0.995)
+    - [qualite_code] Décomposition fonction longue en fonctions courtes (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : PanierAchat
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+     [ATTENTION]  valeur bornée (< 0 rejeté) : la fonction rejette toutes les entrées testées
+  3. Vérification des invariants de sécurité...
+       vérifié   Borne sur une valeur (< 0)             garde ligne 28 : prix < 0
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : PanierAchat
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Borne sur une valeur (< 0)                 garde ligne 28 : prix < 0
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : PanierAchat
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+  qualite_jugee       —     non mesuré : juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute
+Score de confiance : 97.9% (confiance moyenne)
+
+[OK] DÉCISION : LIVRER
+   Score composé 97.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (97.9 %, coordonné par coordinateur_fixe)
+
+> PHASES 3-4 — module outils_texte
+
+  Recherche RAG pour : OutilsTexte
+  3 exemple(s) de migration trouvé(s) :
+    - [validation] Validation d'un montant financier (score: 0.995)
+    - [validation] Vérifier unicité de l'email (score: 0.995)
+    - [architecture_moderne] Migration traitement synchrone vers async/await (score: 0.995)
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : outils_texte
+  1. Vérification syntaxique et résolution des noms...
+     [OK] Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (fonction cible introuvable dans le code généré)
+  3. Vérification des invariants de sécurité...
+       vérifié   Borne sur une valeur (< 1)             garde ligne 24 : longueur < 1
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (0/0)
+
+   Score fonctionnel global : 100.0%
+
+Audit de sécurité du module : outils_texte
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Borne sur une valeur (< 1)                 garde ligne 24 : longueur < 1
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : outils_texte
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 53%)  — Testeur
+  securite          94.0%  (poids 35%)  — Auditeur
+  comportemental      —     non mesuré : équivalence non testée (non_testable)
+  proprietes       100.0%  (poids 12%)  — Vérificateur de propriétés
+  qualite_jugee       —     non mesuré : juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute
+Score de confiance : 97.9% (confiance moyenne)
+
+[OK] DÉCISION : LIVRER
+   Score composé 97.9% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+  → LIVRER (97.9 %, coordonné par coordinateur_fixe)
+
+PHASE 4 — Cohérence du projet : imports cohérents, typage conforme
+
+============================================================
+MIGRATION TERMINÉE — 2/2 module(s) livré(s), 1/1 fichier(s)
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats : C:\Users\poste\projetPfe-jlaikaMalak\agents\passage1\p4_classes-fb44a4dc/

@@ -1,0 +1,30 @@
+MÉTRIQUES — 7 rapport(s), 20 module(s)
+
+FONCTIONNELLES
+  syntaxe valide           100.0 %
+  taux d'exécution         55.0 % (11 module(s) exécuté(s) sur 20)
+      non exécuté (1) : le Comparateur a échoué : KeyError '[10, 0.0]'
+      non exécuté (5) : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.
+      non exécuté (1) : La fonction dépend d'autres modules du projet — non exécutable en isolation (PYTHON : erreur d'import : ImportError cannot import name 'get_connection' from partially ini
+      non exécuté (2) : La fonction dépend d'autres modules du projet — non exécutable en isolation (PYTHON : erreur d'import : NameError name '__file__' is not defined)
+  computational accuracy   45.6 %   (équivalence totale : 18.2 %)
+  pass@1                   35.0 %
+  taux de livraison        80.0 %   (itérations moyennes : 1.8)
+  score de mutation        fixes 48.8 %, IA 92.0 %, hybride 92.0 % (sur les 5 module(s) où les trois sont mesurées)
+
+SÉCURITÉ
+  failles corrigées        5 (persistantes : 0) — 100.0 %
+  gardes préservées        16/16 — 100.0 %
+  injections bloquées      1
+  propriétés               12 prouvée(s), 0 réfutée(s)
+
+PAR LLM
+  Développeur openai/gpt-oss-120b          pass@1 35.0 %, livraison 80.0 %, bascules 0, tokens/module 2078.45
+  Développeur — hallucinations corrigées au niveau projet : 4
+  Coordination coordinateur_fixe        20 module(s), 0.0 sollicitation(s)/module, 0 refus de phase, 0 redondance(s)
+  Juge                     disponibilité 75.0 %, score moyen 67.333
+  Générateur d'entrées     15 module(s), 11.733 entrée(s) en moyenne, 16 bug(s) détecté(s) seulement grâce à l'IA
+
+COÛT
+  temps                    1569.5 s au total, 78.475 s par module
+  tokens de génération     34058 en entrée, 7511 en sortie (2078.45 par module)

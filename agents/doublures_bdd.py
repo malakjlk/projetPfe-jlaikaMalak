@@ -182,7 +182,21 @@ REECRITURES_PHP = [
     (r"\bmysql_query\s*\(", "smaml_requete_simple("),
     (r"\bmysqli_fetch_assoc\s*\(", "smaml_ligne("),
     (r"\bmysql_fetch_assoc\s*\(", "smaml_ligne("),
-    (r"\bmysqli_fetch_array\s*\(", "smaml_ligne("),
+    (r"\bmysqli_fetch_array\s*\(", "smaml_ligne_mixte("),
+    # L'ancienne extension mysql_*, supprimée depuis PHP 7 : c'est elle
+    # qu'utilise le vrai code legacy, et le PHP moderne ne la connaît plus.
+    (r"\bmysql_fetch_array\s*\(", "smaml_ligne_mixte("),
+    (r"\bmysql_fetch_row\s*\(", "smaml_ligne_numerique("),
+    (r"\bmysqli_fetch_row\s*\(", "smaml_ligne_numerique("),
+    (r"\bmysql_fetch_object\s*\(", "smaml_ligne_objet("),
+    (r"\bmysqli_fetch_object\s*\(", "smaml_ligne_objet("),
+    (r"\bmysql_result\s*\(", "smaml_resultat("),
+    (r"\bmysql_error\s*\(", "smaml_erreur("),
+    (r"\bmysql_insert_id\s*\(", "smaml_dernier_id("),
+    (r"\bmysql_affected_rows\s*\(", "smaml_lignes_affectees("),
+    (r"\bmysql_escape_string\s*\(", "smaml_echapper_simple("),
+    (r"\bmysql_free_result\s*\(", "smaml_vrai("),
+    (r"\bmysqli_free_result\s*\(", "smaml_vrai("),
     (r"\bmysqli_fetch_all\s*\(", "smaml_lignes("),
     (r"\bmysqli_num_rows\s*\(", "smaml_nombre("),
     (r"\bmysql_num_rows\s*\(", "smaml_nombre("),
@@ -242,6 +256,25 @@ function smaml_ligne(&$res) {
     return array_shift($res);
 }
 function smaml_lignes($res) { return is_array($res) ? $res : []; }
+// mysql_fetch_array : la ligne par noms de colonnes ET par indices.
+function smaml_ligne_mixte(&$res) {
+    $l = smaml_ligne($res);
+    return $l === null ? null : array_merge($l, array_values($l));
+}
+function smaml_ligne_numerique(&$res) {
+    $l = smaml_ligne($res);
+    return $l === null ? null : array_values($l);
+}
+function smaml_ligne_objet(&$res) {
+    $l = smaml_ligne($res);
+    return $l === null ? null : (object) $l;
+}
+function smaml_resultat($res, $ligne = 0, $champ = 0) {
+    if (!is_array($res) || !isset($res[$ligne])) { return false; }
+    $l = $res[$ligne];
+    if (is_int($champ)) { $v = array_values($l); return $v[$champ] ?? false; }
+    return $l[$champ] ?? false;
+}
 function smaml_nombre($res) { return is_array($res) ? count($res) : 0; }
 function smaml_echapper($conn, $valeur = null) {
     if ($valeur === null) { $valeur = $conn; }
@@ -468,9 +501,41 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
     _module("pymysql", **commun)
 
     # ── SQLAlchemy ──
-    # Le LLM produit souvent du SQLAlchemy plutôt qu'un pilote direct :
-    # sans doublure, l'import échoue et la fonction devient
-    # « non testable » alors qu'elle est parfaitement comparable.
+    # S'il est installé, on utilise le VRAI SQLAlchemy et on redirige
+    # seulement sa connexion vers la base de test : le code généré (select,
+    # Session, modèles…) s'exécute réellement, sur les mêmes données que le
+    # PHP. Un SQLAlchemy factice ne connaissait que create_engine et text.
+    try:
+        import sqlalchemy as _vrai_sa
+        import sqlalchemy.engine as _vrai_moteur_mod
+    except ImportError:
+        _vrai_sa = None
+    moteurs_crees = []
+    if _vrai_sa is not None:
+        create_engine_origine = _vrai_sa.create_engine
+
+        def create_engine_redirige(*a, **k):
+            from datetime import date, datetime
+            from sqlalchemy import event
+            moteur = create_engine_origine(f"sqlite:///{chemin_bdd}")
+
+            @event.listens_for(moteur, "connect")
+            def _fonctions_mysql(cnx, _):
+                # Fonctions MySQL courantes que SQLite ne connaît pas.
+                cnx.create_function("NOW", 0, lambda: datetime.now().isoformat(" ", "seconds"))
+                cnx.create_function("CURDATE", 0, lambda: date.today().isoformat())
+                cnx.create_function("CONCAT", -1, lambda *v: "".join(
+                    "" if x is None else str(x) for x in v))
+
+            @event.listens_for(moteur, "before_cursor_execute")
+            def _journaliser(cnx, curseur, requete, parametres, contexte, plusieurs):
+                journal.append(str(requete))
+
+            moteurs_crees.append(moteur)
+            return moteur
+
+        _vrai_sa.create_engine = create_engine_redirige
+        _vrai_moteur_mod.create_engine = create_engine_redirige
     class _Texte:
         """Résultat de text() : son str() est la requête."""
         def __init__(self, requete):
@@ -507,23 +572,24 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
     Connection = _Connexion
     Engine = _Moteur
 
-    sqlalchemy = _module(
+    sqlalchemy = None if _vrai_sa is not None else _module(
         "sqlalchemy", create_engine=creer_moteur, text=texte,
         Engine=_Moteur, Connection=_Connexion, MetaData=object,
         Table=object, Column=object, String=str, Integer=int)
-    moteur_mod = _module("sqlalchemy.engine", Engine=_Moteur,
-                         Connection=_Connexion, create_engine=creer_moteur,
-                         Result=object, Row=dict)
-    exc_mod = _module("sqlalchemy.exc", SQLAlchemyError=Error,
-                      DatabaseError=Error, OperationalError=Error,
-                      IntegrityError=Error)
-    orm_mod = _module(
-        "sqlalchemy.orm", Session=_Connexion,
-        sessionmaker=lambda *a, **k: (lambda *b, **c: _Connexion()),
-        declarative_base=lambda *a, **k: object)
-    sqlalchemy.engine = moteur_mod
-    sqlalchemy.exc = exc_mod
-    sqlalchemy.orm = orm_mod
+    if sqlalchemy is not None:          # SQLAlchemy absent : la doublure
+        moteur_mod = _module("sqlalchemy.engine", Engine=_Moteur,
+                             Connection=_Connexion, create_engine=creer_moteur,
+                             Result=object, Row=dict)
+        exc_mod = _module("sqlalchemy.exc", SQLAlchemyError=Error,
+                          DatabaseError=Error, OperationalError=Error,
+                          IntegrityError=Error)
+        orm_mod = _module(
+            "sqlalchemy.orm", Session=_Connexion,
+            sessionmaker=lambda *a, **k: (lambda *b, **c: _Connexion()),
+            declarative_base=lambda *a, **k: object)
+        sqlalchemy.engine = moteur_mod
+        sqlalchemy.exc = exc_mod
+        sqlalchemy.orm = orm_mod
 
     # sqlite3.connect redirigé vers la base de test
     connect_origine = sqlite3.connect
@@ -540,6 +606,12 @@ def installer_doublures_python(chemin_bdd: str, journal: list):
                 pass
         connexions_ouvertes.clear()
         sqlite3.connect = connect_origine
+        if _vrai_sa is not None:
+            _vrai_sa.create_engine = create_engine_origine
+            _vrai_moteur_mod.create_engine = create_engine_origine
+            for moteur in moteurs_crees:     # libère le fichier (Windows)
+                moteur.dispose()
+            moteurs_crees.clear()
         for nom, ancien in anciens.items():
             if ancien is None:
                 sys.modules.pop(nom, None)

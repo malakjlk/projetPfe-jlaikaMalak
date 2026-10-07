@@ -544,9 +544,9 @@ def agent_auditeur(
     else:
         rapport["niveau_alerte"] = "OK"
 
-    print(f"\n  📊 Score sécurité global : "
+    print(f"\n   Score sécurité global : "
           f"{rapport['score_securite_global']:.1f}%")
-    print(f"  🚦 Niveau d'alerte : {rapport['niveau_alerte']}")
+    print(f"  Niveau d'alerte : {rapport['niveau_alerte']}")
 
     return rapport
 

@@ -1,0 +1,144 @@
+<?php
+function getUser($id) {
+    $sql = "SELECT * FROM users WHERE id=" . $id;
+    $result = mysql_query($sql);
+    return mysql_fetch_array($result);
+}
+
+function genererRapport($commande) {
+    $sortie = shell_exec("report_tool " . $commande);
+    return $sortie;
+}
+
+function chercherProduit($nom) {
+    $sql = "SELECT * FROM produits WHERE nom LIKE \"%" . $nom . "%\"";
+    return mysql_query($sql);
+}
+"""
+Migré automatiquement par SMAML depuis securite.php
+"""
+
+# ── get_user (score 88.8%, 2 itération(s)) ──
+from typing import Optional, Dict, Any
+import os
+
+from sqlalchemy.orm import Session
+
+# ⚠️ Adapter l'import ci‑dessous à la structure réelle du projet.
+# Par exemple : `from .models import User` ou `from app.db import User`
+from .user_entity import User  # <-- à remplacer par le bon chemin d'import
+
+
+def get_user(user_id: int, db: Session) -> Optional[Dict[str, Any]]:
+    """
+    Récupère un utilisateur depuis la base de données.
+
+    Args:
+        user_id: Identifiant de l'utilisateur recherché.
+        db: Session SQLAlchemy déjà initialisée.
+
+    Returns:
+        Un dictionnaire contenant les colonnes de l'utilisateur si trouvé,
+        sinon ``None`` (comportement équivalent à ``false``/``null`` en PHP).
+    """
+    # Utilisation de l'ORM pour éviter toute injection SQL.
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return None
+
+    # Conversion de l'objet ORM en dictionnaire « flat » similaire à un tableau associatif PHP.
+    # On exclut les attributs internes de SQLAlchemy.
+    user_dict = {
+        column.key: getattr(user, column.key)
+        for column in user.__table__.columns
+    }
+    return user_dict
+
+
+# ── generer_rapport (score 84.7%, 1 itération(s)) ──
+import os
+import subprocess
+from typing import Optional
+
+def generer_rapport(commande: str) -> Optional[str]:
+    """
+    Exécute l'outil ``report_tool`` avec la commande fournie et renvoie la sortie
+    texte du processus.  Aucun appel à un shell n'est effectué afin d'éviter
+    toute injection de commande (CWE‑78).
+
+    Args:
+        commande: Chaîne représentant la sous‑commande à passer à ``report_tool``.
+                  Elle est traitée comme un argument unique et ne subit aucune
+                  interpolation.
+
+    Returns:
+        Le texte de sortie du processus si l'exécution réussit, sinon ``None``.
+        Les erreurs d'exécution (ex. outil introuvable, timeout) sont capturées
+        et renvoient ``None`` plutôt que de lever d'exception métier, afin de
+        respecter le contrat de la fonction PHP d'origine qui renvoie ``null``
+        en cas d'échec.
+    """
+    # Validation très basique : la commande ne doit pas contenir de caractères
+    # de contrôle ou de séparateurs de commande.  On accepte uniquement les
+    # caractères alphanumériques, les tirets, les underscores et les points.
+    if not commande or any(c for c in commande if not (c.isalnum() or c in "-_.")):
+        # En cas de valeur suspecte, on renvoie None comme le PHP le ferait
+        # (pas d'exception levée ici).
+        return None
+
+    try:
+        result = subprocess.run(
+            ["report_tool", commande],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            shell=False,          # impératif pour éviter l'injection de commande
+        )
+        # Si le processus s'est terminé avec un code de retour non‑zéro,
+        # on considère que la génération a échoué et on renvoie None.
+        if result.returncode != 0:
+            return None
+        return result.stdout
+    except (OSError, subprocess.SubprocessError):
+        # Erreurs d'exécution (ex. binaire absent, timeout, etc.)
+        return None
+
+# tirets, underscores et points, hypothèse basée sur l'absence de contexte supplémentaire.
+# correspondre au comportement implicite du code PHP original qui retournerait
+# ``null``/``false`` sans lever d'exception.
+
+
+# ── chercher_produit (score 90.2%, 3 itération(s)) ──
+from typing import List, Dict, Optional
+from sqlalchemy.orm import Session
+from sqlalchemy import text
+
+
+def chercher_produit(nom: str, db: Session) -> Optional[List[Dict]]:
+    """
+    Recherche les produits dont le nom contient la chaîne fournie.
+
+    Args:
+        nom: Chaîne à rechercher dans la colonne ``nom`` de la table ``produits``.
+        db:  Session SQLAlchemy déjà configurée (injection de dépendance dans FastAPI).
+
+    Returns:
+        - Une liste de dictionnaires, chaque dict contenant les colonnes du produit
+          (ex. result[0]["id"], result[0]["nom"], …) si au moins un enregistrement est trouvé.
+        - ``None`` si aucune ligne ne correspond à la recherche.
+    """
+    # Utilisation d'une requête paramétrée pour éviter toute injection SQL (CWE‑89)
+    stmt = text(
+        "SELECT * FROM produits WHERE nom LIKE :pattern"
+    )
+    # Le pattern inclut les jokers % autour du terme recherché
+    result = db.execute(stmt, {"pattern": f"%{nom}%"})
+
+    # ``mappings()`` renvoie chaque ligne sous forme de dict‑like
+    rows = result.mappings().all()
+
+    return rows if rows else None
+
+
+#                 connexion globale n'est définie dans le projet.
+#                 comportement du code PHP qui renvoie false/null dans ce cas.

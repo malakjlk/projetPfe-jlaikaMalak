@@ -2,40 +2,34 @@
 Migré automatiquement par SMAML depuis login.php
 """
 
-# ── login (score 73.2%, 1 itération(s)) ──
-from typing import Optional
-
+# ── login (score 98.2%, 1 itération(s)) ──
+import re
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from db import get_user_by_email, connect_database
-from utils import validate_password
+from db import get_user_by_email  # fonction existante attend (email, db)
+from utils import hash_password   # fonction existante pour hacher le mot de passe
 
-def login(email: str, password: str, db: Session) -> str:
+
+def login(email: str, password: str, db: Session) -> int:
     """
     Authentifie un utilisateur à partir de son email et de son mot de passe.
 
-    - Le mot de passe est d'abord validé avec la fonction utilitaire `validate_password`.
-    - L'utilisateur est récupéré via `get_user_by_email`, qui attend le
-      courriel et la session de base de données.
-    - La comparaison du mot de passe se fait de façon directe (équivalence
-      stricte) afin de respecter la contrainte de « comparaison_authentification ».
-    - En cas de succès, la chaîne « Connexion réussie » est renvoyée,
-      sinon « Email ou mot de passe incorrect ».
+    - Validation du format d'email (pattern simple, pas de Pydantic).
+    - Recherche de l'utilisateur en base via la fonction partagée `get_user_by_email`.
+    - Comparaison du hash du mot de passe fourni avec celui stocké.
+    - Retourne l'identifiant de l'utilisateur en cas de succès.
     """
-    # Validation du format / des règles du mot de passe
-    validate_password(password)
+    # validation_format
+    if not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+        raise HTTPException(status_code=400, detail='Email invalide')
 
-    # Récupération de l'utilisateur en base de données
+    # récupération de l'utilisateur (comparaison_authentification)
     user = get_user_by_email(email, db)
+    if not user:
+        raise HTTPException(status_code=401, detail='Identifiants incorrects')
 
-    # Vérification de l'existence et du mot de passe
-    if user and user.password == password:
-        return "Connexion réussie"
-    else:
-        return "Email ou mot de passe incorrect"
+    if user.password != hash_password(password):
+        raise HTTPException(status_code=401, detail='Identifiants incorrects')
 
-
-# ce qui correspond à la signature corrigée demandée dans les consignes.
-# dans un projet réel il faudrait utiliser une fonction de vérification sécurisée
-# (ex. bcrypt.checkpw) pour éviter les vulnérabilités de timing attacks.
+    return user.id

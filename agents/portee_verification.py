@@ -131,10 +131,10 @@ def resume_portee(attestation: dict) -> str:
     """Rendu lisible pour le journal de migration."""
     lignes = [f"Portée de la vérification — {attestation['module']}"]
     for point in attestation["verifie"]:
-        lignes.append(f"   ✓ {point}")
+        lignes.append(f"   {point}")
     for point in attestation["non_verifie"]:
-        lignes.append(f"   ○ non vérifié : {point}")
-    lignes.append(f"   → {attestation['formulation']}")
+        lignes.append(f"    non vérifié : {point}")
+    lignes.append(f"    {attestation['formulation']}")
     return "\n".join(lignes)
 
 

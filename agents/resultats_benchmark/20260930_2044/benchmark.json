@@ -1,0 +1,793 @@
+{
+  "horodatage": "20260930_2044",
+  "projets": [
+    {
+      "nom": "p1_validations",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p1_validations",
+      "fichiers": 1
+    },
+    {
+      "nom": "p2_calculs",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p2_calculs",
+      "fichiers": 1
+    },
+    {
+      "nom": "p3_securite",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p3_securite",
+      "fichiers": 1
+    },
+    {
+      "nom": "p4_classes",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p4_classes",
+      "fichiers": 1
+    },
+    {
+      "nom": "p5_heritage",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p5_heritage",
+      "fichiers": 1
+    },
+    {
+      "nom": "p6_application",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p6_application",
+      "fichiers": 3
+    },
+    {
+      "nom": "p7_deserialisation",
+      "chemin": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p7_deserialisation",
+      "fichiers": 1
+    }
+  ],
+  "repetitions": 1,
+  "resultats": {
+    "llm_seul": {
+      "agrege": {
+        "migrations_reussies": 7,
+        "migrations_totales": 7,
+        "cas_non_testables": 1.3,
+        "corrections_moyennes": 0,
+        "critere_comportemental": 81.1,
+        "critere_fonctionnel": 92.4,
+        "critere_proprietes": 85.7,
+        "critere_securite": 92.2,
+        "divergences": 4.1,
+        "duree_s": 40.3,
+        "equivalence_moyenne": 81.1,
+        "escalades_humaines": 0,
+        "injections_neutralisees": 0,
+        "modernisation": 69.7,
+        "modules": 2.9,
+        "modules_sans_correction": 2.9,
+        "proprietes_prouvees": 1.7,
+        "proprietes_refutees": 0.1,
+        "score_confiance_moyen": 91.6,
+        "taux_livraison": 90.5
+      },
+      "details": [
+        {
+          "projet": "p1_validations",
+          "passage": 1,
+          "duree_s": 64.1,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 66.3,
+            "score_confiance_moyen": 98.1,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 3,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 64.1
+          }
+        },
+        {
+          "projet": "p2_calculs",
+          "passage": 1,
+          "duree_s": 28.6,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 65.1,
+            "score_confiance_moyen": 90.7,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 80.7,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 0.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 0,
+            "proprietes_refutees": 1,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 28.6
+          }
+        },
+        {
+          "projet": "p3_securite",
+          "passage": 1,
+          "duree_s": 28.9,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 66.7,
+            "modernisation": 79.4,
+            "score_confiance_moyen": 84.4,
+            "critere_fonctionnel": 76.7,
+            "critere_securite": 92.7,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 3,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 1,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 28.9
+          }
+        },
+        {
+          "projet": "p4_classes",
+          "passage": 1,
+          "duree_s": 18.9,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 2,
+            "taux_livraison": 100.0,
+            "modernisation": 67.6,
+            "score_confiance_moyen": 97.9,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 2,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 2,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 18.9
+          }
+        },
+        {
+          "projet": "p5_heritage",
+          "passage": 1,
+          "duree_s": 19.1,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 59.5,
+            "score_confiance_moyen": 98.5,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 96.0,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 3,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 19.1
+          }
+        },
+        {
+          "projet": "p6_application",
+          "passage": 1,
+          "duree_s": 81.3,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 66.7,
+            "modernisation": 78.2,
+            "score_confiance_moyen": 89.5,
+            "critere_fonctionnel": 90.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 66.7,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 66.7,
+            "cas_non_testables": 1,
+            "injections_neutralisees": 0,
+            "divergences": 10,
+            "proprietes_prouvees": 3,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 1,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 81.3
+          }
+        },
+        {
+          "projet": "p7_deserialisation",
+          "passage": 1,
+          "duree_s": 41.4,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 72.1,
+            "score_confiance_moyen": 82.0,
+            "critere_fonctionnel": 80.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 57.8,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 57.8,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 19,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 41.4
+          }
+        }
+      ]
+    },
+    "rag": {
+      "agrege": {
+        "migrations_reussies": 7,
+        "migrations_totales": 7,
+        "cas_non_testables": 1.1,
+        "corrections_moyennes": 0,
+        "critere_comportemental": 66.7,
+        "critere_fonctionnel": 96.2,
+        "critere_proprietes": 85.7,
+        "critere_securite": 92.5,
+        "divergences": 6.3,
+        "duree_s": 38.8,
+        "equivalence_moyenne": 66.7,
+        "escalades_humaines": 0,
+        "injections_neutralisees": 0,
+        "modernisation": 70.7,
+        "modules": 2.9,
+        "modules_sans_correction": 2.9,
+        "proprietes_prouvees": 1.7,
+        "proprietes_refutees": 0.1,
+        "score_confiance_moyen": 93.2,
+        "taux_livraison": 100.0
+      },
+      "details": [
+        {
+          "projet": "p1_validations",
+          "passage": 1,
+          "duree_s": 58.5,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 69.2,
+            "score_confiance_moyen": 98.1,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 3,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 58.5
+          }
+        },
+        {
+          "projet": "p2_calculs",
+          "passage": 1,
+          "duree_s": 26.5,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 60.6,
+            "score_confiance_moyen": 90.7,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 80.7,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 0.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 0,
+            "proprietes_refutees": 1,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 26.5
+          }
+        },
+        {
+          "projet": "p3_securite",
+          "passage": 1,
+          "duree_s": 30.2,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 83.3,
+            "score_confiance_moyen": 88.4,
+            "critere_fonctionnel": 93.3,
+            "critere_securite": 92.7,
+            "critere_comportemental": 0.0,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 0,
+            "cas_non_testables": 2,
+            "injections_neutralisees": 0,
+            "divergences": 19,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 30.2
+          }
+        },
+        {
+          "projet": "p4_classes",
+          "passage": 1,
+          "duree_s": 25.0,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 2,
+            "taux_livraison": 100.0,
+            "modernisation": 69.3,
+            "score_confiance_moyen": 97.9,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 2,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 2,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 25.0
+          }
+        },
+        {
+          "projet": "p5_heritage",
+          "passage": 1,
+          "duree_s": 33.8,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 58.6,
+            "score_confiance_moyen": 98.5,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 96.0,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 3,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 33.8
+          }
+        },
+        {
+          "projet": "p6_application",
+          "passage": 1,
+          "duree_s": 72.4,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 82.0,
+            "score_confiance_moyen": 94.8,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 66.7,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 66.7,
+            "cas_non_testables": 1,
+            "injections_neutralisees": 0,
+            "divergences": 10,
+            "proprietes_prouvees": 3,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 72.4
+          }
+        },
+        {
+          "projet": "p7_deserialisation",
+          "passage": 1,
+          "duree_s": 25.5,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 72.1,
+            "score_confiance_moyen": 84.2,
+            "critere_fonctionnel": 80.0,
+            "critere_securite": 96.0,
+            "critere_comportemental": 66.7,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 66.7,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 15,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 25.5
+          }
+        }
+      ]
+    },
+    "rag_boucle": {
+      "agrege": {
+        "migrations_reussies": 7,
+        "migrations_totales": 7,
+        "cas_non_testables": 1.1,
+        "corrections_moyennes": 0.0,
+        "critere_comportemental": 66.7,
+        "critere_fonctionnel": 95.2,
+        "critere_proprietes": 85.7,
+        "critere_securite": 92.5,
+        "divergences": 4,
+        "duree_s": 42.5,
+        "equivalence_moyenne": 66.7,
+        "escalades_humaines": 0,
+        "injections_neutralisees": 0,
+        "modernisation": 70.9,
+        "modules": 2.9,
+        "modules_sans_correction": 2.7,
+        "proprietes_prouvees": 1.7,
+        "proprietes_refutees": 0.1,
+        "score_confiance_moyen": 92.8,
+        "taux_livraison": 100.0
+      },
+      "details": [
+        {
+          "projet": "p1_validations",
+          "passage": 1,
+          "duree_s": 56.8,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 69.2,
+            "score_confiance_moyen": 98.1,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 3,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 56.8
+          }
+        },
+        {
+          "projet": "p2_calculs",
+          "passage": 1,
+          "duree_s": 26.3,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 62.2,
+            "score_confiance_moyen": 90.7,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 80.7,
+            "critere_comportemental": 100.0,
+            "critere_proprietes": 0.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 100.0,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 0,
+            "proprietes_refutees": 1,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 26.3
+          }
+        },
+        {
+          "projet": "p3_securite",
+          "passage": 1,
+          "duree_s": 39.8,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 82.7,
+            "score_confiance_moyen": 85.1,
+            "critere_fonctionnel": 86.7,
+            "critere_securite": 92.7,
+            "critere_comportemental": 0.0,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0.33,
+            "modules_sans_correction": 2,
+            "equivalence_moyenne": 0,
+            "cas_non_testables": 2,
+            "injections_neutralisees": 0,
+            "divergences": 3,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 39.8
+          }
+        },
+        {
+          "projet": "p4_classes",
+          "passage": 1,
+          "duree_s": 28.5,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 2,
+            "taux_livraison": 100.0,
+            "modernisation": 68.6,
+            "score_confiance_moyen": 97.9,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 2,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 2,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 2,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 28.5
+          }
+        },
+        {
+          "projet": "p5_heritage",
+          "passage": 1,
+          "duree_s": 36.9,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 59.5,
+            "score_confiance_moyen": 98.5,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 96.0,
+            "critere_comportemental": null,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": null,
+            "cas_non_testables": 3,
+            "injections_neutralisees": 0,
+            "divergences": 0,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 36.9
+          }
+        },
+        {
+          "projet": "p6_application",
+          "passage": 1,
+          "duree_s": 72.4,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 82.0,
+            "score_confiance_moyen": 94.8,
+            "critere_fonctionnel": 100.0,
+            "critere_securite": 94.0,
+            "critere_comportemental": 66.7,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 66.7,
+            "cas_non_testables": 1,
+            "injections_neutralisees": 0,
+            "divergences": 10,
+            "proprietes_prouvees": 3,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 72.4
+          }
+        },
+        {
+          "projet": "p7_deserialisation",
+          "passage": 1,
+          "duree_s": 36.7,
+          "interrompu": false,
+          "code_retour": 0,
+          "mesures": {
+            "modules": 3,
+            "taux_livraison": 100.0,
+            "modernisation": 72.1,
+            "score_confiance_moyen": 84.2,
+            "critere_fonctionnel": 80.0,
+            "critere_securite": 96.0,
+            "critere_comportemental": 66.7,
+            "critere_proprietes": 100.0,
+            "corrections_moyennes": 0,
+            "modules_sans_correction": 3,
+            "equivalence_moyenne": 66.7,
+            "cas_non_testables": 0,
+            "injections_neutralisees": 0,
+            "divergences": 15,
+            "proprietes_prouvees": 1,
+            "proprietes_refutees": 0,
+            "escalades_humaines": 0,
+            "categories_echec": {
+              "bug_simple": 0,
+              "ambiguite": 0,
+              "limite_structurelle": 0
+            },
+            "duree_s": 36.7
+          }
+        }
+      ]
+    }
+  }
+}

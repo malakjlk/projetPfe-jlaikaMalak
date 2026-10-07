@@ -332,4 +332,201 @@ class OutilsTexte {
     print(f"Failles : {r['metriques']['nombre_failles']}")
     assert r["metriques"]["nombre_classes"] == 1
     assert r["metriques"]["nombre_failles"] == 1
-    print("\n✅ Analyste détecte classes ET failles dans les méthodes")
+    print("\n[OK] Analyste détecte classes ET failles dans les méthodes")
+
+
+# ═══ ANALYSE DU PROJET ENTIER ═══════════════════════════
+# L'Analyste CONSTATE ce qui existe dans l'application PHP : ses
+# fichiers, ce que chacun contient, qui dépend de qui, et quels champs
+# les appelants lisent sur le résultat des fonctions. Il ne décide de
+# rien : l'ordre de migration et le découpage reviennent à l'Architecte.
+
+import os as _os
+import os
+
+
+def lister_fichiers_php(dossier: str) -> list:
+    """
+    Parcourt récursivement le dossier et retourne
+    la liste de tous les fichiers .php trouvés.
+    """
+    fichiers = []
+    for racine, _, noms in os.walk(dossier):
+        for nom in noms:
+            if nom.lower().endswith(".php"):
+                fichiers.append(os.path.join(racine, nom))
+    return sorted(fichiers)
+
+
+def extraire_includes(code_php: str) -> list:
+    """
+    Extrait les noms de fichiers inclus via
+    include / require / include_once / require_once.
+
+    Exemple : include('db.php');  →  ['db.php']
+    Ne capture que les chemins ÉCRITS EN DUR (statiques).
+    Les includes dynamiques — include($page) — ne sont pas
+    résolubles sans exécuter le code.
+    """
+    pattern = r"(?:include|require)(?:_once)?\s*\(?\s*['\"]([^'\"]+)['\"]"
+    return re.findall(pattern, code_php)
+
+
+def construire_graphe(fichiers: list) -> dict:
+    """
+    Construit le graphe de dépendances du projet.
+    graphe[fichier] = liste des fichiers dont il dépend.
+    """
+    ensemble_fichiers = set(fichiers)
+    graphe = {}
+
+    for fichier in fichiers:
+        with open(fichier, "r", encoding="utf-8", errors="ignore") as f:
+            code = f.read()
+
+        dependances = []
+        for inclus in extraire_includes(code):
+            # Résoudre le chemin relatif au fichier courant
+            candidat = os.path.normpath(
+                os.path.join(os.path.dirname(fichier), inclus)
+            )
+            if candidat in ensemble_fichiers:
+                dependances.append(candidat)
+
+        graphe[fichier] = dependances
+
+    return graphe
+
+
+def analyser_usages_champs(fichiers: list) -> dict:
+    """
+    Passe d'analyse PRÉALABLE sur tout le projet :
+    pour chaque fonction, recense les CHAMPS que ses appelants
+    utilisent sur son résultat.
+
+    Exemple : si login.php contient
+        $user = getUserByEmail($email);
+        if ($user["password"] == ...)
+    alors le résultat contiendra :
+        {"getUserByEmail": {"password"}}
+
+    Cette info est injectée dans le prompt du Développeur pour
+    que les modèles de données générés incluent TOUS les champs
+    dont les appelants auront besoin — sans elle, le Développeur
+    génère db.py avant de savoir ce que login.py utilisera.
+    """
+    # 1. Recenser toutes les fonctions définies dans le projet
+    noms_fonctions = set()
+    contenus = {}
+    for fichier in fichiers:
+        with open(fichier, "r", encoding="utf-8", errors="ignore") as f:
+            code = f.read()
+        contenus[fichier] = code
+        noms_fonctions.update(re.findall(r"function\s+(\w+)\s*\(", code))
+
+    # 2. Pour chaque fonction, chercher dans TOUS les fichiers :
+    #    $variable = nomFonction(...) puis $variable["champ"]
+    #    ou $variable->champ
+    usages = {}
+    for nom in noms_fonctions:
+        champs = set()
+        for code in contenus.values():
+            # Variables qui reçoivent le résultat de la fonction
+            variables = re.findall(
+                rf"\$(\w+)\s*=\s*{re.escape(nom)}\s*\(", code
+            )
+            for var in variables:
+                # Accès tableau : $user["password"] ou $user['password']
+                champs.update(re.findall(
+                    rf"\${re.escape(var)}\s*\[\s*[\"'](\w+)[\"']\s*\]",
+                    code
+                ))
+                # Accès objet : $user->password
+                champs.update(re.findall(
+                    rf"\${re.escape(var)}->(\w+)", code
+                ))
+        if champs:
+            usages[nom] = champs
+
+    return usages
+
+
+def dependances_par_appels(fichiers: list) -> dict:
+    """
+    Dépendances révélées par les APPELS de fonctions : si login.php
+    appelle getUserByEmail, définie dans db.php, login.php dépend de
+    db.php — même sans include explicite.
+    """
+    definitions, contenus = {}, {}
+    for fichier in fichiers:
+        with open(fichier, "r", encoding="utf-8", errors="ignore") as f:
+            code = f.read()
+        contenus[fichier] = code
+        for nom in re.findall(r"function\s+(\w+)\s*\(", code):
+            definitions.setdefault(nom, fichier)
+    graphe = {f: [] for f in fichiers}
+    for fichier, code in contenus.items():
+        for nom, origine in definitions.items():
+            if origine != fichier and re.search(rf"(?<![\w>$]){re.escape(nom)}\s*\(", code):
+                if origine not in graphe[fichier]:
+                    graphe[fichier].append(origine)
+    return graphe
+
+
+def analyser_projet(dossier: str, langage: str = "php") -> dict:
+    """
+    Constate l'état de l'application : fichiers, contenu de chacun,
+    dépendances (includes ET appels), champs attendus par les appelants.
+    Pour un autre langage que PHP, c'est son adaptateur qui analyse.
+    """
+    if (langage or "php").lower() != "php":
+        return _analyser_projet_adaptateur(dossier, langage)
+    fichiers = lister_fichiers_php(dossier)
+    par_includes = construire_graphe(fichiers)
+    par_appels = dependances_par_appels(fichiers)
+
+    relatif = lambda chemin: _os.path.relpath(chemin, dossier).replace("\\", "/")
+    analyses, dependances = {}, {}
+    for fichier in fichiers:
+        with open(fichier, "r", encoding="utf-8", errors="ignore") as f:
+            code = f.read()
+        analyses[relatif(fichier)] = analyser_code_php(code)
+        deps = set(par_includes.get(fichier, [])) | set(par_appels.get(fichier, []))
+        dependances[relatif(fichier)] = sorted(relatif(d) for d in deps)
+
+    usages = {nom: sorted(champs) for nom, champs in
+              analyser_usages_champs(fichiers).items()}
+    return {
+        "dossier": dossier,
+        "fichiers": [relatif(f) for f in fichiers],
+        "analyses": analyses,
+        "dependances": dependances,
+        "usages_champs": usages,
+        "failles_totales": sum(len(a.get("failles_potentielles", []))
+                               for a in analyses.values()),
+        "langage": "php",
+    }
+
+
+def _analyser_projet_adaptateur(dossier: str, langage: str) -> dict:
+    """Même rapport, produit par l'adaptateur d'un autre langage."""
+    from langages import adaptateur
+    outil = adaptateur(langage)
+    fichiers = outil.lister_sources(dossier)
+    relatif = lambda chemin: _os.path.relpath(chemin, dossier).replace("\\", "/")
+    graphe = outil.dependances(fichiers)
+    analyses = {}
+    for fichier in fichiers:
+        with open(fichier, "r", encoding="utf-8", errors="ignore") as f:
+            analyses[relatif(fichier)] = outil.analyser(f.read())
+    return {
+        "dossier": dossier,
+        "fichiers": [relatif(f) for f in fichiers],
+        "analyses": analyses,
+        "dependances": {relatif(f): sorted(relatif(d) for d in graphe.get(f, []))
+                        for f in fichiers},
+        "usages_champs": {},
+        "failles_totales": sum(len(a.get("failles_potentielles", []))
+                               for a in analyses.values()),
+        "langage": langage.lower(),
+    }

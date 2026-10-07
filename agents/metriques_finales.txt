@@ -1,0 +1,32 @@
+MÉTRIQUES — 4 rapport(s), 11 module(s)
+
+FONCTIONNELLES
+  syntaxe valide           100.0 %
+  taux d'exécution         81.8 % (9 module(s) exécuté(s) sur 11)
+      non exécuté (2) : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.
+  computational accuracy   64.1 %   (équivalence totale : 11.1 %)
+  pass@1                   36.4 %
+  taux de livraison        72.7 %   (itérations moyennes : 1.818)
+  score de mutation        fixes 51.4 %, IA 69.4 %, hybride 80.6 % (sur les 3 module(s) où les trois sont mesurées)
+
+SÉCURITÉ
+  failles corrigées        8 (persistantes : 2) — 80.0 %
+      persistante : CWE-78                 securite.php :: get_user (LIVRER)   <-- MODULE LIVRÉ
+      persistante : CWE-78                 securite.php :: chercher_produit (VALIDATION_HUMAINE)
+  gardes préservées        11/11 — 100.0 %
+  injections bloquées      1
+  propriétés               9 prouvée(s), 1 réfutée(s)
+
+PAR LLM
+  Développeur openai/gpt-oss-120b          pass@1 36.4 %, livraison 72.7 %, bascules 0, tokens/module 15882.273
+  Développeur — hallucinations corrigées au niveau projet : 3
+  Coordination coordinateur_fixe        10 module(s), 0.0 sollicitation(s)/module, 0 refus de phase, 0 redondance(s)
+  Coordination aucun (validation humaine) 1 module(s), 0.0 sollicitation(s)/module, 0 refus de phase, 0 redondance(s)
+  Juge                     disponibilité 81.8 %, score moyen 65.556
+  Générateur d'entrées     8 module(s), 12.25 entrée(s) en moyenne, 6 bug(s) détecté(s) seulement grâce à l'IA
+
+COÛT
+  temps                    388.8 s au total, 35.345 s par module
+  tokens de génération     134195 en entrée, 40510 en sortie (15882.273 par module)
+
+Métriques enregistrées : metriques_finales.json

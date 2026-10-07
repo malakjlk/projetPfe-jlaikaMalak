@@ -157,44 +157,31 @@ def retriever(code_php: str, k: int = 5) -> list:
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
 import cache_smaml
+import fournisseurs_llm
+
+# Dernier appel au LLM : fournisseur et modèle réellement utilisés, et
+# basculement éventuel. Repris dans le dépôt et le rapport.
+DERNIER_APPEL = {}
 
 
-def appeler_llm(prompt: str, token: str, max_tentatives: int = 4) -> str:
+def appeler_llm(prompt: str, token: str = None, max_tentatives: int = 4) -> str:
     """
-    Appelle le LLM de génération (GROQ_MODEL) via l'API Groq.
-    En cas de rate limit (429), attend et réessaie (backoff
-    exponentiel) au lieu de basculer sur le fallback — sinon un
-    benchmark entier peut être contaminé par du code de secours.
+    Appelle le LLM de génération, avec basculement entre fournisseurs :
+    Groq d'abord, Gemini si Groq est indisponible (quota, surcharge,
+    réseau, clé refusée). Le choix et le basculement sont consignés dans
+    DERNIER_APPEL.
+
+    En mode strict (benchmark), aucun basculement : une mesure se fait
+    avec un seul modèle.
     """
-    import time
-    client = Groq(api_key=token)
-    attente = 20  # secondes, doublée à chaque tentative
-    for tentative in range(1, max_tentatives + 1):
-        try:
-            params = dict(
-                model=GROQ_MODEL,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
-                max_tokens=4000,
-            )
-            # gpt-oss raisonne avant de répondre, et ce raisonnement
-            # consomme le budget de tokens : effort réduit pour qu'il
-            # reste de la place pour le code.
-            if GROQ_MODEL.startswith("openai/gpt-oss"):
-                params["reasoning_effort"] = "low"
-            response = client.chat.completions.create(**params)
-            return response.choices[0].message.content
-        except Exception as e:
-            est_rate_limit = ("429" in str(e)
-                              or "RateLimit" in type(e).__name__
-                              or "rate limit" in str(e).lower())
-            if est_rate_limit and tentative < max_tentatives:
-                print(f"  ⏳ Rate limit Groq — attente {attente}s "
-                      f"(tentative {tentative}/{max_tentatives})...")
-                time.sleep(attente)
-                attente *= 2
-            else:
-                raise
+    reponse = fournisseurs_llm.generer(prompt, temperature=0.1, max_tokens=8000)
+    DERNIER_APPEL.clear()
+    DERNIER_APPEL.update({"fournisseur": reponse.fournisseur,
+                          "modele": reponse.modele,
+                          "bascule": reponse.bascule,
+                          "essais": reponse.essais,
+                          "tokens": reponse.tokens})
+    return fournisseurs_llm.annoter_bascule(reponse.texte, reponse)
 
 
 # ─── PATRONS DE CORRECTION SÉCURISÉE ─────────────────
@@ -477,7 +464,9 @@ CONTRAINTES STRICTES (le code sera assemblé dans un projet plus large) :
 1. {consigne_structure}
 2. Ne génère PAS de `app = FastAPI()`, PAS de création de moteur/tables SQLAlchemy globales, PAS de code d'exemple : UNIQUEMENT le code demandé et les modèles Pydantic strictement nécessaires.
 3. Si des modules du projet sont listés ci-dessus, importe leurs fonctions au lieu de les redéfinir.
-4. Utilise les annotations de types Python, la gestion d'erreurs avec HTTPException, et l'ORM SQLAlchemy pour tout accès base de données (jamais de SQL concaténé).
+4. Utilise les annotations de types Python. ACCÈS À LA BASE : si le CONTEXTE DU PROJET fournit des modèles SQLAlchemy (models.py), utilise-les. Sinon, N'INVENTE AUCUN MODÈLE ORM (pas de classe User ni d'import d'un module models inexistant) : écris des requêtes SQL PARAMÉTRÉES avec sqlalchemy.text(), qui reprennent les requêtes du PHP sans leurs failles (jamais de SQL concaténé). Garde les mêmes paramètres que la fonction PHP : la connexion s'obtient à l'intérieur de la fonction (par la fonction de connexion du projet), pas en paramètre supplémentaire. Les erreurs se gèrent PAR COUCHE : dans une fonction d'accès aux données (connexion, requête, lecture d'un enregistrement), ne lève JAMAIS HTTPException — lève une exception métier explicite (ConnectionError, LookupError, ValueError…) ou renvoie None ; HTTPException est réservée aux fonctions de validation des entrées et aux routes de l'API.
+4 bis. RESPECTE LE CONTRAT DE LA FONCTION PHP : ce qu'elle renvoie, le Python le renvoie. Si le PHP renvoie null ou false quand rien n'est trouvé, le Python renvoie None ou False — il ne lève pas d'exception à la place. Si le PHP renvoie un message (« Email ou mot de passe incorrect »), le Python renvoie ce même message. Si le PHP renvoie un tableau associatif, le Python renvoie un dict avec les mêmes clés, accessible par résultat["clé"].
+4 ter. N'écris jamais d'identifiant de connexion en clair dans le code : lis-les avec os.getenv("NOM_VARIABLE", valeur_par_défaut_du_PHP).
 5. Pour tout modèle Pydantic (BaseModel), chaque champ Optional DOIT avoir une valeur par défaut (ex: `nom: Optional[str] = None`), sinon l'instanciation et l'héritage échouent.
 6. NE SUR-INTERPRÈTE PAS les paramètres : un paramètre PHP simple ($session, $data, $id...) doit rester un type Python simple (str, int...) SAUF si le code PHP montre clairement un accès objet ($x->prop) ou un accès BDD. Par exemple `if (empty($session))` se traduit `if not session:` (pas `if not session.id:`). N'invente pas d'attributs (.id, .value) qui n'existent pas dans le code PHP d'origine.
 7. Termine le code par des lignes de commentaire EN FRANÇAIS qui explicitent ce qui serait sinon resté implicite, une information par ligne :
@@ -498,6 +487,12 @@ Réponds UNIQUEMENT avec le code Python."""
     if cache_gen:
         print(f"\n  Code Python réutilisé depuis le cache "
               f"(génération identique déjà faite)")
+        # Le cache ne contient QUE du code du modèle principal (jamais celui
+        # d'un secours) : on sait donc quel modèle l'a écrit. Aucun token
+        # n'est consommé.
+        DERNIER_APPEL.clear()
+        DERNIER_APPEL.update({"fournisseur": "cache", "modele": GROQ_MODEL,
+                              "bascule": False, "tokens": {"entree": 0, "sortie": 0}})
         return cache_gen
 
     print(f"\n  Génération du code Python via {GROQ_MODEL} (Groq)...")
@@ -505,24 +500,31 @@ Réponds UNIQUEMENT avec le code Python."""
         code_python = appeler_llm(prompt, GROQ_TOKEN)
         if not code_python or len(code_python.strip()) < 10:
             raise Exception("Réponse vide du modèle")
-        cache_smaml.ecrire(
-            "generation",
-            cache_smaml.empreinte("generation", [prompt, GROQ_MODEL]),
-            code_python)
+        if DERNIER_APPEL.get("bascule"):
+            # Code du modèle de secours : il est livré, mais signalé, et
+            # SURTOUT pas mis en cache sous la clé du modèle principal —
+            # sinon il serait resservi plus tard comme s'il venait de Groq.
+            print(f"  -> Généré par le modèle de secours "
+                  f"{DERNIER_APPEL['modele']} ({DERNIER_APPEL['fournisseur']})")
+        else:
+            cache_smaml.ecrire(
+                "generation",
+                cache_smaml.empreinte("generation", [prompt, GROQ_MODEL]),
+                code_python)
+    except fournisseurs_llm.ErreurRequete:
+        raise           # requête fautive : changer de fournisseur n'y peut rien
     except Exception as e:
-        print(f"  LLM non disponible : {type(e).__name__} - {str(e)[:150]}")
-        # Mode STRICT (activé par le benchmark) : un basculement sur le
-        # code de secours fausserait toute la mesure — mieux vaut arrêter
-        # le run que produire des résultats contaminés.
-        if os.getenv("SMAML_STRICT"):
-            raise RuntimeError(
-                f"[MODE STRICT] LLM indisponible ({type(e).__name__}) — "
-                f"run interrompu pour ne pas contaminer les mesures avec "
-                f"du code de secours. Relance quand le quota/réseau est "
-                f"rétabli."
-            ) from e
-        print(f"  Mode démonstration — code Python généré localement")
-        code_python = generer_code_fallback(module_info, invariants, failles)
+        # Tous les fournisseurs sont indisponibles. Aucun code factice
+        # n'est produit : un squelette qui « réussit » sans rien faire
+        # partirait en vérification et fausserait tout. L'indisponibilité
+        # est signalée, et c'est la chaîne de coordination qui décide
+        # (relais, ou validation humaine).
+        print(f"  LLM indisponible : {type(e).__name__} - {str(e)[:150]}")
+        raise RuntimeError(
+            f"[GÉNÉRATION IMPOSSIBLE] aucun fournisseur de LLM disponible "
+            f"({type(e).__name__}) — le module doit être repris quand un "
+            f"fournisseur sera rétabli."
+        ) from e
 
     return code_python
 

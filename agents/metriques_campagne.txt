@@ -1,0 +1,27 @@
+MÉTRIQUES — 3 rapport(s), 9 module(s)
+
+FONCTIONNELLES
+  syntaxe valide           100.0 %
+  taux d'exécution         88.9 % (8 module(s) exécuté(s) sur 9)
+      non exécuté (1) : La fonction dépend d'autres modules du projet — non exécutable en isolation (PYTHON : erreur d'import : ImportError cannot import name 'get_connection' from partially ini
+  computational accuracy   40.1 %   (équivalence totale : 12.5 %)
+  pass@1                   44.4 %
+  taux de livraison        77.8 %   (itérations moyennes : 1.444)
+  score de mutation        fixes 61.0 %, IA 93.2 %, hybride 93.2 % (sur les 4 module(s) où les trois sont mesurées)
+
+SÉCURITÉ
+  failles corrigées        4 (persistantes : 0) — 100.0 %
+  gardes préservées        9/9 — 100.0 %
+  injections bloquées      1
+  propriétés               7 prouvée(s), 0 réfutée(s)
+
+PAR LLM
+  Développeur openai/gpt-oss-120b          pass@1 44.4 %, livraison 77.8 %, bascules 0, tokens/module 4439.111
+  Développeur — hallucinations corrigées au niveau projet : 4
+  Coordination coordinateur_fixe        9 module(s), 0.0 sollicitation(s)/module, 0 refus de phase, 0 redondance(s)
+  Juge                     disponibilité 100.0 %, score moyen 71.667
+  Générateur d'entrées     9 module(s), 12.0 entrée(s) en moyenne, 9 bug(s) détecté(s) seulement grâce à l'IA
+
+COÛT
+  temps                    415.9 s au total, 46.211 s par module
+  tokens de génération     31151 en entrée, 8801 en sortie (4439.111 par module)

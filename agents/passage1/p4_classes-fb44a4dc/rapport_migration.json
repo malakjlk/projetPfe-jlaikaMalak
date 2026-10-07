@@ -1,0 +1,636 @@
+{
+  "projet": "p4_classes-fb44a4dc-20261007232955-20644",
+  "stockage": "sqlite",
+  "stockage_repli": "TimeoutError : Timeout connecting to server",
+  "mode": "direct",
+  "reception": {
+    "source": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p4_classes",
+    "dossier": "C:\\Users\\poste\\projetPfe-jlaikaMalak\\agents\\corpus_benchmark\\p4_classes",
+    "langage": "php",
+    "detection": {
+      "principal": "php",
+      "pris_en_charge": {
+        "php": 1
+      },
+      "non_pris_en_charge": {},
+      "adaptateurs_disponibles": [
+        "PHP",
+        "COBOL",
+        "Fortran"
+      ]
+    },
+    "framework": null,
+    "fichiers_php": [
+      "classes.php"
+    ],
+    "fichiers_non_traites": []
+  },
+  "fichiers_migres": [
+    {
+      "source": "classes.php",
+      "cible": "classes.py",
+      "statut": "livré",
+      "modules": [
+        {
+          "nom_python": "PanierAchat",
+          "nom_original": "PanierAchat",
+          "decision_finale": "LIVRER",
+          "score_final": 97.88235294117648,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "from fastapi import HTTPException\nfrom typing import List, Union\n\n\nclass PanierAchat:\n    def __init__(self) -> None:\n        self.articles: List[str] = []\n        self.total: Union[int, float] = 0\n\n    def ajouter_article(self, nom: str, prix: Union[int, float, str]) -> bool:\n        \"\"\"\n        Ajoute un article au panier.\n\n        - Le paramètre ``prix`` accepte les nombres ou les chaînes numériques,\n          conformément au comportement de PHP.\n        - Lève une ``HTTPException`` 400 si le prix n'est pas numérique\n          ou s'il est négatif.\n        - Retourne ``True`` comme le code PHP d'origine.\n        \"\"\"\n        # Conversion du prix au type numérique (int ou float) comme le ferait PHP\n        if isinstance(prix, str):\n            try:\n                prix = float(prix) if ('.' in prix or 'e' in prix.lower()) else int(prix)\n            except ValueError:\n                raise HTTPException(status_code=400, detail='Valeur non numérique')\n\n        # Validation de l'intervalle (prix ne doit pas être négatif)\n        if prix < 0:\n            raise HTTPException(status_code=400, detail='Prix negatif')\n\n        self.articles.append(nom)\n        self.total += prix\n        return True\n\n    def obtenir_total(self) -> Union[int, float]:\n        \"\"\"\n        Retourne le total du panier.\n        \"\"\"\n        return self.total\n\n\n# SMAML-HYPOTHÈSE: le prix peut être fourni sous forme de chaîne contenant un exposant (ex. \"1e3\").\n#                  conformément aux exigences de validation d'entrées dans les routes FastAPI.",
+          "code_php": "class PanierAchat {\n    private $articles = array();\n    private $total = 0;\n\n    public function ajouterArticle($nom, $prix) {\n        if ($prix < 0) {\n            throw new Exception(\"Prix negatif\");\n        }\n        $this->articles[] = $nom;\n        $this->total += $prix;\n        return true;\n    }\n\n    public function obtenirTotal() {\n        return $this->total;\n    }\n}",
+          "equivalence": {
+            "statut": "non_testable",
+            "score_equivalence": null,
+            "cas_testes": 0,
+            "cas_equivalents": 0,
+            "divergences": [],
+            "raison": "Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+            "entrees_ia": {
+              "statut": "invalide",
+              "raison": "réponse inexploitable",
+              "nombre": 0
+            },
+            "mutation": {
+              "statut": "non_observable",
+              "raison": "la fonction échoue sur toutes les entrées (TypeError) : son comportement n'est pas observable hors de son environnement"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "ajouter_article : acceptation ⇒ valeur >= 0",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 97.88235294117648,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5294117647058824
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.35294117647058826
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.11764705882352942
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental",
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 65.1,
+            "indicateurs": {
+              "annotations_types": 1.0,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 0.5,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 0.6666666666666666
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 1926,
+            "sortie": 448,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 0)",
+                  "fonction": "ajouterArticle",
+                  "code": "if ($prix < 0) {\n            throw new Exception(\"Prix negatif\");\n        }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Borne sur une valeur (< 0)",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 28 : prix < 0"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:32:07.211",
+                "module": "classes.php__PanierAchat",
+                "projet": "p4_classes-fb44a4dc-20261007232955-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 97.88235294117648,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5294117647058824
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.35294117647058826
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "équivalence non testée (non_testable)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.11764705882352942
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "comportemental",
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "la méthode ``ajouter_article`` lève une ``HTTPException`` pour les erreurs de validation,",
+              "équivalence non testée : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique."
+            ]
+          },
+          "portee_verification": {
+            "module": "PanierAchat",
+            "decision": "LIVRER",
+            "verifie": [
+              "propriété « ajouter_article : acceptation ⇒ valeur >= 0 » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "l'équivalence comportementale : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 3 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 129.1
+        },
+        {
+          "nom_python": "outils_texte",
+          "nom_original": "OutilsTexte",
+          "decision_finale": "LIVRER",
+          "score_final": 97.88235294117648,
+          "iterations": 1,
+          "categorie_echec": null,
+          "code_python": "from fastapi import HTTPException\n\n\ndef majuscules(texte: str) -> str:\n    \"\"\"\n    Convertit le texte en majuscules.\n    \"\"\"\n    return texte.upper()\n\n\ndef tronquer(texte: str, longueur) -> str:\n    \"\"\"\n    Retourne le texte tronqué à la longueur indiquée.\n    La longueur peut être un int, float ou une chaîne numérique,\n    conformément au comportement de PHP qui accepte les chaînes numériques.\n    \"\"\"\n    # Conversion de la longueur selon le pattern PHP → Python\n    if isinstance(longueur, str):\n        try:\n            longueur = float(longueur) if ('.' in longueur or 'e' in longueur.lower()) else int(longueur)\n        except ValueError:\n            raise HTTPException(status_code=400, detail='Valeur non numérique')\n    # Validation de l'intervalle (longueur doit être >= 1)\n    if longueur < 1:\n        raise HTTPException(status_code=400, detail='Longueur invalide')\n    # On s'assure que la longueur est un entier pour le slicing\n    longueur = int(longueur)\n    return texte[:longueur]\n\n\n# même si le PHP original attendait typiquement un entier.",
+          "code_php": "class OutilsTexte {\n    public static function majuscules($texte) {\n        return strtoupper($texte);\n    }\n\n    public static function tronquer($texte, $longueur) {\n        if ($longueur < 1) {\n            throw new Exception(\"Longueur invalide\");\n        }\n        return substr($texte, 0, $longueur);\n    }\n}",
+          "equivalence": {
+            "statut": "non_testable",
+            "score_equivalence": null,
+            "cas_testes": 0,
+            "cas_equivalents": 0,
+            "divergences": [],
+            "raison": "Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+            "entrees_ia": {
+              "statut": "genere",
+              "modele": "qwen/qwen3.8-27b",
+              "nombre": 12
+            },
+            "mutation": {
+              "statut": "non_executable",
+              "raison": "la fonction ne s'exécute pas seule (dépendances, base de données)"
+            }
+          },
+          "verification_formelle": {
+            "statut": "teste",
+            "proprietes": [
+              {
+                "libelle": "tronquer : acceptation ⇒ valeur >= 1",
+                "statut": "prouvee",
+                "contre_exemple": null,
+                "famille": "invariant_metier"
+              }
+            ],
+            "score_formel": 1.0
+          },
+          "jugement": {
+            "statut": "indisponible",
+            "raison": "ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute"
+          },
+          "confiance": {
+            "score": 97.88235294117648,
+            "niveau": "moyenne",
+            "criteres": [
+              {
+                "nom": "fonctionnel",
+                "agent": "Testeur",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.5294117647058824
+              },
+              {
+                "nom": "securite",
+                "agent": "Auditeur",
+                "score": 94.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.35294117647058826
+              },
+              {
+                "nom": "comportemental",
+                "agent": "Comparateur",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "équivalence non testée (non_testable)",
+                "poids": 0.0
+              },
+              {
+                "nom": "proprietes",
+                "agent": "Vérificateur de propriétés",
+                "score": 100.0,
+                "mesure": true,
+                "raison": "",
+                "poids": 0.11764705882352942
+              },
+              {
+                "nom": "qualite_jugee",
+                "agent": "LLM juge",
+                "score": 0.0,
+                "mesure": false,
+                "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                "poids": 0.0
+              }
+            ],
+            "criteres_non_mesures": [
+              "comportemental",
+              "qualite_jugee"
+            ],
+            "criteres_critiques": []
+          },
+          "modernisation": {
+            "score": 68.6,
+            "indicateurs": {
+              "annotations_types": 0.8,
+              "validation_typee": 0.0,
+              "injection_dependances": 0.0,
+              "erreurs_typees": 1.0,
+              "sans_etat_global": 1.0,
+              "documentation": 1.0,
+              "fonctions_pures": 1.0,
+              "arguments_preserves": 1.0
+            },
+            "non_applicables": [
+              "acces_donnees_parametre",
+              "style_declaratif"
+            ],
+            "erreur": null
+          },
+          "modele_generation": {
+            "fournisseur": "groq",
+            "modele": "openai/gpt-oss-120b",
+            "bascule": false
+          },
+          "tokens_generation": {
+            "entree": 1982,
+            "sortie": 381,
+            "appels": 1
+          },
+          "coordonne_par": "coordinateur_fixe",
+          "relais": [
+            {
+              "coordinateur": "coordinateur_fixe",
+              "issue": "termine",
+              "resultat": {
+                "decision": "LIVRER",
+                "iterations": 1
+              }
+            }
+          ],
+          "rapport_testeur": {
+            "invariants": {
+              "invariants_verifies": [
+                {
+                  "type": "validation_intervalle",
+                  "description": "Borne sur une valeur (< 1)",
+                  "fonction": "tronquer",
+                  "code": "if ($longueur < 1) {\n            throw new Exception(\"Longueur invalide\");\n        }",
+                  "obligatoire": true
+                }
+              ],
+              "invariants_manquants": [],
+              "invariants_douteux": [],
+              "preuves": [
+                {
+                  "invariant": "Borne sur une valeur (< 1)",
+                  "verdict": "vérifié",
+                  "source": "garde ligne 24 : longueur < 1"
+                }
+              ],
+              "score": 1.0
+            },
+            "failles": {
+              "failles_corrigees": [],
+              "failles_persistantes": [],
+              "score": 1.0
+            }
+          },
+          "etat_structure": {
+            "journal": [],
+            "notes": [
+              {
+                "type": "note",
+                "nature": "coordination_terminee",
+                "coordinateur": "coordinateur_fixe",
+                "niveau": "fixe",
+                "horodatage": "2026-10-07T23:33:11.805",
+                "module": "classes.php__outils_texte",
+                "projet": "p4_classes-fb44a4dc-20261007232955-20644"
+              }
+            ],
+            "versions": {
+              "module": 1,
+              "code_python": 1,
+              "rapport_testeur": 1,
+              "rapport_differentiel": 1,
+              "rapport_formel": 1,
+              "rapport_auditeur": 1,
+              "rapport_juge": 1,
+              "decision": 1
+            },
+            "derniere_decision": {
+              "verdict": "LIVRER",
+              "confiance": {
+                "score": 97.88235294117648,
+                "niveau": "moyenne",
+                "criteres": [
+                  {
+                    "nom": "fonctionnel",
+                    "agent": "Testeur",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.5294117647058824
+                  },
+                  {
+                    "nom": "securite",
+                    "agent": "Auditeur",
+                    "score": 94.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.35294117647058826
+                  },
+                  {
+                    "nom": "comportemental",
+                    "agent": "Comparateur",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "équivalence non testée (non_testable)",
+                    "poids": 0.0
+                  },
+                  {
+                    "nom": "proprietes",
+                    "agent": "Vérificateur de propriétés",
+                    "score": 100.0,
+                    "mesure": true,
+                    "raison": "",
+                    "poids": 0.11764705882352942
+                  },
+                  {
+                    "nom": "qualite_jugee",
+                    "agent": "LLM juge",
+                    "score": 0.0,
+                    "mesure": false,
+                    "raison": "juge indisponible : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+                    "poids": 0.0
+                  }
+                ],
+                "criteres_non_mesures": [
+                  "comportemental",
+                  "qualite_jugee"
+                ],
+                "criteres_critiques": []
+              }
+            },
+            "points_attention": [
+              "juge non pris en compte : ErreurFournisseurs : Aucun fournisseur n'a pu générer le code : groq → limite_minute",
+              "équivalence non testée : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique."
+            ]
+          },
+          "portee_verification": {
+            "module": "outils_texte",
+            "decision": "LIVRER",
+            "verifie": [
+              "propriété « tronquer : acceptation ⇒ valeur >= 1 » : aucun contre-exemple trouvé par exploration symbolique",
+              "1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle"
+            ],
+            "non_verifie": [
+              "l'équivalence comportementale : Méthode de classe — non exécutable en isolation (nécessite d'instancier l'objet). Vérification assurée par l'exécution symbolique.",
+              "l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue",
+              "les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge"
+            ],
+            "formulation": "Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 3 point(s) hors de portée de la vérification. Le module est livré sous ces réserves."
+          },
+          "duree_s": 64.6
+        }
+      ]
+    }
+  ],
+  "statistiques": {
+    "total_fichiers": 1,
+    "fichiers_livres": 1,
+    "modules": 2,
+    "modules_livres": 2,
+    "relais_de_coordination": 0
+  },
+  "coherence_projet": {
+    "imports_valides": [],
+    "imports_casses": [],
+    "coherent": true,
+    "typage": {
+      "statut": "teste",
+      "coherent": true,
+      "erreurs": []
+    }
+  },
+  "corrections_projet": [],
+  "decoupage_services": {
+    "services": [
+      {
+        "nom": "service_outilstexte",
+        "modules": [
+          "OutilsTexte"
+        ],
+        "tables": [],
+        "fichiers": [
+          "classes.php"
+        ],
+        "depend_de": []
+      },
+      {
+        "nom": "service_panierachat",
+        "modules": [
+          "PanierAchat"
+        ],
+        "tables": [],
+        "fichiers": [
+          "classes.php"
+        ],
+        "depend_de": []
+      }
+    ],
+    "metriques": {
+      "methode": "louvain",
+      "services": 2,
+      "modularite": null,
+      "cohesion": 100.0,
+      "couplage": 0.0,
+      "appels_internes": 0,
+      "appels_inter_services": 0
+    },
+    "bibliotheques_partagees": [],
+    "obstacles": []
+  },
+  "fichiers_annexes": [],
+  "framework": {
+    "gabarits": [],
+    "non_convertis": []
+  },
+  "reglages": {
+    "configuration": "réglages manuels",
+    "titre": "—",
+    "rag": true,
+    "patrons": true,
+    "boucle_correction": true,
+    "mode": "direct",
+    "orchestrateur_demande": "gemini",
+    "bascule_autorisee": false,
+    "cache": false,
+    "mode_strict": false
+  },
+  "cache": {
+    "actif": false,
+    "stockage": "sqlite",
+    "lectures": 0,
+    "succes": 0,
+    "ecritures": 0,
+    "ruees_evitees": 0,
+    "taux_reutilisation": 0.0,
+    "par_categorie": {}
+  }
+}

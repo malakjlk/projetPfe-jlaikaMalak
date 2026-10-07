@@ -1,0 +1,133 @@
+{
+  "travailleurs": 2,
+  "projets": [
+    {
+      "projet": "p3_securite-99c83a3c-20261007231807-20644",
+      "source": "corpus_benchmark\\p3_securite",
+      "sortie": "passage1\\p3_securite-99c83a3c",
+      "debut": 1791415087.34,
+      "fin": 1791415894.63,
+      "duree_s": 807.3,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 3,
+      "modules_livres": 3,
+      "priorite": {
+        "langage": "php",
+        "critiques": 3,
+        "failles": 3,
+        "taille": 3
+      }
+    },
+    {
+      "projet": "p6_application-af999221-20261007231807-20644",
+      "source": "corpus_benchmark\\p6_application",
+      "sortie": "passage1\\p6_application-af999221",
+      "debut": 1791415087.34,
+      "fin": 1791415514.95,
+      "duree_s": 427.6,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 3,
+      "modules_livres": 3,
+      "priorite": {
+        "langage": "php",
+        "critiques": 1,
+        "failles": 1,
+        "taille": 3
+      }
+    },
+    {
+      "projet": "p7_deserialisation-f9760d76-20261007232515-20644",
+      "source": "corpus_benchmark\\p7_deserialisation",
+      "sortie": "passage1\\p7_deserialisation-f9760d76",
+      "debut": 1791415515.04,
+      "fin": 1791415795.25,
+      "duree_s": 280.2,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 3,
+      "modules_livres": 3,
+      "priorite": {
+        "langage": "php",
+        "critiques": 1,
+        "failles": 1,
+        "taille": 3
+      }
+    },
+    {
+      "projet": "p4_classes-fb44a4dc-20261007232955-20644",
+      "source": "corpus_benchmark\\p4_classes",
+      "sortie": "passage1\\p4_classes-fb44a4dc",
+      "debut": 1791415795.29,
+      "fin": 1791416000.67,
+      "duree_s": 205.4,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 2,
+      "modules_livres": 2,
+      "priorite": {
+        "langage": "php",
+        "critiques": 0,
+        "failles": 0,
+        "taille": 2
+      }
+    },
+    {
+      "projet": "p1_validations-c184048a-20261007233134-20644",
+      "source": "corpus_benchmark\\p1_validations",
+      "sortie": "passage1\\p1_validations-c184048a",
+      "debut": 1791415894.68,
+      "fin": 1791416455.18,
+      "duree_s": 560.5,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 3,
+      "modules_livres": 3,
+      "priorite": {
+        "langage": "php",
+        "critiques": 0,
+        "failles": 0,
+        "taille": 3
+      }
+    },
+    {
+      "projet": "p2_calculs-b9fea836-20261007233320-20644",
+      "source": "corpus_benchmark\\p2_calculs",
+      "sortie": "passage1\\p2_calculs-b9fea836",
+      "debut": 1791416000.71,
+      "fin": 1791416546.7,
+      "duree_s": 546.0,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 3,
+      "modules_livres": 3,
+      "priorite": {
+        "langage": "php",
+        "critiques": 0,
+        "failles": 0,
+        "taille": 3
+      }
+    },
+    {
+      "projet": "p5_heritage-7b8669bc-20261007234055-20644",
+      "source": "corpus_benchmark\\p5_heritage",
+      "sortie": "passage1\\p5_heritage-7b8669bc",
+      "debut": 1791416455.2,
+      "fin": 1791416899.62,
+      "duree_s": 444.4,
+      "code_retour": 0,
+      "statut": "termine",
+      "modules": 3,
+      "modules_livres": 2,
+      "priorite": {
+        "langage": "php",
+        "critiques": 0,
+        "failles": 0,
+        "taille": 3
+      }
+    }
+  ],
+  "termines": 7,
+  "echecs": 0
+}

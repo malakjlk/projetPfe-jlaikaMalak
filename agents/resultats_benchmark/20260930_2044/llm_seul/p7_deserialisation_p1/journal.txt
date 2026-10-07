@@ -1,0 +1,227 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Chargement de la base RAG...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 18732.98it/s]
+Base RAG chargée : 3060 exemples indexés — recherche : FAISS
+============================================================
+SMAML — MIGRATION D'APPLICATION COMPLÈTE
+============================================================
+  Configuration : llm_seul | RAG : False | boucle : False | mode : direct
+ZIP décompressé dans : C:\Users\poste\AppData\Local\Temp\smaml_projet_z96w3a8u
+
+1 fichier(s) PHP trouvé(s) :
+  - p7_deserialisation\session.php
+
+Ordre de migration (dépendances d'abord) :
+  1. session.php
+
+------------------------------------------------------------
+- FICHIER : session.php
+------------------------------------------------------------
+  Analyste : 3 fonction(s), 0 classe(s), 1 faille(s)
+
+  [ablation] RAG désactivé pour : chargerSession
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : charger_session
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 100% (1/1)
+
+   Score fonctionnel global : 100.0%
+  Équivalence comportementale : 67% (10/15 cas)
+     Divergence sur '' : PHP=accepte / Python=rejette (Données de session invalides.)
+     Divergence sur '1234567' : PHP=rejette (sortie illisible : Warning: unserialize(): Error at / Python=accepte
+     Divergence sur '12345678' : PHP=rejette (sortie illisible : Warning: unserialize(): Error at / Python=accepte
+     Divergence sur '0' : PHP=rejette (sortie illisible : Warning: unserialize(): Error at / Python=accepte
+     Divergence sur '12345678901234567890' : PHP=rejette (sortie illisible : Warning: unserialize(): Error at / Python=accepte
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : charger_session
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : charger_session
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel      100.0%  (poids 50%)  — Testeur
+  securite          94.0%  (poids 33%)  — Auditeur
+  comportemental    66.7%  (poids 17%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 92.4% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 92.4% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — charger_session
+   comportement identique au PHP sur 15 entrée(s) testée(s) (67% de concordance), exécution réelle des deux codes
+   1 faille(s) du PHP d'origine corrigée(s) dans le code migré
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables
+    non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 2 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+  [ablation] RAG désactivé pour : afficherPage
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : afficher_page
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     non applicable (aucun invariant traduisible en propriété)
+  3. Vérification des invariants de sécurité...
+     Score invariants : 100% (0/0)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 0% (0/1)
+
+   Score fonctionnel global : 70.0%
+  Équivalence comportementale : 100% (15/15 cas)
+  Vérification formelle : aucun invariant traduisible en propriété pour ce module
+
+Audit de sécurité du module : afficher_page
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : afficher_page
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       70.0%  (poids 50%)  — Testeur
+  securite          94.0%  (poids 33%)  — Auditeur
+  comportemental   100.0%  (poids 17%)  — Comparateur
+  proprietes          —     non mesuré : aucune propriété vérifiée (aucune_propriete)
+Score de confiance : 83.0% (confiance moyenne)
+
+✅ DÉCISION : LIVRER
+   Score composé 83.0% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — afficher_page
+   comportement identique au PHP sur 15 entrée(s) testée(s) (100% de concordance), exécution réelle des deux codes
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : aucune propriété formelle : les règles du code d'origine n'ont pas pu être traduites en contrats vérifiables
+    non vérifié : aucun invariant relevé dans le code d'origine : la préservation des règles métier implicites n'est pas vérifiable
+    non vérifié : 1 faille(s) encore présente(s)
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 1 point(s) établi(s), 6 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+  [ablation] RAG désactivé pour : sauvegarderPreferences
+
+  Génération du code Python via openai/gpt-oss-120b (Groq)...
+
+Vérification du module : sauvegarder_preferences
+  1. Vérification syntaxique et résolution des noms...
+      Code statiquement valide : True
+  2. Tests property-based (Hypothesis)...
+     1/1 propriété(s) sans contre-exemple
+  3. Vérification des invariants de sécurité...
+       vérifié   Vérification d'existence de variable   test dynamique : aucun contre-exemple sur 60 entrées (la f
+     Score invariants : 100% (1/1)
+  4. Vérification de la correction des failles...
+     Score failles corrigées : 0% (0/1)
+
+   Score fonctionnel global : 70.0%
+  Équivalence comportementale : 7% (1/15 cas)
+     Divergence sur 'a' : PHP=s:1:"a"; / Python="a"
+     Divergence sur 'abc' : PHP=s:3:"abc"; / Python="abc"
+     Divergence sur '1234567' : PHP=s:7:"1234567"; / Python="1234567"
+     Divergence sur '12345678' : PHP=s:8:"12345678"; / Python="12345678"
+     Divergence sur 'Password123' : PHP=s:11:"Password123"; / Python="Password123"
+     Divergence sur 'motdepasse' : PHP=s:10:"motdepasse"; / Python="motdepasse"
+     Divergence sur 'éàçùè' : PHP=s:10:"éàçùè"; / Python="\u00e9\u00e0\u00e7\u00f9\u00e8"
+     Divergence sur 'mot de passe avec espaces' : PHP=s:25:"mot de passe avec espaces"; / Python="mot de passe avec espaces"
+     Divergence sur '<script>alert(1)</script>' : PHP=s:25:"<script>alert(1)</script>"; / Python="<script>alert(1)</script>"
+     Divergence sur "' OR 1=1 --" : PHP=s:11:"' OR 1=1 --"; / Python="' OR 1=1 --"
+     Divergence sur 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : PHP=s:500:"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx / Python="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+     Divergence sur 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : PHP=s:1500:"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx / Python="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+     Divergence sur '0' : PHP=rejette (Preferences vides) / Python=accepte
+     Divergence sur '12345678901234567890' : PHP=s:20:"12345678901234567890"; / Python="12345678901234567890"
+  Vérification formelle :  PROUVÉE — sauvegarder_preferences : acceptation ⇒ argument non nul
+
+Audit de sécurité du module : sauvegarder_preferences
+  Dimension 1 — Préservation des invariants de sécurité...
+     Score : 100%
+       préservé  Vérification d'existence de variable       garde ligne 14 : not prefs
+  Dimension 2 — Analyse statique Bandit...
+     Failles détectées : 0
+     Score Bandit : 100%
+  Dimension 3 — Audit des dépendances (pip-audit)...
+     Dépendances du module : annotated-doc, annotated-types, anyio, exceptiongroup, fastapi, idna, pydantic, pydantic-core, starlette, typing-extensions, typing-inspection
+     Vulnérabilités trouvées : 3
+
+   Score sécurité global : 94.0%
+  Niveau d'alerte : OK
+
+Révision du module : sauvegarder_preferences
+Itération actuelle : 1/5
+
+Niveau de confiance — détail par critère :
+  fonctionnel       70.0%  (poids 45%)  — Testeur
+  securite          94.0%  (poids 30%)  — Auditeur
+  comportemental     6.7%  (poids 15%)  — Comparateur
+  proprietes       100.0%  (poids 10%)  — Vérificateur de propriétés
+Score de confiance : 70.7% (confiance faible)
+
+✅ DÉCISION : LIVRER
+   Score composé 70.7% >= seuil haut 65.0%. Le module respecte les critères de qualité et sécurité.
+    Architecture : modernisation 72% — à renforcer : validation typee, injection dependances
+
+Portée de la vérification — sauvegarder_preferences
+   comportement identique au PHP sur 15 entrée(s) testée(s) (7% de concordance), exécution réelle des deux codes
+   propriété « sauvegarder_preferences : acceptation ⇒ argument non nul » : aucun contre-exemple trouvé par exploration symbolique
+   1 invariant(s) du code d'origine préservé(s), vérifié(s) par test dynamique ou analyse structurelle
+    non vérifié : le comportement sur les entrées non testées : l'équivalence est observée, elle n'est pas démontrée pour toute entrée
+    non vérifié : les particularités du moteur MySQL : la comparaison s'appuie sur une base SQLite identique pour les deux langages
+    non vérifié : l'exploration symbolique est bornée en temps : une propriété sans contre-exemple trouvé n'est pas une preuve absolue
+    non vérifié : 1 faille(s) encore présente(s)
+    non vérifié : les effets hors périmètre mesuré : réseau, système de fichiers, courriels, horloge
+    Équivalence observée et propriétés vérifiées dans les limites énoncées : 3 point(s) établi(s), 5 point(s) hors de portée de la vérification. Le module est livré sous ces réserves.
+
+============================================================
+VÉRIFICATION DE COHÉRENCE DU PROJET
+============================================================
+   Projet cohérent : tous les imports internes sont valides
+
+============================================================
+MIGRATION DU PROJET TERMINÉE
+============================================================
+  Fichiers migrés  : 1/1
+  Cache désactivé (SMAML_CACHE=0).
+  Résultats dans   : C:\Users\poste\projetPfe-jlaikaMalak\agents\resultats_benchmark\20260930_2044\llm_seul\p7_deserialisation_p1/
+
+============================================================
+PROPOSITION DE DÉCOUPAGE EN SERVICES
+============================================================
+3 service(s) candidat(s) — cohésion 100.0%, couplage 0.0%
+  • service_afficherpage : afficherPage
+  • service_chargersession : chargerSession
+  • service_sauvegarderpreferences : sauvegarderPreferences
